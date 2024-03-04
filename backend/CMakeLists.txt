@@ -16,16 +16,20 @@ add_executable(usbguard main.cpp
     csv_rule.cpp
 )
 
+
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+
 include(Format)
 Format(usbguard .)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 include(ClangTidy)
 AddClangTidy(usbguard)
 
 include(CppCheck)
 AddCppCheck(${CMAKE_CURRENT_SOURCE_DIR})
 add_dependencies(usbguard run_cppcheck)
+
 endif()
 
 

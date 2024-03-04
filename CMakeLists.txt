@@ -29,8 +29,10 @@ add_subdirectory(backend)
 #target_link_libraries(test_fstab PRIVATE PkgConfig::UDEV)
 #target_include_directories(test_fstab PUBLIC ${UDEV_INCLUDE_DIRS})
 
-# for android vid_pid parser
+# android vid_pid parser
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 add_subdirectory(android_vidpid_parser)
+endif()
 
 # tests
 IF (DEFINED UNIT_TEST)
