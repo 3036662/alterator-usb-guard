@@ -15,7 +15,8 @@ Source2: %name-%version-thirdparty-rapidcsv.tar
 Requires: usbids usbguard
 BuildPreReq: gcc-c++ cmake ninja-build rpm-macros-cmake rpm-build-licenses 
 
-BuildRequires: usbguard-devel boost-devel-headers  libsdbus-cpp-devel libsystemd-devel doxygen
+BuildRequires: usbguard-devel libusbguard1 boost-devel-headers  libsdbus-cpp-devel libsystemd-devel 
+
 
 %description
 Alterator Module to control USB devices via USBGuard.
@@ -24,7 +25,7 @@ Alterator Module to control USB devices via USBGuard.
 %setup -a0 -a1 -a2  
 
 %build
-%cmake -DCMAKE_BUILD_TYPE:STRING=Release -G Ninja 
+%cmake -DCMAKE_BUILD_TYPE:STRING=Release -G Ninja
 %cmake_build
 
 %install
