@@ -12,7 +12,7 @@ Source: %name-%version.tar
 Source1: %name-%version-thirdparty-cppcodec.tar
 Source2: %name-%version-thirdparty-rapidcsv.tar
 
-Requires: usbids usbguard
+Requires: usbids usbguard alterator
 BuildPreReq: gcc-c++ cmake ninja-build rpm-macros-cmake rpm-build-licenses 
 
 BuildRequires: usbguard-devel libusbguard1 boost-devel-headers  libsdbus-cpp-devel libsystemd-devel 
