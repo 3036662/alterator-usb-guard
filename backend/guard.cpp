@@ -10,7 +10,6 @@
 #include "utils.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/replace.hpp>
-#include <boost/beast/core/detail/base64.hpp>
 #include <boost/json.hpp>
 #include <boost/json/array.hpp>
 #include <cstddef>
