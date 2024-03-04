@@ -1,0 +1,4 @@
+spec: .gear/alterator-usbguard.spec
+tar: . name=@name@-@version@
+tar: thirdparty/cppcodec/@version@:. name=@name@-@version@-thirdparty-cppcodec base=thirdparty/cppcodec
+tar: thirdparty/rapidcsv/@version@:. name=@name@-@version@-thirdparty-rapidcsv base=thirdparty/rapidcsv
