@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-03-04T13:17:33.780Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="-mkRzZNIk_0qTej0H_yV" version="24.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2024-03-04T13:19:40.496Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36" etag="rl2FemDC4jttPe2Z4SF3" version="24.0.1" type="github">
   <diagram id="HF3EYHtyEsSgDk29EQUM" name="Страница 1">
     <mxGraphModel dx="2124" dy="535" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
@@ -20,13 +20,13 @@
           <mxGeometry x="40" y="432" width="869" height="201" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-6" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=13;" parent="3SDEc3MKjUo-QjRz-hxS-3" vertex="1">
-          <mxGeometry x="7" y="35.5" width="15" height="15" as="geometry" />
+          <mxGeometry x="13" y="35.5" width="15" height="15" as="geometry" />
         </mxCell>
         <mxCell id="gBsZXXF_Xg-kHRnBOiRI-2" value="Свой режим" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;spacing=2;labelPosition=center;verticalLabelPosition=middle;" vertex="1" parent="3SDEc3MKjUo-QjRz-hxS-3">
           <mxGeometry x="33" y="70" width="90" height="30" as="geometry" />
         </mxCell>
         <mxCell id="gBsZXXF_Xg-kHRnBOiRI-3" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=13;" vertex="1" parent="3SDEc3MKjUo-QjRz-hxS-3">
-          <mxGeometry x="7" y="77.5" width="15" height="15" as="geometry" />
+          <mxGeometry x="13" y="77.5" width="15" height="15" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-46" value="&lt;font face=&quot;monospace&quot;&gt;Rules lists:&lt;/font&gt;" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;spacing=2;fontSize=13;" parent="3SDEc3MKjUo-QjRz-hxS-3" vertex="1">
           <mxGeometry x="-29" y="-21" width="114" height="28" as="geometry" />
@@ -38,7 +38,7 @@
           <mxGeometry x="30" width="350" height="26" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-76" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=13;" parent="3SDEc3MKjUo-QjRz-hxS-74" vertex="1">
-          <mxGeometry y="7.5" width="15" height="15" as="geometry" />
+          <mxGeometry x="10" y="7.5" width="15" height="15" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-71" value="" style="group;" parent="3SDEc3MKjUo-QjRz-hxS-3" vertex="1" connectable="0">
           <mxGeometry x="3" y="118" width="514" height="30" as="geometry" />
@@ -47,31 +47,31 @@
           <mxGeometry x="30" width="484" height="26" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-73" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=13;" parent="3SDEc3MKjUo-QjRz-hxS-71" vertex="1">
-          <mxGeometry y="7.5" width="15" height="15" as="geometry" />
+          <mxGeometry x="10" y="7.5" width="15" height="15" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-78" value="Свой режим" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;spacing=2;labelPosition=center;verticalLabelPosition=middle;" parent="3SDEc3MKjUo-QjRz-hxS-3" vertex="1">
-          <mxGeometry x="33" y="171" width="90" height="30" as="geometry" />
+          <mxGeometry x="36" y="171" width="90" height="30" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-79" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=13;" parent="3SDEc3MKjUo-QjRz-hxS-3" vertex="1">
-          <mxGeometry x="3" y="178.5" width="15" height="15" as="geometry" />
+          <mxGeometry x="13" y="178.5" width="15" height="15" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-161" value="" style="group;" parent="3SDEc3MKjUo-QjRz-hxS-3" vertex="1" connectable="0">
           <mxGeometry x="-62" y="97" width="410" height="30" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-162" value="Чёрный список" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;spacing=2;" parent="3SDEc3MKjUo-QjRz-hxS-161" vertex="1">
-          <mxGeometry x="30" width="104" height="26" as="geometry" />
+          <mxGeometry x="36.5" y="-2" width="104" height="26" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-164" value="" style="group;" parent="3SDEc3MKjUo-QjRz-hxS-3" vertex="1" connectable="0">
           <mxGeometry x="-57" y="4.25" width="630" height="68.75" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-165" value="Белый список" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;spacing=2;" parent="3SDEc3MKjUo-QjRz-hxS-164" vertex="1">
-          <mxGeometry x="30" width="96" height="26" as="geometry" />
+          <mxGeometry x="29.5" width="96" height="26" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-69" value="Блокировать всё, кроме подключённых устройств и HID/HUB устройств" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;spacing=2;labelPosition=center;verticalLabelPosition=middle;" parent="3SDEc3MKjUo-QjRz-hxS-164" vertex="1">
           <mxGeometry x="90" y="23.75" width="428" height="26" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-70" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=13;" parent="3SDEc3MKjUo-QjRz-hxS-164" vertex="1">
-          <mxGeometry x="64" y="53.75" width="15" height="15" as="geometry" />
+          <mxGeometry x="70" y="53.75" width="15" height="15" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-4" value="Блокировать всё, кроме подключённых устройств" style="text;html=1;align=left;verticalAlign=top;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;spacing=2;" parent="3SDEc3MKjUo-QjRz-hxS-3" vertex="1">
           <mxGeometry x="33" y="50.5" width="305" height="26" as="geometry" />
