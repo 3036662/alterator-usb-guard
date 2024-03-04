@@ -10,7 +10,7 @@ JsonRule::JsonRule(const boost::json::object *ptr_obj) {
   if (!ptr_obj->contains("target")) {
     throw std::logic_error("Rule target is mandatory");
   }
-  target_ = ptr_obj->at("target").as_string();
+  target_ = ptr_obj->at("target").as_string().c_str();
 
   // fields
   if (!ptr_obj->contains("fields_arr") ||
@@ -61,7 +61,7 @@ std::string JsonRule::BuildString() const noexcept {
 
 void JsonRule::ParseOneField(const boost::json::object *ptr_field) {
   for (const auto &field_obj : *ptr_field) {
-    std::string field = field_obj.key();
+    std::string field =std::string(field_obj.key().cbegin(),field_obj.key().cend());
     std::string value = field_obj.value().as_string().c_str();
     if (value.empty()) {
       throw std::logic_error("Empty value for field " + field);
