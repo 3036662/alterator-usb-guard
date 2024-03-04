@@ -1,23 +1,23 @@
-(define-module (ui simple ajax)
+(define-module (ui usbguard ajax)
     :use-module (alterator ajax)
     :use-module (alterator woo)
     :export (init))
 
 (define (ls_usbs)
-    (form-update-enum "list_prsnt_devices" (woo-list "/simple/list_curr_usbs" ))
+    (form-update-enum "list_prsnt_devices" (woo-list "/usbguard/list_curr_usbs" ))
 )
 
 ; list usbguard rules
 (define (ls_guard_rules)
-    (form-update-enum "list_hash_rules" (woo-list "/simple/list_rules" 'level "hash"))
-    (form-update-enum "list_vidpid_rules" (woo-list "/simple/list_rules" 'level "vid_pid"))
-    (form-update-enum "list_interface_rules" (woo-list "/simple/list_rules" 'level "interface"))
-    (form-update-enum "list_unsorted_rules" (woo-list "/simple/list_rules" 'level "non-strict"))   
+    (form-update-enum "list_hash_rules" (woo-list "/usbguard/list_rules" 'level "hash"))
+    (form-update-enum "list_vidpid_rules" (woo-list "/usbguard/list_rules" 'level "vid_pid"))
+    (form-update-enum "list_interface_rules" (woo-list "/usbguard/list_rules" 'level "interface"))
+    (form-update-enum "list_unsorted_rules" (woo-list "/usbguard/list_rules" 'level "non-strict"))   
 )
 
 ; get udev rules filenames
 (define (udev_rules_check)
-    (form-update-enum "suspicious_udev_files"  (woo-list "/simple/check_config_udev"))
+    (form-update-enum "suspicious_udev_files"  (woo-list "/usbguard/check_config_udev"))
 )
 
 ; remove first element from sublists ( (a b c) (a b c)) => ((b c)(b c))
@@ -38,7 +38,7 @@
 ; usbguard: "OK" or "BAD"
 ; udev:     "OK" or BAD 
 (define (config_status_check)
-   (let ((status  (removeFirstElement (woo-read "/simple/config_status")) ))
+   (let ((status  (removeFirstElement (woo-read "/usbguard/config_status")) ))
            ; if udev=OK
            (if (string=? "OK" (get-value 'udev status)) 
                 (begin
@@ -120,7 +120,7 @@
 
 ; unblock the selected device 
  (define (allow_device)
-    (let ((  status  (woo-read-first "/simple/usb_allow" 'usb_id  (form-value "list_prsnt_devices")) )) 
+    (let ((  status  (woo-read-first "/usbguard/usb_allow" 'usb_id  (form-value "list_prsnt_devices")) )) 
         (if   
             (equal? "OK" (woo-get-option status 'status))
             (update_after_rulles_applied)
@@ -131,7 +131,7 @@
 
  ;block selected device
  (define (block_device)
-     (let ((  status  (woo-read-first "/simple/usb_block" 'usb_id  (form-value "list_prsnt_devices")) )) 
+     (let ((  status  (woo-read-first "/usbguard/usb_block" 'usb_id  (form-value "list_prsnt_devices")) )) 
         (if   
             (equal? "OK" (woo-get-option status 'status))
             (update_after_rulles_applied)
@@ -143,7 +143,7 @@
 
 ; get all changes with one string from fronted and send data to backend
 (define (save_rules_handler)
-    (let ((  response  (removeFirstElement (woo-read "/simple/apply_changes" 'changes_json  (form-value "hidden_manual_changes_data"))) ))
+    (let ((  response  (removeFirstElement (woo-read "/usbguard/apply_changes" 'changes_json  (form-value "hidden_manual_changes_data"))) ))
         (if 
             (string=? "OK" (get-value 'status response))
             (form-update-value "hidden_manual_changes_response" (get-value 'ids_json response) )
@@ -163,7 +163,7 @@
 
 (define (upload_rules_callback)
     (let ((
-        response  (removeFirstElement (woo-read "/simple/rules_upload" 'upload_rules (form-blob "file_input"))) 
+        response  (removeFirstElement (woo-read "/usbguard/rules_upload" 'upload_rules (form-blob "file_input"))) 
          ))  
        (if  (string=? "OK" (get-value 'status response))
             (js "AddRulesFromFile" (get-value 'response_json response) )
