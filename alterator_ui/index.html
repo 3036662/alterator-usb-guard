@@ -121,35 +121,41 @@
       
       
       <!-- Radio buttons -->
+
+
+
+      
       <form name="form_presets" id="form_presets">
         <fieldset>
           <legend>Presets</legend>
+
+          <p>White list:</p>
           <p><input type="radio" id="preset1" name="presets" value="put_connected_to_white_list" />
-          <label for="preset1">Block everything except connected devices.</label>
-          </p>
+          <label for="preset1">Block everything except connected devices.</label></p>
+
           <p><input type="radio" id="preset2" name="presets" value="put_connected_to_white_list_plus_HID" />
-          <label for="preset1">Block everything except connected and HID/DUB devices.</label></p>
-          <p>
-          <input type="radio" id="preset3" name="presets" value="put_disks_and_mtp_to_black" />
-          <label for="preset1">Block only USB Mass Storage, MTP/PTP.</label>
-          </p>
-          <p><input type="radio" id="preset3" name="presets" value="block_and_reject_android" />
-          <label for="preset1">Block and reject only Android devices.</label></p>
-          <p><input type="radio" id="preset4" name="presets" value="manual_mode" />
-          <label for="preset4">Manual mode</label></p>
+          <label for="preset2">Block everything except connected and HID/DUB devices.</label></p>
+
+          <p><input type="radio" id="preset_manual_white" name="presets" value="radio_white_list" />
+          <label for="preset_manual_white">Manual mode</label></p> 
+          <hr/>
+          <p>Black list:</p>
+          <p><input type="radio" id="preset3" name="presets" value="put_disks_and_mtp_to_black" />
+          <label for="preset3">Block only USB Mass Storage, MTP/PTP.</label></p>
+
+          <p><input type="radio" id="preset4" name="presets" value="block_and_reject_android" />
+          <label for="preset4">Block and reject only Android devices.</label></p>
+
+          <p><input type="radio" id="preset_manual_black" name="presets" value="radio_black_list" />
+          <label for="preset_manual_black">Manual mode</label></p>
+
           <input type="hidden" name="presets_input_hidden" id="presets_input_hidden" />
-        </fieldset>
-        <fieldset id="radio_list_type">
-          <legend>Rules lists:</legend>
-          <p><input type="radio" id="radio_black_list" name="list_type" value="radio_black_list" />
-          <label for="preset1">"Black" list (allow all,except listed).</label>
-          </p>
-          <p><input type="radio" id="radio_white_list" name="list_type" value="radio_white_list" />
-          <label for="preset1">"White" list (block all, except listed).</label>
-          </p>
           <input type="hidden" name="hidden_list_type" id="hidden_list_type"/>
          </fieldset>  
       </form>
+
+
+
       <!-- Rules non-strict(non sorted) -->
       <form name="form_list_unsorted_rules" id="form_list_unsorted_rules" class="form_rules" method="POST" onsubmit="return false;">
         <table class="alterator-listbox multi-select" align="center" name="list_unsorted_rules" id="list_unsorted_rules">

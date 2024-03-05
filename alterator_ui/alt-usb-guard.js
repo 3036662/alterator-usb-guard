@@ -1,6 +1,5 @@
 $(document).ready(function () {
 
-
   // workaround to check and uncheck checkbox as usual input
   // state of check  can be changed from lisp 
   // with form-update-value for hidden input 
@@ -24,27 +23,35 @@ $(document).ready(function () {
 
   /*******************************************************/
   // catch a preset selection event
+  // put current value to presets_input_hidden
   $('input[type=radio][name=presets]').change(function () {
     if ($(this).is(':checked')) {
+      if ($(this).val()=="radio_white_list" || $(this).val()=="radio_black_list"){
+        $("#presets_input_hidden").val("manual_mode");
+        $("#hidden_list_type").val($(this).val());
+        return;             
+      }      
       $("#presets_input_hidden").val($(this).val());
     }
   });
+
   // set preset selection
+  // set radiobutton if presets_input_hidden changes
   $('#presets_input_hidden').bind('update-value change', function () {
     $('input[type=radio][name=presets][value=' + $("#presets_input_hidden").val() + ']').attr('checked', true);
   });
-  $('#checkbox_use_control_hidden').trigger('change');
-
-  // catch a type-of-list selection event
-  $('input[type=radio][name=list_type]').change(function () {
-    if ($(this).is(':checked')) {
-      $("#hidden_list_type").val($(this).val());
-    }
-  });
+  
   // preselect type-of-list
   $('#hidden_list_type').bind('update-value change', function () {
-    $('input[type=radio][name=list_type][value=' + $("#hidden_list_type").val() + ']').attr('checked', true);
+    if ($('#hidden_list_type').val()==="radio_white_list"){
+        $('#preset_manual_white').attr('checked',true);
+    }
+    else {
+        $('#preset_manual_black').attr('checked',true);
+    }
   });
+
+  $("#presets_input_hidden").trigger('change');
   $('#hidden_list_type').trigger('change');
 
   /*******************************************************/
@@ -60,7 +67,6 @@ $(document).ready(function () {
 
   /*******************************************************/
   // add strings to tables
-  console.log($("#hidden_list_type").val());
 
   // add new hash-level rule
   var new_hash_row = 
@@ -170,11 +176,11 @@ function AddRulesFromFile (data) {
   }
   if (rules_json.hasOwnProperty('policy')){
     if (rules_json['policy'] === 0){
-        $("#radio_black_list").val("radio_white_list"); 
+        $("#form_presets").val("radio_white_list"); 
         $("#hidden_list_type").val("radio_white_list");
     }
     else{
-      $("#radio_black_list").val("radio_black_list"); 
+      $("#form_presets").val("radio_black_list"); 
       $("#hidden_list_type").val("radio_black_list");
     }
   }
