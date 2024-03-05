@@ -61,7 +61,8 @@ std::string JsonRule::BuildString() const noexcept {
 
 void JsonRule::ParseOneField(const boost::json::object *ptr_field) {
   for (const auto &field_obj : *ptr_field) {
-    std::string field =std::string(field_obj.key().cbegin(),field_obj.key().cend());
+    std::string field =
+        std::string(field_obj.key().cbegin(), field_obj.key().cend());
     std::string value = field_obj.value().as_string().c_str();
     if (value.empty()) {
       throw std::logic_error("Empty value for field " + field);
