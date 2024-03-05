@@ -358,29 +358,31 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
     file << new_content;
     file.close();
     // parse new rules
-    auto parsed_new_file = ParseGuardRulesFile();
-    // If some errors occurred while parsing new rules - recover
-    if (parsed_new_file.first.size() != parsed_new_file.second ||
-        !TryToRun(run_daemon)) {
-      Log::Error() << "Error parsing new rules,old file will be recovered";
-      std::ofstream file3(daemon_rules_file_path);
-      if (!file3.is_open()) {
-        Log::Error() << "[ERROR] Can't open file " << daemon_rules_file_path
-                     << " for writing";
+    if (!new_content.empty()) {
+      auto parsed_new_file = ParseGuardRulesFile();
+      // If some errors occurred while parsing new rules - recover
+      if (parsed_new_file.first.size() != parsed_new_file.second ||
+          !TryToRun(run_daemon)) {
+        Log::Error() << "Error parsing new rules,old file will be recovered";
+        std::ofstream file3(daemon_rules_file_path);
+        if (!file3.is_open()) {
+          Log::Error() << "[ERROR] Can't open file " << daemon_rules_file_path
+                       << " for writing";
+          return false;
+        }
+        file3 << old_content.str();
+        file3.close();
+        dbus_bindings::Systemd sysd;
+        // try to run with recovered rules
+        if (!TryToRun(run_daemon)) {
+          Log::Error()
+              << "Can't start usbguard service. UsbGuard will be disabled";
+          ChangeImplicitPolicy(false);
+          TryToRun(false);
+          ChangeDaemonStatus(false, false);
+        }
         return false;
       }
-      file3 << old_content.str();
-      file3.close();
-      dbus_bindings::Systemd sysd;
-      // try to run with recovered rules
-      if (!TryToRun(run_daemon)) {
-        Log::Error()
-            << "Can't start usbguard service. UsbGuard will be disabled";
-        ChangeImplicitPolicy(false);
-        TryToRun(false);
-        ChangeDaemonStatus(false, false);
-      }
-      return false;
     }
   }
 
@@ -389,7 +391,8 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
     Log::Error() << "Can't change usbguard policy";
     return false;
   }
-  TryToRun(run_daemon);
+  if (run_daemon)
+    TryToRun(run_daemon);
   return true;
 }
 
