@@ -63,7 +63,7 @@ std::optional<bool> Systemd::StartUnit(const std::string &unit_name) noexcept {
   if (!Health())
     return std::nullopt;
   try {
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     auto proxy = CreateProxyToSystemd(kObjectPath);
     auto method =
         proxy->createMethodCall(kSystemdInterfaceManager, "StartUnit");
@@ -93,7 +93,7 @@ std::optional<bool> Systemd::EnableUnit(const std::string &unit_name) noexcept {
     return std::nullopt;
 
   try {
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     std::vector<std::string> arr_unit_names{unit_name};
     auto proxy = CreateProxyToSystemd(kObjectPath);
     auto method =
@@ -124,7 +124,7 @@ Systemd::DisableUnit(const std::string &unit_name) noexcept {
   if (!Health())
     return std::nullopt;
   try {
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     std::vector<std::string> arr_unit_names{unit_name};
     auto proxy = CreateProxyToSystemd(kObjectPath);
     auto method =
@@ -155,7 +155,7 @@ Systemd::RestartUnit(const std::string &unit_name) noexcept {
     return std::nullopt;
 
   try {
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     auto proxy = CreateProxyToSystemd(kObjectPath);
     auto method =
         proxy->createMethodCall(kSystemdInterfaceManager, "RestartUnit");
@@ -182,9 +182,8 @@ Systemd::RestartUnit(const std::string &unit_name) noexcept {
 std::optional<bool> Systemd::StopUnit(const std::string &unit_name) noexcept {
   if (!Health())
     return std::nullopt;
-
   try {
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     // if a unit is already stopped
     auto isActive = IsUnitActive(unit_name);
     if (isActive && !isActive.value()) {
