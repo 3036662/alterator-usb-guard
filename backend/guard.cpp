@@ -206,6 +206,7 @@ Guard::ApplyJsonRulesChanges(const std::string &msg) noexcept {
   if (*preset_mode == "put_connected_to_white_list" ||
       *preset_mode == "put_connected_to_white_list_plus_HID") {
     obj_result = ProcessJsonAllowConnected(rules_to_add);
+    config_status.ChangeImplicitPolicy(true);
   }
   // add HID devices to white list
   if (*preset_mode == "put_connected_to_white_list_plus_HID")
@@ -250,16 +251,6 @@ boost::json::object Guard::ProcessJsonAllowConnected(
   namespace json = boost::json;
   json::object res;
   auto config = GetConfigStatus();
-  // temporary change the policy to "allow all"
-  // The purpose is to launch USBGuard without blocking anything
-  // to receive a list of devices
-  if (!config.ChangeImplicitPolicy(false)) {
-    Log::Error() << "Can't change usbguard policy";
-    res["STATUS"] = "error";
-    res["ERROR_MSG"] = "Failed to change usbguard policy";
-    return res;
-  }
-  Log::Info() << "USBguard implicit policy was changed to allow all";
   // make sure that USBGuard is running
   ConnectToUsbGuard();
   if (!HealthStatus()) {
@@ -289,11 +280,6 @@ boost::json::object Guard::ProcessJsonAllowConnected(
       res["ERROR_MSG"] = "Failed to create policy.Failed";
       return res;
     }
-  }
-
-  if (config.implicit_policy_target != "block") {
-    Log::Info() << "Changing USBGuard policy to block all";
-    config.ChangeImplicitPolicy(true);
   }
   res["STATUS"] = "OK";
   return res;
