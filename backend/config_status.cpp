@@ -372,10 +372,13 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
       file3 << old_content.str();
       file3.close();
       dbus_bindings::Systemd sysd;
-      using namespace std::chrono_literals;
-      auto start_result = sysd.StartUnit(usb_guard_daemon_name);
-      if (!start_result || *start_result) {
-        Log::Error() << "Can't start usbguard service";
+      // try to run with recovered rules
+      if (!TryToRun(run_daemon)) {
+        Log::Error()
+            << "Can't start usbguard service. UsbGuard will be disabled";
+        ChangeImplicitPolicy(false);
+        TryToRun(false);
+        ChangeDaemonStatus(false, false);
       }
       return false;
     }
@@ -386,6 +389,7 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
     Log::Error() << "Can't change usbguard policy";
     return false;
   }
+  TryToRun(run_daemon);
   return true;
 }
 

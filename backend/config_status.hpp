@@ -80,6 +80,7 @@ public:
    * @param block if true - apply "block" policy
    * @return true Succeded
    * @return false Failed
+   * @warning Usbguard should be restarted to apply changes
    */
   bool ChangeImplicitPolicy(bool block) noexcept;
 
