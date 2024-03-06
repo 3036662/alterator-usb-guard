@@ -14,6 +14,13 @@
 namespace guard::utils {
 
 /**
+ * @brief Upload CSV rules from file, uploaded by user
+ * @param file  file content
+ */
+std::optional<std::vector<GuardRule>>
+UploadRulesCsv(const std::string &file) noexcept;
+
+/**
  * @brief Build a json response for rules uploaded from csv
  */
 std::optional<std::string>
