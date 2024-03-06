@@ -9,6 +9,10 @@
 (define (get-value key assoc-list)
   (cadr (assoc key assoc-list)))
 
+; concatenate two strings
+(define (concatenate-strings str1 str2)
+  (string-append str1 str2))
+
 (define (object->string obj)
   (call-with-output-string
     (lambda (port)
@@ -27,6 +31,8 @@
              (form-update-value "usb_guard_status" "UsbGuard service ... ACTIVE") 
              (form-update-visibility "list_prsnt_devices" #t)
              (form-update-visibility "usb_buttons" #t)
+             ; set checkbox checked if usbguard is active   
+             (form-update-value "checkbox_use_usbguard" #t)
           )
           ;  else (usbguard is not totally ok)
           ( begin
@@ -41,6 +47,8 @@
                (begin
                   (form-update-visibility "list_prsnt_devices" #t)
                   (form-update-visibility "usb_buttons" #t)
+                  ; set checkbox checked if usbguard is active   
+                  (form-update-value "checkbox_use_usbguard" #t)
                   (ls_usbs)
                ) 
                ; else hide list of devices
@@ -63,7 +71,14 @@
                (form-update-visibility "udev_warnings" #t)    
                (form-update-enum "list_suspicious_files"  (woo-list "/usbguard/check_config_udev")) 
             )
-       )      
+       )
+       ;show allowed users and groups
+       (form-update-value "usbguard_users" 
+         (concatenate-strings "Users are allowed to change rules: " (get-value 'allowed_users status))
+       ) 
+       (form-update-value "usbguard_groups"
+         (concatenate-strings "Users are allowed to change rules: " (get-value 'allowed_groups status))
+       )       
    ) ; let
 )
 
@@ -74,6 +89,8 @@
    (groupbox title "Service status"
       (label name "usb_guard_status")
       (label name "udev_rules_status")
+      (label name "usbguard_users")
+      (label name "usbguard_groups")
       (spacer)
       (vbox name "udev_warnings"
          (label text "Suspicious files were found in udev config folders.")
@@ -87,6 +104,7 @@
                   ) 
          )      
       )
+      (checkbox text "Use usb ports control" name "checkbox_use_usbguard")
    )
    (spacer)
    (spacer colspan 3)
