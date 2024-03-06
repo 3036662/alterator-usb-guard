@@ -49,6 +49,7 @@ install(TARGETS usbguard
 )
 install(FILES 
         ${CMAKE_SOURCE_DIR}/alterator_ui/ajax.scm 
+        ${CMAKE_SOURCE_DIR}/alterator_ui/index.scm 
         ${CMAKE_SOURCE_DIR}/alterator_ui/index.html 
         DESTINATION "/usr/share/alterator/ui/usbguard"
 )

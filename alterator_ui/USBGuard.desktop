@@ -7,5 +7,4 @@ Terminal=false
 Name=USBGuard
 X-Alterator-URI=/usbguard
 X-Alterator-Weight=20
-X-Alterator-UI=html
 Name[ru]=USBGuard
