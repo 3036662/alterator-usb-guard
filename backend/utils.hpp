@@ -62,7 +62,7 @@ std::string ToLisp(const SerializableForLisp<T> &obj) noexcept {
   }
   // use name:value
   while (iter != vec.cend()) {
-    res += WrapWithQuotes(iter->first);
+    res += iter->first;
     res += " ";
     res += WrapWithQuotes(iter->second);
     res += " ";
