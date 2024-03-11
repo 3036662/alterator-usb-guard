@@ -83,13 +83,6 @@ public:
   std::optional<std::string>
   ApplyJsonRulesChanges(const std::string &msg) noexcept;
 
-  /**
-   * @brief Upload CSV rules from file, uploaded by user
-   * @param file  file content
-   */
-  std::optional<std::vector<GuardRule>>
-  UploadRulesCsv(const std::string &file) noexcept;
-
 private:
   /// True if daemon is active
   bool HealthStatus() const noexcept;

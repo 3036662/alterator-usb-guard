@@ -67,7 +67,7 @@ bool MessageDispatcher::UploadRulesFile(const LispMessage &msg) const noexcept {
     return true;
   }
   std::optional<std::vector<guard::GuardRule>> vec_rules =
-      guard_.UploadRulesCsv(msg.params.at("upload_rules"));
+      guard::utils::UploadRulesCsv(msg.params.at("upload_rules"));
   Log::Debug() << "Rules parsed";
   if (vec_rules.has_value() && !vec_rules->empty()) {
     std::optional<std::string> js_arr = guard::utils::BuildJsonArrayOfUpploaded(

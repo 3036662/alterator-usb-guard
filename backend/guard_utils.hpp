@@ -14,6 +14,13 @@
 namespace guard::utils {
 
 /**
+ * @brief Upload CSV rules from file, uploaded by user
+ * @param file  file content
+ */
+std::optional<std::vector<GuardRule>>
+UploadRulesCsv(const std::string &file) noexcept;
+
+/**
  * @brief Build a json response for rules uploaded from csv
  */
 std::optional<std::string>
@@ -93,7 +100,7 @@ bool InterfaceValidator(const std::string &val) noexcept;
  *
  * @param raw_str String to split
  * @return std::vector<std::string>
- * @example "id    1    name   "Long Name"" -> { "id","1",""Long Name""}
+ * @details "id    1    name   "Long Name"" -> { "id","1",""Long Name""}
  */
 std::vector<std::string> SplitRawRule(std::string raw_str) noexcept;
 

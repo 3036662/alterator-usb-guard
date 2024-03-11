@@ -1,0 +1,26 @@
+allow id 7Dbb:* serial "R0Ci+jH'" name "g-!};_LI" hash "0,;UW~fn" parent-hash "f<A^w5kG" via-port "|+|iC%y4" with-interface { 4d:61:* B1:bA:* db:dE:A9 B2:*:* 3A:aE:* 6d:*:* }
+allow hash "0,;UW~fn" id  7Dbb:* serial "R0Ci+jH'" parent-hash  "f<A^w5kG" name "g-!};_LI" with-interface equals { 4d:61:* B1:bA:* db:dE:A9 B2:*:* 3A:aE:* 6d:*:* } via-port  "|+|iC%y4" 
+allow hash "4pAg0-_k" via-port "<Q~kbL2x" with-interface equals-ordered { Cd:*:* D7:Ff:ae E2:*:* 52:B0:* 4D:*:* 0d:21:* }
+allow hash "0,;UW~fn" id  7Dbb:*  serial "R0Ci+jH'" parent-hash "f<A^w5kG" name "g-!};_LI" with-interface equals { 4d:61:* B1:bA:* db:dE:A9 B2:*:* 3A:aE:* 6d:*:* } via-port one-of { "|+|iC%y4" "}SB@jbVd" }
+block hash "NlcFk|zb"
+allow hash "4pAg0-_k" with-interface equals-ordered { Cd:*:* D7:Ff:ae E2:*:* 52:B0:* 4D:*:* 0d:21:* } via-port "<Q~kbL2x" name "wSNm}ee/"
+allow hash "6CJS2jC_" id 5cBE:fc52 with-interface equals { 00:c1:A6 2E:*:* 1e:*:* c6:ae:0F 9F:*:* 3C:*:* } serial "=5G-xMpI" parent-hash "l i}~|dJ" via-port "A?DY5T+{"
+allow hash "6^~>+n`s" via-port "/^WlPN7G"  if rule-evaluated
+allow hash "z$6EAE`V" if !localtime(2:00)
+allow id fA6E:* serial "v]s`5riB" hash "]:.drVPa" parent-hash "!dcVB5iT" via-port "%C`qdl9b" if allowed-matches(name "mIba4_Mk")
+allow hash "G4Rs_h^K"  if equals { true false !true false }
+allow hash "G4Rs_h^K" if equals{true false !true false}
+allow id 0da4:bCa4 with-interface { 8B:A1:33 Fd:F0:* CE:88:Aa bC:b0:B6 7F:dc:* dc:a0:* 49:5C:* F5:91:c9 }
+allow id 20F6:*
+allow id 48c9:B016 name "KOGY9jPX" with-interface fe:0b:* hash "oyH8A,$!"
+allow id 5D3C:*  name  "ylD+:/QD" parent-hash "YXu_=*5Q"
+allow id 7DfA:* with-interface DD:e5:Be parent-hash "YTv7H7H%" via-port "0uq<hva?"  if rule-applied
+allow parent-hash "A!egv?S<"  if rule-applied
+allow  if allowed-matches(name ":[-iqZSZ")
+allow  if allowed-matches(name "mfoB!!Z-")
+allow  if !false
+allow  if random
+allow name "`2[cOu&8" serial "nw@acm?>"  if !false
+allow name "3Z|DTZq=" with-interface 85:Ef:Cf serial "d`~6Cu=>"
+allow hash "BZ:Rs,AF" via-port  ":{bSGo0^"  serial  "#|0#fK/M"  parent-hash  "q{UtS-B0"  with-interface one-of { d5:F8:* 63:*:* Cc:1D:* c8:c2:09 }
+allow serial "13gwVVH5" parent-hash "^$#pYu'q" via-port " ;Oqn1Y-" id 34B6:05b0 hash "Gme/.b;n" name "uB69{#>*"  if !localtime(2:00)

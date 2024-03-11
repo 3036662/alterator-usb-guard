@@ -245,8 +245,9 @@ void Test::Run8() {
 }
 
 void Test::Run9() {
-  guard::GuardRule parser("allow");
+  guard::GuardRule parser("allow id *:*");
   {
+
     std::vector<std::string> expected{"a", "b"};
     assert(SplitRawRule("a b") == expected);
   }
@@ -290,13 +291,21 @@ void Test::Run9() {
 }
 
 void Test::Run10() {
-  std::string str = "allow";
+
+
+
+  std::string str = "allow name \"name\"";
   {
     guard::GuardRule parser(str);
     assert((parser.target() == guard::Target::allow) && !parser.vid_ &&
-           !parser.pid_ && !parser.hash_ && !parser.device_name_ &&
+           !parser.pid_ && !parser.hash_ && 
            !parser.serial_ && !parser.port_ && !parser.with_interface_ &&
            !parser.cond_);
+  }
+  
+  str = "allow hash \"0,;UW~fn\" id  7Dbb:* serial \"R0Ci+jH\'\" parent-hash  \"f<A^w5kG\" name \"g-!};_LI\" with-interface equals { 4d:61:* B1:bA:* db:dE:A9 B2:*:* 3A:aE:* 6d:*:* } via-port  \"|+|iC%y4\" ";
+  {
+    guard::GuardRule parser(str);
   }
   str = "block id 8564:1000";
   {
@@ -560,7 +569,7 @@ Log::Test() << "rule-applied time with parameter";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="!rule-applied(HH__SMM_MM)";
+    std::string expected=" !rule-applied(HH__SMM_MM)";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
   }
@@ -570,7 +579,7 @@ Log::Test() << "rule-evaluated time with no parameter";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="!rule-evaluated";
+    std::string expected=" !rule-evaluated";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
   }
@@ -580,17 +589,17 @@ Log::Test() << "rule-evaluated time with no parameter";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="rule-evaluated(HH:MM:SS)";
+    std::string expected=" rule-evaluated(HH:MM:SS)";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
   }
 
   Log::Test() << "One-of  with sequense of coditions";
-  str = "allow if one-of{!rule-evaluated(HH:MM:SS) true}";
+  str = "allow if one-of {!rule-evaluated(HH:MM:SS) true}";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="one-of{!rule-evaluated(HH:MM:SS) true}";
+    std::string expected="one-of {!rule-evaluated(HH:MM:SS) true}";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
   }
@@ -600,7 +609,7 @@ Log::Test() << "rule-evaluated time with no parameter";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="one-of{!rule-evaluated(HH:MM:SS) true}";
+    std::string expected="one-of {!rule-evaluated(HH:MM:SS) true}";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
     assert(parser.target() == Target::allow);
@@ -629,7 +638,7 @@ Log::Test() << "rule-evaluated time with no parameter";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="one-of{localtime(HH:MM:SS) true}";
+    std::string expected="one-of {localtime(HH:MM:SS) true}";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
     assert(parser.target() == Target::allow);
@@ -643,7 +652,7 @@ Log::Test() << "rule-evaluated time with no parameter";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="one-of{allowed-matches(query) localtime(HH:MM:SS)}";
+    std::string expected="one-of {allowed-matches(query) localtime(HH:MM:SS)}";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
     assert(parser.target() == Target::allow);
@@ -656,7 +665,7 @@ Log::Test() << "rule-evaluated time with no parameter";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="one-of{allowed-matches(query) localtime(HH:MM:SS) rule-applied(past_duration)}";
+    std::string expected="one-of {allowed-matches(query) localtime(HH:MM:SS) rule-applied(past_duration)}";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
     assert(parser.target() == Target::allow);
@@ -669,7 +678,7 @@ Log::Test() << "rule-evaluated time with no parameter";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="one-of{allowed-matches(query) localtime(HH:MM:SS) rule-applied(past_duration) rule-applied random(p_true)}";
+    std::string expected="one-of {allowed-matches(query) localtime(HH:MM:SS) rule-applied(past_duration) rule-applied random(p_true)}";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
     assert(parser.target() == Target::allow);
@@ -682,7 +691,7 @@ Log::Test() << "rule-evaluated time with no parameter";
   {
     GuardRule parser(str);
     std::string cond_result=parser.ConditionsToString();
-    std::string expected="one-of{true allowed-matches(query) localtime(HH:MM:SS) rule-applied(past_duration) rule-applied random(p_true)}";
+    std::string expected="one-of {true allowed-matches(query) localtime(HH:MM:SS) rule-applied(past_duration) rule-applied random(p_true)}";
     Log::Test() <<cond_result <<"==" << expected;
     assert(cond_result == expected);
     assert(parser.target() == Target::allow);
@@ -1122,7 +1131,7 @@ void Test::Run14(){
     assert(rule.with_interface_.value() == pair);
     assert(rule.port_.has_value());
     assert(rule.port_ == ports);
-    assert(rule.level() == guard::StrictnessLevel::vid_pid);
+    assert(rule.level() == guard::StrictnessLevel::non_strict);
   }
 
   {
@@ -1161,7 +1170,7 @@ void Test::Run14(){
     assert(rule.with_interface_.value() == pair);
     assert(rule.port_.has_value());
     assert(rule.port_ == ports);
-    assert(rule.level() == guard::StrictnessLevel::vid_pid);
+    assert(rule.level() == guard::StrictnessLevel::non_strict);
     assert(rule.conn_type_ == "hotplug");
   }
 
@@ -1202,7 +1211,7 @@ void Test::Run14(){
     assert(rule.with_interface_.value() == pair);
     assert(rule.port_.has_value());
     assert(rule.port_ == ports);
-    assert(rule.level() == guard::StrictnessLevel::vid_pid);
+    assert(rule.level() == guard::StrictnessLevel::non_strict);
     assert(rule.conn_type_ == "hotplug");
 
     std::pair<guard::RuleOperator, std::vector<guard::RuleWithBool>> conds=std::make_pair(guard::RuleOperator::one_of,std::vector<guard::RuleWithBool>());

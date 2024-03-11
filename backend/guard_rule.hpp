@@ -126,6 +126,13 @@ public:
 private:
   ///  @brief Build a condition string from this object.
   std::string ConditionsToString() const;
+  /// @brief Determine a strictness level, wtite to level_
+  void DetermineStrictnessLevel() noexcept;
+  /**
+   * @brief Finial validation of builded rule
+   * @throw std::logic_error
+   */
+  void FinalValidator(std::vector<std::string> &) const;
   /// @brief Builds a string from ports
   std::string PortsToString() const;
   /// @brief Builds a string from interfaces

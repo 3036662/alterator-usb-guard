@@ -1,0 +1,16 @@
+allow
+alloww
+asdf
+.:][}{}{(*#*&^!&^%
+allow 1234:1234 id 1234:1234
+allow name
+allow name one-of
+allow name { a }
+allow name \"a\"
+allow with-interface 1::
+allow with-interface 12:*:34
+allow with-interface one-of
+allow with-interface some { 12:12:12 }
+allow if !(true
+allow if !!()
+allow with-connect-type one-of { "hardwired" } with-connect-type "hardwired"
