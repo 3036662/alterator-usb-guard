@@ -15,7 +15,7 @@ Source2: %name-%version-thirdparty-rapidcsv.tar
 Requires: usbids usbguard alterator
 BuildPreReq: gcc-c++ cmake ninja-build rpm-macros-cmake rpm-build-licenses 
 
-BuildRequires: usbguard-devel libusbguard1 boost-devel-headers  libsdbus-cpp-devel libsystemd-devel 
+BuildRequires: usbguard-devel libusbguard1 boost-devel-headers  libsdbus-cpp-devel libsystemd-devel gettext-tools
 
 
 %description
@@ -39,6 +39,7 @@ Alterator Module to control USB devices via USBGuard.
 %_altdata_dir/ui/usbguard/index.html
 %_usr/lib/alterator/backend3/usbguard
 %_sysconfdir/usbguard/android_vidpid.json
+%lang(ru)  %_datadir/locale/ru/LC_MESSAGES/alterator-usbguard.mo
 
 %changelog
 * Mon Mar 04 2024 Oleg Proskurin <proskur@altlinux.org> 0.1-alt1
