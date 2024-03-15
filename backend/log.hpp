@@ -31,7 +31,7 @@ public:
       std::cerr << val;
       return *this;
     }
-    Warning() noexcept { std::cerr << "[WARINING] "; }
+    Warning() noexcept { std::cerr << "[WARNING] "; }
     ~Warning() { std::cerr << "\n"; }
   };
   class Error {

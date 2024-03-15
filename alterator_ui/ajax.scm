@@ -39,6 +39,7 @@
 ; udev:     "OK" or BAD 
 (define (config_status_check)
    (let ((status  (removeFirstElement (woo-read "/usbguard/config_status")) ))
+   ; (woo-error (object->string status))
            ; if udev=OK
            (if (string=? "OK" (get-value 'udev status)) 
                 (begin
@@ -69,8 +70,14 @@
                 )
                 ;else usbguard not totally fine
                 (begin
-                     (form-update-value "usbguard_enabled" (get-value 'usbguard_enabled status) )
-                     (form-update-value "usbguard_active" (get-value 'usbguard_active status))
+                     (if (string=? "ENABLED"  (get-value 'usbguard_enabled status)) 
+                        (form-update-value "usbguard_enabled" (_ "Autorun is ENABLED"))
+                        (form-update-value "usbguard_enabled" (_ "Autorun is DISABLED"))                                     
+                     )
+                     (if (string=? "ACTIVE"  (get-value 'usbguard_active status))
+                         (form-update-value "usbguard_active" (_ "Process is ACTIVE") )
+                         (form-update-value "usbguard_active" (_ "Process is STOPPED") )   
+                     )                                     
                      (form-update-visibility "guard_status_ok" #f)
                      (form-update-visibility "guard_status_bad" #t)
                      ; if usbguard prosess is active
@@ -88,6 +95,12 @@
                 )    
            ) ; endif
            
+           ; file permissions warning
+           (if  (string=? "OK" (get-value 'config_files_permissions status))
+                (form-update-visibility "warning_file_permissions" #f)
+                (form-update-visibility "warning_file_permissions" #t)
+           ) ; endif            
+
            ; disable block button if default policy is block
            (if (string=? "block" (get-value 'implicit_policy status))
                     (begin        
@@ -100,19 +113,28 @@
                     )
            ) ; endif     
 
-           ; set checkbox checked if usbguard is active 
-           (form-update-value "checkbox_use_control_hidden" 
-                    (string=? "ACTIVE" (get-value 'usbguard_active status)))
+
            ;show allowed users and groups
            (form-update-value "usbguard_users" (get-value 'allowed_users status)) 
            (form-update-value "usbguard_groups" (get-value 'allowed_groups status)) 
-           
-           ;select a preset
-           (form-update-value "presets_input_hidden" "manual_mode")
+                     
            ;select a list type (white or black)
            (if (string=? "block" (get-value 'implicit_policy status))
                (form-update-value "hidden_list_type" "radio_white_list")
                (form-update-value "hidden_list_type" "radio_black_list") 
+           )
+
+           ; set checkbox checked if usbguard is active 
+           (if (string=? "ACTIVE" (get-value 'usbguard_active status))             
+                (begin
+                    (form-update-value "checkbox_use_control_hidden" #t)
+                    (form-update-value "presets_input_hidden" "manual_mode")
+                )
+                ;select a preset
+                (begin
+                    (form-update-value "checkbox_use_control_hidden" #f)                  
+                    (form-update-value "presets_input_hidden" "put_connected_to_white_list")
+                )
            )
 
    )  ; //let
@@ -120,24 +142,28 @@
 
 ; unblock the selected device 
  (define (allow_device)
-    (let ((  status  (woo-read-first "/usbguard/usb_allow" 'usb_id  (form-value "list_prsnt_devices")) )) 
-        (if   
-            (equal? "OK" (woo-get-option status 'status))
-            (update_after_rulles_applied)
-            (woo-throw  "Error while trying to unblock selected device")
-        )
-    ); let
+    (if (string? (form-value "list_prsnt_devices"))
+        (let ((  status  (woo-read-first "/usbguard/usb_allow" 'usb_id  (form-value "list_prsnt_devices")) )) 
+            (if   
+                (equal? "OK" (woo-get-option status 'status))
+                (update_after_rulles_applied)
+                (woo-error (_ "Error while trying to unblock selected device. You can unblock it using hash or interface."))
+            )
+        ); let
+    ) ; endif
  )
 
  ;block selected device
  (define (block_device)
-     (let ((  status  (woo-read-first "/usbguard/usb_block" 'usb_id  (form-value "list_prsnt_devices")) )) 
-        (if   
-            (equal? "OK" (woo-get-option status 'status))
-            (update_after_rulles_applied)
-            (woo-throw  "Error while trying to block selected device")
-        )
-    ); let
+    (if (string? (form-value "list_prsnt_devices"))    
+        (let ((  status  (woo-read-first "/usbguard/usb_block" 'usb_id  (form-value "list_prsnt_devices")) )) 
+            (if   
+                (equal? "OK" (woo-get-option status 'status))
+                (update_after_rulles_applied)
+                (woo-error  (_ "Error while trying to block selected device"))
+            )
+        ); let
+    ); endif
  )
 
 
@@ -146,10 +172,21 @@
     (let ((  response  (removeFirstElement (woo-read "/usbguard/apply_changes" 'changes_json  (form-value "hidden_manual_changes_data"))) ))
         (if 
             (string=? "OK" (get-value 'status response))
-            (form-update-value "hidden_manual_changes_response" (get-value 'ids_json response) )
-            (woo-error "An error occured while processing new rules" )
+            (js "ValidationResponseCallback" (get-value 'ids_json response) )
+            (woo-error (_ "An error occurred when starting the USB Guard with new rules. We recommend checking the rules and configuration files for correctness." ))
         )
     ); //let 
+)
+
+; send all changes to backend for validation
+(define (validate_rules_handler)
+    (let ((  response  (removeFirstElement (woo-read "/usbguard/validate_changes" 'changes_json  (form-value "hidden_manual_changes_data"))) ))
+        (if 
+            (string=? "OK" (get-value 'status response))
+            (js "ValidationResponseCallback" (get-value 'ids_json response) )
+            (woo-error (_ "An error occurred when starting the USB Guard with new rules. We recommend checking the rules and configuration files for correctness." ))
+        )
+    ); //let
 )
 
 (define (update_after_rulles_applied)
@@ -167,17 +204,35 @@
          ))  
        (if  (string=? "OK" (get-value 'status response))
             (js "AddRulesFromFile" (get-value 'response_json response) )
-            (woo-error "An error occured while parsing csv file")
+            (if (string=? "ERROR_EMPTY" (get-value 'status response))
+                (woo-error (_ "An empty csv file. Parsed 0 rules."))
+                (woo-error (_ "An error occured while parsing csv file"))
+            )
        ) 
     ) ; let
 )
 
+; validation finished signal from js
+(define (validation_finished)
+    (form-update-activity "save_rules"  #t)
+    (form-update-activity "validate_rules"  #f)
+)
+; some changes where made - validation needed
+(define (validation_needed)
+    (form-update-activity "save_rules"  #f)
+    (form-update-activity "validate_rules"  #t)
+)
+
 (define (init)
+  (validation_needed)  
+  (form-bind "validate_rules" "validation_finished" validation_finished)  
+  (form-bind "validate_rules" "validation_needed" validation_needed)
   (config_status_check)
   (ls_guard_rules)
   (form-bind "btn_prsnt_scan" "click" ls_usbs)
   (form-bind "btn_prsnt_dev_add" "click" allow_device)
   (form-bind "btn_prsnt_dev_block" "click" block_device)
+  (form-bind "hidden_manual_changes_data" "rules_json_validation" validate_rules_handler) ;save changes event
   (form-bind "hidden_manual_changes_data" "rules_json_ready" save_rules_handler) ;save changes event
   (form-bind "hidden_manual_changes_response" "rules_applied" update_after_rulles_applied)  
   (form-bind-upload "load_file_button" "data_ready" "file_input" upload_rules_callback )

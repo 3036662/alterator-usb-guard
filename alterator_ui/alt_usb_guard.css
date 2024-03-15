@@ -84,3 +84,16 @@
     width: 100%;
     border: 0px;
 }
+
+.crossed-out {
+    text-decoration: line-through;
+    font-weight: bold;
+}
+
+.validator_appended{
+    border: 2px green solid;
+}
+
+.inline{
+    display: inline;
+}

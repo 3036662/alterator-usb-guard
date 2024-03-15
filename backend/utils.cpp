@@ -5,6 +5,7 @@
 #include <exception>
 #include <filesystem>
 #include <iostream>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -88,6 +89,7 @@ std::optional<uint32_t> StrToUint(const std::string &str) noexcept {
   } catch (std::exception &e) {
     std::cerr << "Error string to number conversion";
     std::cerr << e.what();
+    return std::nullopt;
   }
   return res;
 }

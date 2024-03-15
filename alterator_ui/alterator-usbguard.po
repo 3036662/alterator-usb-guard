@@ -1,0 +1,235 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-15 15:26+0300\n"
+"PO-Revision-Date: 2024-03-15 16:00+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.2\n"
+"X-Poedit-Basepath: .\n"
+
+#: стандартный ввод:1
+msgid "UsbGuard service ... ACTIVE"
+msgstr "UsbGuard ... АКТИВЕН"
+
+#: стандартный ввод:2
+msgid "UsbGuard service ... "
+msgstr "USBGuard служба "
+
+#: стандартный ввод:3
+msgid " Wrong file permissions for UsbGuard config files (requiered 0600)."
+msgstr ""
+" Неверные права доступа к файлам конфигурации UsbGuard (требуется 0600)."
+
+#: стандартный ввод:4
+msgid "Udev rules ... OK"
+msgstr "Правила Udev... OK"
+
+#: стандартный ввод:5
+msgid "Udev rules ... WARNING"
+msgstr "Правила Udev ... WARINIG"
+
+#: стандартный ввод:6
+msgid "Users are allowed to change rules:"
+msgstr "Эти пользователи могут изменять правила:"
+
+#: стандартный ввод:7
+msgid "Groups are allowed to change rules: "
+msgstr "Эти группы могу менять правила: "
+
+#: стандартный ввод:8
+msgid "Suspicious files were found in udev config folders."
+msgstr "В папках конфигурации udev были обнаружены подозрительные файлы."
+
+#: стандартный ввод:9
+msgid "It may cause undefined behavior."
+msgstr "Это может привести к неопределенному поведению."
+
+#: стандартный ввод:10
+msgid "Please double-check before configuring."
+msgstr "Пожалуйста, перепроверьте перед настройкой."
+
+#: стандартный ввод:11
+msgid "Use usb ports control"
+msgstr "Активировать контроль портов"
+
+#: стандартный ввод:12
+msgid "Connnected usb devices:"
+msgstr "Подключенные usb-устройства:"
+
+#: стандартный ввод:13
+msgid "List of devices"
+msgstr "Список устройств"
+
+#: стандартный ввод:14 ввод:39 ввод:47
+msgid "Port"
+msgstr "Порт"
+
+#: стандартный ввод:15 ввод:44
+msgid "Vendor"
+msgstr "Вендор"
+
+#: стандартный ввод:16 ввод:46
+msgid "Product"
+msgstr "Название"
+
+#: стандартный ввод:17
+msgid "SN"
+msgstr "Серийный номер"
+
+#: стандартный ввод:18 ввод:52
+msgid "Hash"
+msgstr "Хэш"
+
+#: стандартный ввод:19
+msgid "Status"
+msgstr "Статус"
+
+#: стандартный ввод:20
+msgid "Scan plugged-in USB devices"
+msgstr "Сканировать устройства"
+
+#: стандартный ввод:21
+msgid "Allow device"
+msgstr "Разблокировать"
+
+#: стандартный ввод:22
+msgid "Block device"
+msgstr "Заблокировать"
+
+#: стандартный ввод:23
+msgid "Presets"
+msgstr "Предустановки"
+
+#: стандартный ввод:24
+msgid "White list:"
+msgstr "Белый список:"
+
+#: стандартный ввод:25
+msgid "Block everything except connected devices."
+msgstr "Заблокировать все, кроме подключенных устройств"
+
+#: стандартный ввод:26
+msgid "Block everything except connected and HID/DUB devices."
+msgstr "Заблокировать все, кроме подключенных и HID/DUB устройств"
+
+#: стандартный ввод:27 ввод:31
+msgid "Manual mode"
+msgstr "Ручной режим"
+
+#: стандартный ввод:28
+msgid "Black list:"
+msgstr "Черный список:"
+
+#: стандартный ввод:29
+msgid "Block only USB Mass Storage, MTP/PTP."
+msgstr "Блокировать только USB накопители и MTP/PTP"
+
+#: стандартный ввод:30
+msgid "Block and reject only Android devices."
+msgstr "Блокировать только  устройства в режиме Android"
+
+#: стандартный ввод:32
+msgid "Unsorted rules"
+msgstr "Другие правила"
+
+#: стандартный ввод:33
+msgid "Rule"
+msgstr "Правило"
+
+#: стандартный ввод:34 ввод:40 ввод:48 ввод:54
+msgid "Action"
+msgstr "Действие"
+
+#: стандартный ввод:35 ввод:41 ввод:49 ввод:56
+msgid "Add"
+msgstr "Добавить"
+
+#: стандартный ввод:36 ввод:42 ввод:50 ввод:57
+msgid "Delete"
+msgstr "Удалить"
+
+#: стандартный ввод:37
+msgid "Masks CC:SS:PP"
+msgstr "Маски CC:SS:PP"
+
+#: стандартный ввод:38 ввод:53
+msgid "Description"
+msgstr "Описание"
+
+#: стандартный ввод:43
+msgid "Masks VID:PID"
+msgstr "Маски VID:PID"
+
+#: стандартный ввод:45
+msgid "PID"
+msgstr "PID"
+
+#: стандартный ввод:51
+msgid "Mask Hash"
+msgstr "Хэш"
+
+#: стандартный ввод:55
+msgid "Load from file"
+msgstr "Загрузить из файла"
+
+#: стандартный ввод:58
+msgid "SAVE ALL RULES"
+msgstr "ПРИМЕНИТЬ"
+
+#: стандартный ввод:59
+msgid "CHECK THE RULES"
+msgstr "ПРОВЕРИТЬ"
+
+#: ajax.scm:74
+msgid "Autorun is ENABLED"
+msgstr "Автозапуск ВКЛЮЧЕН"
+
+#: ajax.scm:75
+msgid "Autorun is DISABLED"
+msgstr "Автозапуск ВЫКЛЮЧЕН"
+
+#: ajax.scm:78
+msgid "Process is ACTIVE"
+msgstr "Процесс  АКТИВЕН"
+
+#: ajax.scm:79
+msgid "Process is STOPPED"
+msgstr "Процесс  НЕАКТИВЕН"
+
+#: ajax.scm:150
+msgid ""
+"Error while trying to unblock selected device. You can unblock it using hash "
+"or interface."
+msgstr ""
+"Ошибка при попытке разблокировать выбранное устройство. Вы можете "
+"разблокировать его с помощью хэша или интерфейса."
+
+#: ajax.scm:163
+msgid "Error while trying to block selected device"
+msgstr "Ошибка при попытке заблокировать выбранное устройство"
+
+#: ajax.scm:176 ajax.scm:187
+msgid ""
+"An error occurred when starting the USB Guard with new rules. We recommend "
+"checking the rules and configuration files for correctness."
+msgstr ""
+"Произошла ошибка при запуске USBGuard с новыми правилами. Мы рекомендуем "
+"проверить правила и файлы конфигурации на корректность."
+
+#: ajax.scm:208
+msgid "An empty csv file. Parsed 0 rules."
+msgstr "Пустой csv-файл. Загружено 0 правил."
+
+#: ajax.scm:209
+msgid "An error occured while parsing csv file"
+msgstr "Произошла ошибка при разборе csv-файла"
+
+#: стандартный ввод:1
+msgid "USBGuard"
+msgstr "USBGuard  Контроль USB"

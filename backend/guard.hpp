@@ -76,40 +76,20 @@ public:
    *  "rules_BAD": [
    *    "rule_1"
    *   ],
-   *  "rules_OK": []
+   *  "rules_OK": [],
+   *  "rules_DELETED" :[],
+   *  "ACTION": "apply"
    * }
    * @endcode
    */
   std::optional<std::string>
-  ApplyJsonRulesChanges(const std::string &msg) noexcept;
+  ProcessJsonRulesChanges(const std::string &msg, bool apply_changes) noexcept;
 
 private:
   /// True if daemon is active
   bool HealthStatus() const noexcept;
   /// try to connect the UsbGuardDaemon
   void ConnectToUsbGuard() noexcept;
-
-  /**
-   * @brief Reads rules from USB Guard config,
-   * deletes by index, and skips rules, conflicting with a new policy
-   * @param rule_indexes Order numbers of rules to delete
-   * @param new_policy New implicit policy (allow || block)
-   * @param[out] new_rules Vector, where the result will be appended
-   * @param[out] deleted_by_policy_change If function will skip some
-   * rules via conflict with new policy, this flag will be set to true
-   * @return true on success
-   */
-  bool DeleteRules(const std::vector<uint> &rule_indexes, Target new_policy,
-                   std::vector<GuardRule> &new_rules,
-                   bool &deleted_by_policy_change) noexcept;
-
-  /**
-   * @brief Utility method to add all connected devices to allow (white) list
-   * @param[out] rules_to_add vector,  where new rules will be appended
-   * @return boost::json::object ["STATUS":"OK"]
-   */
-  boost::json::object
-  ProcessJsonAllowConnected(std::vector<GuardRule> &rules_to_add) noexcept;
 
   const std::string kDefaultQuery = "match";
   std::unique_ptr<usbguard::IPCClient> ptr_ipc_;

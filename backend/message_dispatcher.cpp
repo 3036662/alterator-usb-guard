@@ -46,8 +46,14 @@ bool MessageDispatcher::Dispatch(const LispMessage &msg) const noexcept {
   }
   // save changes rules
   if (msg.action == "read" && msg.objects == "apply_changes") {
-    return SaveChangeRules(msg);
+    return SaveChangeRules(msg, true);
   }
+
+  // validate changes
+  if (msg.action == "read" && msg.objects == "validate_changes") {
+    return SaveChangeRules(msg, false);
+  }
+
   // upload rules file
   if (msg.action == "read" && msg.objects == "rules_upload") {
     return UploadRulesFile(msg);
@@ -57,12 +63,15 @@ bool MessageDispatcher::Dispatch(const LispMessage &msg) const noexcept {
   return true;
 }
 
-bool MessageDispatcher::UploadRulesFile(const LispMessage &msg) const noexcept {
+bool MessageDispatcher::UploadRulesFile(const LispMessage &msg) noexcept {
   auto start = std::chrono::steady_clock::now();
   Log::Debug() << "Uploading file started";
   if (msg.params.count("upload_rules") == 0 ||
       msg.params.at("upload_rules").empty()) {
-    std::cout << kMessBeg << kMessEnd;
+    vecPairs vec_result;
+    vec_result.emplace_back("status", "ERROR_EMPTY");
+    std::cout << ToLispAssoc(
+        SerializableForLisp<vecPairs>(std::move(vec_result)));
     Log::Warning() << "Empty rules file";
     return true;
   }
@@ -99,7 +108,8 @@ bool MessageDispatcher::UploadRulesFile(const LispMessage &msg) const noexcept {
   return true;
 }
 
-bool MessageDispatcher::SaveChangeRules(const LispMessage &msg) const noexcept {
+bool MessageDispatcher::SaveChangeRules(const LispMessage &msg,
+                                        bool apply_rules) const noexcept {
   auto start = std::chrono::steady_clock::now();
   Log::Debug() << "Time measurement has started";
   if (msg.params.count("changes_json") == 0 ||
@@ -110,7 +120,8 @@ bool MessageDispatcher::SaveChangeRules(const LispMessage &msg) const noexcept {
   }
   std::string json_string = msg.params.at("changes_json");
   boost::replace_all(json_string, "\\\\\"", "\\\"");
-  std::optional<std::string> result = guard_.ApplyJsonRulesChanges(json_string);
+  std::optional<std::string> result =
+      guard_.ProcessJsonRulesChanges(json_string, apply_rules);
   if (result)
     *result = EscapeQuotes(*result);
   vecPairs vec_result;
@@ -206,7 +217,7 @@ bool MessageDispatcher::BlockDevice(const LispMessage &msg) const noexcept {
 bool MessageDispatcher::CheckConfig() const noexcept {
   Log::Info() << "Check config";
   std::string str = kMessBeg;
-  for (const auto &pair : guard_.GetConfigStatus().udev_warnings) {
+  for (const auto &pair : guard_.GetConfigStatus().udev_warnings()) {
     str += ToLisp({"label_udev_rules_filename", pair.first});
   }
   str += kMessEnd;

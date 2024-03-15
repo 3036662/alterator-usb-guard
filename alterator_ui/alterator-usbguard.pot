@@ -1,0 +1,234 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-15 15:26+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: стандартный ввод:1
+msgid "UsbGuard service ... ACTIVE"
+msgstr ""
+
+#: стандартный ввод:2
+msgid "UsbGuard service ... "
+msgstr ""
+
+#: стандартный ввод:3
+msgid " Wrong file permissions for UsbGuard config files (requiered 0600)."
+msgstr ""
+
+#: стандартный ввод:4
+msgid "Udev rules ... OK"
+msgstr ""
+
+#: стандартный ввод:5
+msgid "Udev rules ... WARNING"
+msgstr ""
+
+#: стандартный ввод:6
+msgid "Users are allowed to change rules:"
+msgstr ""
+
+#: стандартный ввод:7
+msgid "Groups are allowed to change rules: "
+msgstr ""
+
+#: стандартный ввод:8
+msgid "Suspicious files were found in udev config folders."
+msgstr ""
+
+#: стандартный ввод:9
+msgid "It may cause undefined behavior."
+msgstr ""
+
+#: стандартный ввод:10
+msgid "Please double-check before configuring."
+msgstr ""
+
+#: стандартный ввод:11
+msgid "Use usb ports control"
+msgstr ""
+
+#: стандартный ввод:12
+msgid "Connnected usb devices:"
+msgstr ""
+
+#: стандартный ввод:13
+msgid "List of devices"
+msgstr ""
+
+#: стандартный ввод:14 ввод:39 ввод:47
+msgid "Port"
+msgstr ""
+
+#: стандартный ввод:15 ввод:44
+msgid "Vendor"
+msgstr ""
+
+#: стандартный ввод:16 ввод:46
+msgid "Product"
+msgstr ""
+
+#: стандартный ввод:17
+msgid "SN"
+msgstr ""
+
+#: стандартный ввод:18 ввод:52
+msgid "Hash"
+msgstr ""
+
+#: стандартный ввод:19
+msgid "Status"
+msgstr ""
+
+#: стандартный ввод:20
+msgid "Scan plugged-in USB devices"
+msgstr ""
+
+#: стандартный ввод:21
+msgid "Allow device"
+msgstr ""
+
+#: стандартный ввод:22
+msgid "Block device"
+msgstr ""
+
+#: стандартный ввод:23
+msgid "Presets"
+msgstr ""
+
+#: стандартный ввод:24
+msgid "White list:"
+msgstr ""
+
+#: стандартный ввод:25
+msgid "Block everything except connected devices."
+msgstr ""
+
+#: стандартный ввод:26
+msgid "Block everything except connected and HID/DUB devices."
+msgstr ""
+
+#: стандартный ввод:27 ввод:31
+msgid "Manual mode"
+msgstr ""
+
+#: стандартный ввод:28
+msgid "Black list:"
+msgstr ""
+
+#: стандартный ввод:29
+msgid "Block only USB Mass Storage, MTP/PTP."
+msgstr ""
+
+#: стандартный ввод:30
+msgid "Block and reject only Android devices."
+msgstr ""
+
+#: стандартный ввод:32
+msgid "Unsorted rules"
+msgstr ""
+
+#: стандартный ввод:33
+msgid "Rule"
+msgstr ""
+
+#: стандартный ввод:34 ввод:40 ввод:48 ввод:54
+msgid "Action"
+msgstr ""
+
+#: стандартный ввод:35 ввод:41 ввод:49 ввод:56
+msgid "Add"
+msgstr ""
+
+#: стандартный ввод:36 ввод:42 ввод:50 ввод:57
+msgid "Delete"
+msgstr ""
+
+#: стандартный ввод:37
+msgid "Masks CC:SS:PP"
+msgstr ""
+
+#: стандартный ввод:38 ввод:53
+msgid "Description"
+msgstr ""
+
+#: стандартный ввод:43
+msgid "Masks VID:PID"
+msgstr ""
+
+#: стандартный ввод:45
+msgid "PID"
+msgstr ""
+
+#: стандартный ввод:51
+msgid "Mask Hash"
+msgstr ""
+
+#: стандартный ввод:55
+msgid "Load from file"
+msgstr ""
+
+#: стандартный ввод:58
+msgid "SAVE ALL RULES"
+msgstr ""
+
+#: стандартный ввод:59
+msgid "CHECK THE RULES"
+msgstr ""
+
+#: ajax.scm:74
+msgid "Autorun is ENABLED"
+msgstr ""
+
+#: ajax.scm:75
+msgid "Autorun is DISABLED"
+msgstr ""
+
+#: ajax.scm:78
+msgid "Process is ACTIVE"
+msgstr ""
+
+#: ajax.scm:79
+msgid "Process is STOPPED"
+msgstr ""
+
+#: ajax.scm:150
+msgid ""
+"Error while trying to unblock selected device. You can unblock it using hash "
+"or interface."
+msgstr ""
+
+#: ajax.scm:163
+msgid "Error while trying to block selected device"
+msgstr ""
+
+#: ajax.scm:176 ajax.scm:187
+msgid ""
+"An error occurred when starting the USB Guard with new rules. We recommend "
+"checking the rules and configuration files for correctness."
+msgstr ""
+
+#: ajax.scm:208
+msgid "An empty csv file. Parsed 0 rules."
+msgstr ""
+
+#: ajax.scm:209
+msgid "An error occured while parsing csv file"
+msgstr ""
+
+#: стандартный ввод:1
+msgid "USBGuard"
+msgstr ""

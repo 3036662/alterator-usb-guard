@@ -21,26 +21,32 @@ using guard::utils::Log;
 using ::utils::FindAllFilesInDirRecursive;
 
 ConfigStatus::ConfigStatus() noexcept
-    : udev_warnings{utils::InspectUdevRules()},
-      udev_rules_OK{udev_warnings.empty()}, guard_daemon_OK{false},
-      guard_daemon_enabled{false}, guard_daemon_active{false},
-      daemon_config_file_path{GetDaemonConfigPath()} {
+    : udev_warnings_{utils::InspectUdevRules()},
+      udev_rules_OK_{udev_warnings_.empty()}, guard_daemon_OK{false},
+      guard_daemon_enabled_{false}, guard_daemon_active_{false},
+      config_file_permissions_OK_(false), rules_file_permissions_OK_(false),
+      daemon_config_file_path_{GetDaemonConfigPath()},
+      rules_files_exists_(false) {
   CheckDaemon();
   ParseDaemonConfig();
+  CheckConfigFilesPermissions();
 }
 
 vecPairs ConfigStatus::SerializeForLisp() const {
   vecPairs res;
-  res.emplace_back("udev", udev_rules_OK ? "OK" : "BAD");
+  res.emplace_back("udev", udev_rules_OK_ ? "OK" : "BAD");
   res.emplace_back("usbguard", guard_daemon_OK ? "OK" : "BAD");
   res.emplace_back("usbguard_active",
-                   guard_daemon_active ? "ACTIVE" : "STOPPED");
+                   guard_daemon_active_ ? "ACTIVE" : "STOPPED");
   res.emplace_back("usbguard_enabled",
-                   guard_daemon_enabled ? "ENABLED" : "DISABLED");
-  res.emplace_back("rules_file_exists", rules_files_exists ? "TRUE" : "FALSE");
-  res.emplace_back("allowed_users", boost::join(ipc_allowed_users, ", "));
-  res.emplace_back("allowed_groups", boost::join(ipc_allowed_groups, ", "));
-  res.emplace_back("implicit_policy", implicit_policy_target);
+                   guard_daemon_enabled_ ? "ENABLED" : "DISABLED");
+  res.emplace_back("rules_file_exists", rules_files_exists_ ? "TRUE" : "FALSE");
+  res.emplace_back("allowed_users", boost::join(ipc_allowed_users_, ", "));
+  res.emplace_back("allowed_groups", boost::join(ipc_allowed_groups_, ", "));
+  res.emplace_back("implicit_policy", implicit_policy_target_);
+  res.emplace_back(
+      "config_files_permissions",
+      config_file_permissions_OK_ && rules_file_permissions_OK_ ? "OK" : "BAD");
   return res;
 }
 
@@ -49,14 +55,14 @@ void ConfigStatus::CheckDaemon() noexcept {
   std::optional<bool> enabled = systemd.IsUnitEnabled(usb_guard_daemon_name);
   std::optional<bool> active = systemd.IsUnitActive(usb_guard_daemon_name);
   if (enabled.has_value())
-    guard_daemon_enabled = enabled.value_or(false);
+    guard_daemon_enabled_ = enabled.value_or(false);
   else
     Log::Error() << "Can't check if usbguard service is enabled";
   if (active.has_value())
-    guard_daemon_active = active.value_or(false);
+    guard_daemon_active_ = active.value_or(false);
   else
     Log::Error() << "Can't check if usbguard service is active";
-  guard_daemon_OK = guard_daemon_enabled && guard_daemon_active;
+  guard_daemon_OK = guard_daemon_enabled_ && guard_daemon_active_;
 }
 
 std::string ConfigStatus::GetDaemonConfigPath() const noexcept {
@@ -140,7 +146,7 @@ bool ConfigStatus::ExtractRuleFilePath(const std::string &line) noexcept {
       if (!path_to_rules.empty()) {
         daemon_rules_file_path = std::move(path_to_rules);
         try {
-          rules_files_exists = std::filesystem::exists(daemon_rules_file_path);
+          rules_files_exists_ = std::filesystem::exists(daemon_rules_file_path);
         } catch (const std::exception &ex) {
           Log::Error() << "Can't check if rules file " << daemon_rules_file_path
                        << " exists";
@@ -171,7 +177,7 @@ bool ConfigStatus::ExctractUsers(const std::string &line) noexcept {
       for (std::string &str : splitted_string) {
         boost::trim(str);
         if (!str.empty()) {
-          ipc_allowed_users.insert(str);
+          ipc_allowed_users_.insert(str);
         }
       }
     }
@@ -194,7 +200,7 @@ bool ConfigStatus::CheckUserFiles(const std::string &line) noexcept {
         for (std::string &str : files) {
           boost::trim(str);
           if (!str.empty()) {
-            ipc_allowed_users.insert(
+            ipc_allowed_users_.insert(
                 std::filesystem::path(str).filename().string());
           }
         }
@@ -223,7 +229,7 @@ bool ConfigStatus::ExtractGroups(const std::string &line) noexcept {
       for (std::string &str : splitted_string) {
         boost::trim(str);
         if (!str.empty()) {
-          ipc_allowed_groups.insert(str);
+          ipc_allowed_groups_.insert(str);
         }
       }
     }
@@ -239,8 +245,8 @@ bool ConfigStatus::ExtractPolicy(const std::string &line) noexcept {
       std::string implicit_target(line, pos);
       boost::trim(implicit_target);
       if (!implicit_target.empty()) {
-        implicit_policy_target = std::move(implicit_target);
-        Log::Info() << "Implicit policy target = " << implicit_policy_target;
+        implicit_policy_target_ = std::move(implicit_target);
+        Log::Info() << "Implicit policy target = " << implicit_policy_target_;
       }
     }
     return true;
@@ -250,16 +256,17 @@ bool ConfigStatus::ExtractPolicy(const std::string &line) noexcept {
 
 void ConfigStatus::ParseDaemonConfig() noexcept {
   // cleanup
-  ipc_allowed_users.clear();
-  ipc_allowed_groups.clear();
+  ipc_allowed_users_.clear();
+  ipc_allowed_groups_.clear();
   daemon_rules_file_path.clear();
-  rules_files_exists = false;
-  if (daemon_config_file_path.empty())
+  rules_files_exists_ = false;
+  if (daemon_config_file_path_.empty())
     return;
   // open config
-  std::ifstream file_dconfig(daemon_config_file_path);
+  std::ifstream file_dconfig(daemon_config_file_path_);
   if (!file_dconfig.is_open()) {
-    Log::Error() << "Can't open daemon config file " << daemon_config_file_path;
+    Log::Error() << "Can't open daemon config file "
+                 << daemon_config_file_path_;
     return;
   }
   // parse
@@ -282,6 +289,36 @@ void ConfigStatus::ParseDaemonConfig() noexcept {
     ExtractPolicy(line);
   }
   file_dconfig.close();
+}
+
+void ConfigStatus::CheckConfigFilesPermissions() noexcept {
+  namespace fs = std::filesystem;
+  try {
+    fs::path config_path(daemon_config_file_path_);
+    if (fs::exists(config_path)) {
+      fs::perms conf_perm = fs::status(config_path).permissions();
+      if (conf_perm == (fs::perms::owner_write | fs::perms::owner_read)) {
+        config_file_permissions_OK_ = true;
+      } else {
+        config_file_permissions_OK_ = false;
+        Log::Error() << "USBGuard config file (" << daemon_config_file_path_
+                     << ") must have 0600 permissions";
+      }
+    }
+    if (fs::exists(daemon_rules_file_path)) {
+      fs::perms conf_perm = fs::status(daemon_rules_file_path).permissions();
+      if (conf_perm == (fs::perms::owner_write | fs::perms::owner_read)) {
+        rules_file_permissions_OK_ = true;
+      } else {
+        rules_file_permissions_OK_ = false;
+        Log::Error() << "USBGuard rules file (" << daemon_rules_file_path
+                     << ") must have 0600 permissions";
+      }
+    }
+  } catch (const std::exception &ex) {
+    Log::Error() << "Can't check file permissions for USBGuard files";
+    Log::Error() << ex.what();
+  }
 }
 
 std::pair<std::vector<GuardRule>, uint>
@@ -332,12 +369,12 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
   // temporary change the policy to "allow all"
   // The purpose is to launch USBGuard without blocking anything
   // to make sure it can parse new rules
-  bool initial_policy = implicit_policy_target == "block";
+  bool initial_policy = implicit_policy_target_ == "block";
   if (!ChangeImplicitPolicy(false)) {
     Log::Error() << "Can't change usbguard policy";
     return false;
   }
-  if (rules_files_exists) {
+  if (rules_files_exists_) {
     // read old rules
     std::ifstream old_file(daemon_rules_file_path);
     if (!old_file.is_open()) {
@@ -471,28 +508,29 @@ bool ConfigStatus::ChangeDaemonStatus(bool active,
 }
 
 bool ConfigStatus::ChangeImplicitPolicy(bool block) noexcept {
-  if (block && implicit_policy_target == "block")
+  if (block && implicit_policy_target_ == "block")
     return true;
-  if (!block && implicit_policy_target == "allow")
+  if (!block && implicit_policy_target_ == "allow")
     return true;
   Log::Debug() << "Changing implicit policy to " << (block ? "block" : "allow");
   try {
-    if (!std::filesystem::exists(daemon_config_file_path)) {
-      Log::Error() << "Config file " << daemon_config_file_path
+    if (!std::filesystem::exists(daemon_config_file_path_)) {
+      Log::Error() << "Config file " << daemon_config_file_path_
                    << "doesn't exist.";
       return false;
     }
   } catch (const std::exception &ex) {
     Log::Error() << "Error looking for config file at path "
-                 << daemon_config_file_path;
+                 << daemon_config_file_path_;
     Log::Error() << ex.what();
     return false;
   }
   std::string new_target = block ? "block" : "allow";
   // open config
-  std::ifstream file_config(daemon_config_file_path);
+  std::ifstream file_config(daemon_config_file_path_);
   if (!file_config.is_open()) {
-    Log::Error() << "Can't open daemon config file " << daemon_config_file_path;
+    Log::Error() << "Can't open daemon config file "
+                 << daemon_config_file_path_;
     return false;
   }
   std::stringstream new_content;
@@ -513,9 +551,9 @@ bool ConfigStatus::ChangeImplicitPolicy(bool block) noexcept {
   }
   file_config.close();
   // write to config
-  std::ofstream f_out(daemon_config_file_path);
+  std::ofstream f_out(daemon_config_file_path_);
   if (!f_out.is_open()) {
-    Log::Error() << "Can't open file " << daemon_config_file_path
+    Log::Error() << "Can't open file " << daemon_config_file_path_
                  << " for writing";
     return false;
   }

@@ -108,8 +108,15 @@ public:
   /// @return StrictnessLevel - non_strict if no corresondent level is found.
   static StrictnessLevel StrToStrictnessLevel(const std::string &str) noexcept;
 
+  /// @brief Builds a string from interfaces
+  std::string
+  InterfacesToString(bool with_interface_array_no_operator = true) const;
+
   inline const std::optional<std::string> &vid() const noexcept {
     return vid_;
+  };
+  inline const std::optional<std::string> &pid() const noexcept {
+    return pid_;
   };
   inline const std::optional<std::string> &vendor_name() const noexcept {
     return vendor_name_;
@@ -122,6 +129,10 @@ public:
   inline uint number() const noexcept { return number_; };
   inline void number(uint numb) noexcept { number_ = numb; };
   inline Target target() const noexcept { return target_; };
+  inline std::string hash() const noexcept { return hash_.value_or(""); }
+  inline std::string device_name() const noexcept {
+    return device_name_.value_or("");
+  }
 
 private:
   ///  @brief Build a condition string from this object.
@@ -135,9 +146,6 @@ private:
   void FinalValidator(std::vector<std::string> &) const;
   /// @brief Builds a string from ports
   std::string PortsToString() const;
-  /// @brief Builds a string from interfaces
-  std::string
-  InterfacesToString(bool with_interface_array_no_operator = true) const;
 
   /**
    * @brief Parse a token when operators are possible for token

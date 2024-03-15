@@ -38,56 +38,6 @@ std::vector<std::string> FoldUsbInterfacesList(std::string i_type);
 std::unordered_map<std::string, std::string>
 MapVendorCodesToNames(const std::unordered_set<std::string> &vendors) noexcept;
 
-/// @brief extract daemon target state from json (run || disabled)
-std::optional<bool>
-ExtractDaemonTargetState(boost::json::object *p_obj) noexcept;
-
-/// @brief extract daemon target implicit polict from json (block || allow)
-std::optional<Target> ExtractTargetPolicy(boost::json::object *p_obj) noexcept;
-
-/// @brief extract preset type from json
-std::optional<std::string>
-ExtractPresetMode(boost::json::object *p_obj) noexcept;
-
-/**
- * @brief Process rules for "manual" mode
- * @param ptr_jobj Json object, containig "appended_rules" and "deleted_rules"
- * arrays
- * @param[out] rules_to_delete array,where to put order numbers of rules to
- * delete
- * @param[out] rules_to_add array, where to put rules to append
- * @return boost::json::object, containig "rules_OK" and "rules_BAD" arrays
- * @details rules_OK and rules_BAD contains html <tr> ids for validation
- */
-boost::json::object
-ProcessJsonManualMode(const boost::json::object *ptr_jobj,
-                      std::vector<uint> &rules_to_delete,
-                      std::vector<GuardRule> &rules_to_add) noexcept;
-
-/**
- * @brief Parses "appended" rules from json
- * @param[in] ptr_json_array_rules A pointer to json array with rules
- * @param rules_to_add Vector, where new rulles will be appended
- * @return JSON object, containig arrays of html ids - "rules_OK" and
- * "rules_BAD"
- * @details This function is called from ProcessJsonManualMode
- */
-boost::json::object
-ProcessJsonAppended(const boost::json::array *ptr_json_array_rules,
-                    std::vector<GuardRule> &rules_to_add) noexcept;
-
-/// @brief Add a rule to allow all HID devices.
-/// @param rules_to_add Vector,where a new rule will be appended.
-void AddAllowHid(std::vector<GuardRule> &rules_to_add) noexcept;
-
-///@brief Add a rule to block 08 and 06 - usb and mtp.
-/// @param rules_to_add Vector,where a new rule will be appended.
-void AddBlockUsbStorages(std::vector<GuardRule> &rules_to_add) noexcept;
-
-/// @brief Add rules to reject known android devices
-/// @param rules_to_add Vector,where a new rule will be appended.
-bool AddRejectAndroid(std::vector<GuardRule> &rules_to_add) noexcept;
-
 /*----------------- GuardRule utility functions ----------------- */
 
 /// @brief Validation predicate for a VID/PID value

@@ -1,7 +1,7 @@
 #include "json_rule.hpp"
 #include <sstream>
 
-namespace guard::utils::json {
+namespace guard::json {
 
 namespace json = boost::json;
 
@@ -116,4 +116,4 @@ void JsonRule::ParseOneField(const boost::json::object *ptr_field) {
   }
 }
 
-} // namespace guard::utils::json
+} // namespace guard::json

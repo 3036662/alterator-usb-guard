@@ -23,13 +23,13 @@ public:
   bool Dispatch(const LispMessage &msg) const noexcept;
 
 private:
-  bool SaveChangeRules(const LispMessage &msg) const noexcept;
+  bool SaveChangeRules(const LispMessage &msg, bool apply_rules) const noexcept;
   bool ListUsbGuardRules(const LispMessage &msg) const noexcept;
   bool ListUsbDevices() const noexcept;
   bool AllowDevice(const LispMessage &msg) const noexcept;
   bool BlockDevice(const LispMessage &msg) const noexcept;
   bool CheckConfig() const noexcept;
-  bool UploadRulesFile(const LispMessage &msg) const noexcept;
+  static bool UploadRulesFile(const LispMessage &msg) noexcept;
 
   guard::Guard &guard_;
   const std::string kMessBeg = "(";

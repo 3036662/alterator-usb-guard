@@ -2,7 +2,7 @@
 #include <boost/json.hpp>
 #include <string>
 
-namespace guard::utils::json {
+namespace guard::json {
 
 class JsonRule {
 public:
@@ -25,4 +25,4 @@ private:
   void ParseOneField(const boost::json::object *ptr_field);
 };
 
-} // namespace guard::utils::json
+} // namespace guard::json

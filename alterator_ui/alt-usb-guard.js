@@ -1,9 +1,18 @@
 $(document).ready(function () {
 
+  $("#usbguard_enabled").bind('update-value change', function () {
+    $("#span_usbguard_enabled").text( $("#usbguard_enabled").val());
+  });
+
+  $("#usbguard_active").bind('update-value change', function () {
+    $("#span_usbguard_active").text( $("#usbguard_active").val());
+  });
+
   // workaround to check and uncheck checkbox as usual input
   // state of check  can be changed from lisp 
   // with form-update-value for hidden input 
   $('#checkbox_use_control').change(function () {
+    $('#validate_rules_button').trigger('validation_needed');
     if ($("#checkbox_use_control").attr('checked')) {
       $("#checkbox_use_control_hidden").val("#t");
     }
@@ -11,6 +20,7 @@ $(document).ready(function () {
       $("#checkbox_use_control_hidden").val("#f");
     }
   });
+
   $('#checkbox_use_control_hidden').bind('update-value change', function () {
     if ($("#checkbox_use_control_hidden").val() === "#t") {
       $("#checkbox_use_control").attr('checked', true);
@@ -25,11 +35,17 @@ $(document).ready(function () {
   // catch a preset selection event
   // put current value to presets_input_hidden
   $('input[type=radio][name=presets]').change(function () {
+    $('#validate_rules_button').trigger('validation_needed');
     if ($(this).is(':checked')) {
       if ($(this).val()=="radio_white_list" || $(this).val()=="radio_black_list"){
+        ActivateManualModeButtons(true);
         $("#presets_input_hidden").val("manual_mode");
         $("#hidden_list_type").val($(this).val());
         return;             
+      } 
+      // if not manual mode - disable add and delete buttons
+      else{
+        ActivateManualModeButtons(false);
       }      
       $("#presets_input_hidden").val($(this).val());
     }
@@ -58,7 +74,6 @@ $(document).ready(function () {
   // delete strings from tables
 
   localStorage.removeItem("deletedFields");
-
   $("#delete_rules_from_hash_level").bind('click', "form_list_hash_rules", SaveDeleted);
   $("#delete_rules_from_vid_pid_level").bind('click', "form_list_vidpid_rules", SaveDeleted);
   $("#delete_rules_from_interface_level").bind('click', "form_list_interface_rules", SaveDeleted);
@@ -69,13 +84,13 @@ $(document).ready(function () {
   // add strings to tables
 
   // add new hash-level rule
-  var new_hash_row = 
+  const new_hash_row = 
     '<td><span class="alterator-label"><input type="text" class="input_appended" name="hash"><span></td>' +
     '<td>--</td>';
   addRuleBehaviorAdd("#add_to_rules_hash", new_hash_row, "#list_hash_rules");
 
   // add new vidpid-level rule
-  var new_vidpid_row = 
+  const new_vidpid_row = 
     '<td><span class="alterator-label"><input type="text" class="input_appended" name="vid"><span></td>' +
     '<td>--</td>' +
     '<td><span class="alterator-label"><input type="text" class="input_appended" name="pid"><span></td>' +
@@ -83,13 +98,13 @@ $(document).ready(function () {
   addRuleBehaviorAdd("#add_to_rules_vidpid", new_vidpid_row, "#list_vidpid_rules");
 
   // add new CC::SS::PP rule
-  var new_interface_row = 
+  const new_interface_row = 
     '<td><span class="alterator-label"><input type="text" class="input_appended" name="with_interface"><span></td>' +
     '<td>--</td><td>--</td>';
   addRuleBehaviorAdd("#add_to_rules_interfase", new_interface_row, "#list_interface_rules");
 
   // add new rule to unsorted-rules
-  var new_unsorted_rules_row = 
+  const new_unsorted_rules_row = 
     '<td><span class="alterator-label"><input type="text" class="input_appended" name="raw_rule"><span></td>';
   addRuleBehaviorAdd("#add_to_rules_unsorted", new_unsorted_rules_row, "#list_unsorted_rules");
   window.last_append_rule_id = 0;
@@ -97,8 +112,8 @@ $(document).ready(function () {
   // on click "save rules"
   // read stored values, put them to hidden input, trigger "ready" event for it
   $("#save_rules_button").bind('click', function () {
-    var deletedFields = localStorage.getItem('deletedFields');
-    var rules_changes={
+    let deletedFields = localStorage.getItem('deletedFields');
+    let rules_changes={
       preset_mode: $("#presets_input_hidden").val(),
       deleted_rules:  JSON.parse(deletedFields),
       appended_rules: collectAppendedRules(),
@@ -110,25 +125,19 @@ $(document).ready(function () {
     $("#hidden_manual_changes_data").trigger('rules_json_ready');
   });
 
-  // bind response recieved
-  $("#hidden_manual_changes_response").bind('update-value change',function(){
-    if ( $(this).val()!==""){  
-      var response=JSON.parse( $(this).val());
-      $(this).val("");
-      if (response["STATUS"] ==="OK"){
-        $(".manual_appended").remove();
-        localStorage.removeItem("deletedFields");
-        $(this).trigger("rules_applied");
-        return;
-      }
-      for (const el of response["rules_BAD"]){
-        $('#'+el).css("border", "3px red solid");
-      }
-      for (const el of response["rules_OK"]){
-        $('#'+el).css("border", "2px green solid");
-      }  
-    }  
- });
+  // on check rules clicked
+  $("#validate_rules_button").bind('click', function () {
+    let deletedFields = localStorage.getItem('deletedFields');
+    let rules_changes={
+      preset_mode: $("#presets_input_hidden").val(),
+      deleted_rules:  JSON.parse(deletedFields),
+      appended_rules: collectAppendedRules(),
+      run_daemon: $("#checkbox_use_control_hidden").val()==="#t" ? "true":"false",
+      policy_type: $("#hidden_list_type").val() 
+    }
+    $("#hidden_manual_changes_data").val(JSON.stringify(rules_changes));
+    $("#hidden_manual_changes_data").trigger('rules_json_validation');
+  });
 
  /**
   * file upload
@@ -143,13 +152,17 @@ $(document).ready(function () {
         alert("This file is too big. Limit 1 MB");
         fileInput.value="";
     }
+    if(fileInput.files[0].size ==0 ){
+      alert("This file is empty.");
+      fileInput.value="";
+    }
     const file = fileInput.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = function(event) {
             const fileContent = event.target.result;
             const encodedString = btoa(fileContent);
-            let file_encoded = new File([encodedString], "endoded.csv", {
+            let file_encoded = new File([encodedString], "encoded.csv", {
                     type: "text/plain",
                     lastModified: new Date()
                 });
@@ -164,9 +177,100 @@ $(document).ready(function () {
   } 
  });
 
+ // bind appended checkboxes to checkbox in headers of tables
+ CatchTableHeaderCheckbok('list_hash_rules');
+ CatchTableHeaderCheckbok('list_vidpid_rules');
+ CatchTableHeaderCheckbok('list_interface_rules');
+ CatchTableHeaderCheckbok('list_unsorted_rules');
+
 }); // .ready
 
-/*******************************************************/
+
+// show validation result in tables
+function ValidationResponseCallback(data){
+  $(".validator_appended").remove();
+  if ( data==="") return;  
+  let response=JSON.parse(data);
+  if (response["STATUS"] ==="OK" && response["ACTION"]==="apply"){
+      $(".manual_appended").remove();
+      localStorage.removeItem("deletedFields");
+      ActivateManualModeButtons(true);
+      $("#hidden_manual_changes_response").trigger("rules_applied");
+      return;
+  }
+  for (const el of response["rules_BAD"]){
+      $('#'+el).css("border", "3px red solid");
+  }
+  for (const el of response["rules_OK"]){
+      $('#'+el).css("border", "2px green solid");
+  }
+  CrossDeletedByBackend("list_hash_rules",response["rules_DELETED"]);
+  CrossDeletedByBackend("list_vidpid_rules",response["rules_DELETED"]);
+  CrossDeletedByBackend("list_interface_rules",response["rules_DELETED"]);
+  CrossDeletedByBackend("list_unsorted_rules",response["rules_DELETED"]);
+  // if some rules where appended by preset 
+  if (response.hasOwnProperty('rules_PRESET')){
+    //hash
+    if (response['rules_PRESET'].hasOwnProperty('hash') &&
+        Array.isArray(response['rules_PRESET']['hash'])){
+        response['rules_PRESET']['hash'].forEach((el) => 
+        {
+          $("#list_hash_rules").append(
+            '<tr class="validator_appended">'+
+            '<td></td><td>--</td>'+
+            '<td><span class="alterator-label">'+el['hash'] +'</span></td> '+
+            '<td>'+el['description']+'</td>'+
+            '<td>'+(el['target']=== 0 ? "allow" : "block") +'</td></tr>'
+          );
+        });
+    }
+    // interface
+    if (response['rules_PRESET'].hasOwnProperty('interface') &&
+        Array.isArray(response['rules_PRESET']['interface'])){
+        response['rules_PRESET']['interface'].forEach((el) => 
+        {
+          $("#list_interface_rules").append(
+            '<tr class="validator_appended">'+
+            '<td></td><td>--</td>' +       
+        '<td><span class="alterator-label">'+el['interface']+'</span></td>' +
+        '<td>--</td><td>--</td>'+
+        '<td>' + (el["target"] === 0 ? "allow" : "block") +'</td></tr>');          
+        });
+    }
+    // vidpid
+    if (response['rules_PRESET'].hasOwnProperty('vidpid') &&
+        Array.isArray(response['rules_PRESET']['vidpid'])){
+      response['rules_PRESET']['vidpid'].forEach((el) => 
+      {
+      $("#list_vidpid_rules").append(
+        '<tr class="validator_appended" id="rule_'+window.last_append_rule_id+'">'+
+        '<td></td><td>--</td>' +       
+        '<td><span class="alterator-label">'+el['vid']+'</span></td>' +
+        '<td>--</td>' +
+        '<td><span class="alterator-label">'+el['pid']+'</span></td>' +
+        '<td>--</td><td>--</td>'+
+        '<td>' + (el["policy"] === 0 ? "allow" : "block") + '</td></tr>');   
+      });
+    }
+    // raw
+    if (response['rules_PRESET'].hasOwnProperty('raw') &&
+        Array.isArray(response['rules_PRESET']['raw'])){
+      response['rules_PRESET']['raw'].forEach((el) => 
+      {
+      $("#list_unsorted_rules").append(
+        '<tr class="validator_appended">'+
+        '<td></td><td>--</td>' + 
+        '<td><span class="alterator-label">'+el['raw'] +'</span></td>' +
+        '<td>' +(el["target"] === 0 ? "allow" : "block") + '</td></tr>');
+      });
+    }
+  }
+  // tell alterator to enable save button if everything is OK
+  if (response["STATUS"] ==="OK"){
+    $('#validate_rules_button').trigger('validation_finished');
+  }
+}
+
 
 function AddRulesFromFile (data) {
   const rules_json=JSON.parse(data);
@@ -259,12 +363,15 @@ function AddRulesFromFile (data) {
     });
   };  
   bindCheckBox();
+  $('#validate_rules_button').trigger('validation_needed');
   document.getElementById('file_input').value = '';
 };
 
 
+// add appending editable rule to a table
 function addRuleBehaviorAdd(button_id, row_html, table_id) {
   $(button_id).bind('click', function () {
+    $('#validate_rules_button').trigger('validation_needed');
     ++window.last_append_rule_id;
     $(table_id).append(
       '<tr class="manual_appended" id="rule_'+window.last_append_rule_id+'"><td><input class="select_appended" type="checkbox"></td>' +
@@ -273,12 +380,13 @@ function addRuleBehaviorAdd(button_id, row_html, table_id) {
       ($("#hidden_list_type").val() === "radio_white_list" ? "allow" : "block") +
       '</td></tr>');
     bindCheckBox();
-
+    // validation is needed after change
+    $('.input_appended').bind('input',function(){$('#validate_rules_button').trigger('validation_needed');});
   });
 };
 
-/*******************************************************/
 
+// bind appended change - add "selected" class
 function bindCheckBox() {
   $('.select_appended').change(function () {
     if ($(this).is(':checked')) {
@@ -290,23 +398,23 @@ function bindCheckBox() {
   });
 };
 
-/*******************************************************/
 
+// collects appended rules from tables
 function collectAppendedRules() {
-  var appended_rules=[];
+  let appended_rules=[];
   // for each appended rule
   $(".manual_appended").each(function () {
     // get a type of rule
-    var table_id = $(this).closest('table').attr('id');
-    var target = $(this).find("td.appended_rule_target")[0];
-    var tr_id = $(this).attr('id');
+    let table_id = $(this).closest('table').attr('id');
+    let target = $(this).find("td.appended_rule_target")[0];
+    let tr_id = $(this).attr('id');
     // put all field values to array
-    var inputs =$(this).find("input.input_appended");
-    var fields =[];
+    let inputs =$(this).find("input.input_appended");
+    let fields =[];
     inputs.each(function(i,el){
-        var name=$(el).attr('name');
-        var val=$(el).val();
-        fields.push({[name]:val});
+      let name=$(el).attr('name');
+      let val=$(el).val();
+      fields.push({[name]:val});
     });
     // put rule to the result array (appended_rules)
     appended_rules.push({table_id:table_id,tr_id:tr_id,target:$(target).text(),fields_arr:fields});
@@ -314,17 +422,68 @@ function collectAppendedRules() {
   return appended_rules;
 }
 
-/*******************************************************/
-
 // save deleted rules to local storage
 function SaveDeleted(table_id) {
-  var deletedFields = JSON.parse(localStorage.getItem('deletedFields')) || [];
+  let deletedFields = JSON.parse(localStorage.getItem('deletedFields')) || [];
   $('#' + table_id.data + " tr.selected").each(function () {
-    var val = $(this).find("td > span[name='name']").text();
+    let val = $(this).find("td > span[name='name']").text();
     if (val !== "") {
       deletedFields.push(val);
     }
-    $(this).remove();
+    if ($(this).hasClass("manual_appended")){
+      $(this).remove()
+    }
+    else{
+      $('#validate_rules_button').trigger('validation_needed');
+      $(this).addClass('crossed-out');
+    }
   });
   localStorage.setItem('deletedFields', JSON.stringify(deletedFields));
+}
+
+// cross-out rules delete by preset
+function CrossDeletedByBackend(table_id,deleted){
+  $('#' + table_id + " tr").each(function () {
+    let val = $(this).find("span[name='name']").text();
+    if (val !=="" && deleted.includes(parseInt(val,10)) && !$(this).hasClass('crossed-out') ){
+      $(this).addClass('crossed-out');
+      $(this).css("border", "2px black solid");
+    }
+  });
+}
+
+// @param activate - bool true || false
+function ActivateManualModeButtons(activate){
+  let buttons = document.getElementsByClassName("manual_mode_button");
+  if (activate){
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = false;
+      buttons[i].classList.remove("ui-state-disabled");
+    }
+  }
+  else{
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].disabled = true;
+      buttons[i].classList.add("ui-state-disabled");          
+    }
+  }
+}
+
+
+// check all appended rules if checkbox in table header is checked
+function CatchTableHeaderCheckbok(table_id){
+  let checkboxTh = $("#"+table_id+" th input[type='checkbox']:first");
+  if (checkboxTh.length>0){
+    $(checkboxTh[0]).change(function (){
+      if ($(this).is(':checked')) {
+        $('#'+table_id+' '+'input.select_appended[type="checkbox"]').attr("checked", true);
+        $('#'+table_id+' '+'input.select_appended[type="checkbox"]').trigger("change")
+        
+      }
+      else {
+        $('#'+table_id+' '+'input.select_appended[type="checkbox"]').attr("checked", false);
+        $('#'+table_id+' '+'input.select_appended[type="checkbox"]').trigger("change");
+      }
+    });
+  }
 }
