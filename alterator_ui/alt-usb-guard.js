@@ -149,11 +149,11 @@ $(document).ready(function () {
   const fileInput = document.getElementById('file_input');
   if (fileInput.files.length > 0) {
     if(fileInput.files[0].size >1024000 ){
-        alert("This file is too big. Limit 1 MB");
+        alert($("#alert_huge_file").text());
         fileInput.value="";
     }
     if(fileInput.files[0].size ==0 ){
-      alert("This file is empty.");
+      alert($("#alert_empty_file").text());
       fileInput.value="";
     }
     const file = fileInput.files[0];

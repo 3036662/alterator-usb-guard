@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 15:26+0300\n"
+"POT-Creation-Date: 2024-03-15 17:49+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -182,10 +182,18 @@ msgid "Load from file"
 msgstr ""
 
 #: стандартный ввод:58
-msgid "SAVE ALL RULES"
+msgid "This file is empty."
 msgstr ""
 
 #: стандартный ввод:59
+msgid "This file is too big. Limit 1 MB."
+msgstr ""
+
+#: стандартный ввод:60
+msgid "SAVE ALL RULES"
+msgstr ""
+
+#: стандартный ввод:61
 msgid "CHECK THE RULES"
 msgstr ""
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 15:26+0300\n"
-"PO-Revision-Date: 2024-03-15 16:00+0300\n"
+"POT-Creation-Date: 2024-03-15 17:49+0300\n"
+"PO-Revision-Date: 2024-03-15 17:50+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -179,10 +179,18 @@ msgid "Load from file"
 msgstr "Загрузить из файла"
 
 #: стандартный ввод:58
+msgid "This file is empty."
+msgstr "Загружен пустой файл."
+
+#: стандартный ввод:59
+msgid "This file is too big. Limit 1 MB."
+msgstr "Слишком большой файл. Максимальный размер - 1 Мегабайт."
+
+#: стандартный ввод:60
 msgid "SAVE ALL RULES"
 msgstr "ПРИМЕНИТЬ"
 
-#: стандартный ввод:59
+#: стандартный ввод:61
 msgid "CHECK THE RULES"
 msgstr "ПРОВЕРИТЬ"
 
