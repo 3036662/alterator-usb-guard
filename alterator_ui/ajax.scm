@@ -5,6 +5,7 @@
 
 (define (ls_usbs)
     (form-update-enum "list_prsnt_devices" (woo-list "/usbguard/list_curr_usbs" ))
+    (js "CatchDeviceSelection")
 )
 
 ; list usbguard rules
@@ -147,7 +148,7 @@
             (if   
                 (equal? "OK" (woo-get-option status 'status))
                 (update_after_rulles_applied)
-                (woo-error (_ "Error while trying to unblock selected device. You can unblock it using hash or interface."))
+                (woo-error (_ "Error while trying to unblock selected device. You can unblock it with crearing hash rule or interface rule."))
             )
         ); let
     ) ; endif
