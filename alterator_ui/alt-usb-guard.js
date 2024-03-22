@@ -274,11 +274,20 @@ function ValidationResponseCallback(data){
 }
 
 
+function ClearFileInput(){
+  const fileInput = document.getElementById('file_input');
+  fileInput.value="";
+}
+
 function AddRulesFromFile (data) {
   const rules_json=JSON.parse(data);
   //set policy ratiobuttons
   if (rules_json["STATUS"]==="error"){
-    alert(rules_json["ERR_MSG"]);
+    if (rules_json["ERR_MSG"]==="Conflicting rule targets"){
+      alert($("#alert_conflicts_in_file").text());
+      ClearFileInput();
+      return;
+    }
   }
   if (rules_json.hasOwnProperty('policy')){
     if (rules_json['policy'] === 0){
@@ -383,7 +392,14 @@ function addRuleBehaviorAdd(button_id, row_html, table_id) {
       '</td></tr>');
     bindCheckBox();
     // validation is needed after change
-    $('.input_appended').bind('input',function(){$('#validate_rules_button').trigger('validation_needed');});
+    $('.input_appended').bind('input',function(){
+      if ($('#validate_rules_button').hasClass('ui-state-disabled')){
+        $("#validate_rules_button").removeClass("ui-state-disabled");
+        document.getElementById('validate_rules_button').disabled=false; 
+        $("#save_rules_button").addClass("ui-state-disabled");
+        document.getElementById('save_rules_button').disabled=true; 
+      }
+      });
   });
 };
 

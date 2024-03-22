@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 17:49+0300\n"
+"POT-Creation-Date: 2024-03-22 12:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "UsbGuard service ... "
 msgstr ""
 
 #: стандартный ввод:3
-msgid " Wrong file permissions for UsbGuard config files (requiered 0600)."
+msgid " Wrong file permissions for UsbGuard config files (required 0600)."
 msgstr ""
 
 #: стандартный ввод:4
@@ -190,50 +190,54 @@ msgid "This file is too big. Limit 1 MB."
 msgstr ""
 
 #: стандартный ввод:60
-msgid "SAVE ALL RULES"
+msgid "Error. The file contains rules with conflicting targets."
 msgstr ""
 
 #: стандартный ввод:61
+msgid "SAVE ALL RULES"
+msgstr ""
+
+#: стандартный ввод:62
 msgid "CHECK THE RULES"
 msgstr ""
 
-#: ajax.scm:74
+#: ajax.scm:75
 msgid "Autorun is ENABLED"
 msgstr ""
 
-#: ajax.scm:75
+#: ajax.scm:76
 msgid "Autorun is DISABLED"
 msgstr ""
 
-#: ajax.scm:78
+#: ajax.scm:79
 msgid "Process is ACTIVE"
 msgstr ""
 
-#: ajax.scm:79
+#: ajax.scm:80
 msgid "Process is STOPPED"
 msgstr ""
 
-#: ajax.scm:150
+#: ajax.scm:151
 msgid ""
-"Error while trying to unblock selected device. You can unblock it using hash "
-"or interface."
+"Error while trying to unblock a selected device. You can unblock it by "
+"creating a hash rule or interface rule."
 msgstr ""
 
-#: ajax.scm:163
-msgid "Error while trying to block selected device"
+#: ajax.scm:164
+msgid "Error while trying to block a selected device"
 msgstr ""
 
-#: ajax.scm:176 ajax.scm:187
+#: ajax.scm:177 ajax.scm:188
 msgid ""
 "An error occurred when starting the USB Guard with new rules. We recommend "
 "checking the rules and configuration files for correctness."
 msgstr ""
 
-#: ajax.scm:208
+#: ajax.scm:209
 msgid "An empty csv file. Parsed 0 rules."
 msgstr ""
 
-#: ajax.scm:209
+#: ajax.scm:210
 msgid "An error occured while parsing csv file"
 msgstr ""
 

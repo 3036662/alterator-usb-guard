@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-15 17:49+0300\n"
-"PO-Revision-Date: 2024-03-21 13:27+0300\n"
+"POT-Creation-Date: 2024-03-22 12:58+0300\n"
+"PO-Revision-Date: 2024-03-22 12:59+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -22,7 +22,7 @@ msgid "UsbGuard service ... "
 msgstr "USBGuard служба "
 
 #: стандартный ввод:3
-msgid " Wrong file permissions for UsbGuard config files (requiered 0600)."
+msgid " Wrong file permissions for UsbGuard config files (required 0600)."
 msgstr ""
 " Неверные права доступа к файлам конфигурации UsbGuard (требуется 0600)."
 
@@ -32,7 +32,7 @@ msgstr "Правила Udev... OK"
 
 #: стандартный ввод:5
 msgid "Udev rules ... WARNING"
-msgstr "Правила Udev ... WARINIG"
+msgstr "Правила Udev ... WARNING"
 
 #: стандартный ввод:6
 msgid "Users are allowed to change rules:"
@@ -112,11 +112,11 @@ msgstr "Белый список:"
 
 #: стандартный ввод:25
 msgid "Block everything except connected devices."
-msgstr "Заблокировать все, кроме подключенных устройств"
+msgstr "Заблокировать все, кроме подключенных устройств."
 
 #: стандартный ввод:26
 msgid "Block everything except connected and HID/DUB devices."
-msgstr "Заблокировать все, кроме подключенных и HID/DUB устройств"
+msgstr "Заблокировать все, кроме подключенных и HID/DUB устройств."
 
 #: стандартный ввод:27 ввод:31
 msgid "Manual mode"
@@ -128,11 +128,11 @@ msgstr "Черный список:"
 
 #: стандартный ввод:29
 msgid "Block only USB Mass Storage, MTP/PTP."
-msgstr "Блокировать только USB накопители и MTP/PTP"
+msgstr "Блокировать только USB накопители и MTP/PTP."
 
 #: стандартный ввод:30
 msgid "Block and reject only Android devices."
-msgstr "Блокировать только  устройства в режиме Android"
+msgstr "Блокировать только  устройства в режиме Android."
 
 #: стандартный ввод:32
 msgid "Unsorted rules"
@@ -187,42 +187,46 @@ msgid "This file is too big. Limit 1 MB."
 msgstr "Слишком большой файл. Максимальный размер - 1 Мегабайт."
 
 #: стандартный ввод:60
+msgid "Error. The file contains rules with conflicting targets."
+msgstr "Ошибка. Файл содержит конфликтующие правила."
+
+#: стандартный ввод:61
 msgid "SAVE ALL RULES"
 msgstr "ПРИМЕНИТЬ"
 
-#: стандартный ввод:61
+#: стандартный ввод:62
 msgid "CHECK THE RULES"
 msgstr "ПРОВЕРИТЬ"
 
-#: ajax.scm:74
+#: ajax.scm:75
 msgid "Autorun is ENABLED"
 msgstr "Автозапуск ВКЛЮЧЕН"
 
-#: ajax.scm:75
+#: ajax.scm:76
 msgid "Autorun is DISABLED"
 msgstr "Автозапуск ВЫКЛЮЧЕН"
 
-#: ajax.scm:78
+#: ajax.scm:79
 msgid "Process is ACTIVE"
 msgstr "Процесс  АКТИВЕН"
 
-#: ajax.scm:79
+#: ajax.scm:80
 msgid "Process is STOPPED"
 msgstr "Процесс  НЕАКТИВЕН"
 
-#: ajax.scm:150
+#: ajax.scm:151
 msgid ""
-"Error while trying to unblock selected device. You can unblock it using hash "
-"or interface."
+"Error while trying to unblock a selected device. You can unblock it by "
+"creating a hash rule or interface rule."
 msgstr ""
 "Ошибка при попытке разблокировать выбранное устройство. Вы можете "
 "разблокировать его, добавив правило по хэшу или интерфейсу."
 
-#: ajax.scm:163
-msgid "Error while trying to block selected device"
+#: ajax.scm:164
+msgid "Error while trying to block a selected device"
 msgstr "Ошибка при попытке заблокировать выбранное устройство"
 
-#: ajax.scm:176 ajax.scm:187
+#: ajax.scm:177 ajax.scm:188
 msgid ""
 "An error occurred when starting the USB Guard with new rules. We recommend "
 "checking the rules and configuration files for correctness."
@@ -230,11 +234,11 @@ msgstr ""
 "Произошла ошибка при запуске USBGuard с новыми правилами. Мы рекомендуем "
 "проверить правила и файлы конфигурации на корректность."
 
-#: ajax.scm:208
+#: ajax.scm:209
 msgid "An empty csv file. Parsed 0 rules."
 msgstr "Пустой csv-файл. Загружено 0 правил."
 
-#: ajax.scm:209
+#: ajax.scm:210
 msgid "An error occured while parsing csv file"
 msgstr "Произошла ошибка при разборе csv-файла"
 

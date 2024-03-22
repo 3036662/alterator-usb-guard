@@ -14,3 +14,4 @@ allow with-interface some { 12:12:12 }
 allow if !(true
 allow if !!()
 allow with-connect-type one-of { "hardwired" } with-connect-type "hardwired"
+allow id 1w31:23w4

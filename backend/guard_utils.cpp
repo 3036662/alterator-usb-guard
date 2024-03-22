@@ -18,6 +18,7 @@
 #include <fstream>
 #include <optional>
 #include <set>
+#include <stdexcept>
 #include <sys/types.h>
 #include <utility>
 
@@ -247,7 +248,10 @@ bool VidPidValidator(const std::string &val) noexcept {
       return element == "*";
     }
     try {
-      std::stoi(element, nullptr, 16);
+      size_t pos = 0;
+      std::stoi(element, &pos, 16);
+      if (pos != element.size())
+        throw std::logic_error("Not HEX number");
     } catch (const std::exception &ex) {
       Log::Error() << "Can't parse id " << element;
       return false;
@@ -274,7 +278,10 @@ bool InterfaceValidator(const std::string &val) noexcept {
     if (element.size() != 2 && element == "*")
       return true;
     try {
-      std::stoi(element, nullptr, 16);
+      size_t pos = 0;
+      std::stoi(element, &pos, 16);
+      if (pos != element.size())
+        throw std::logic_error("Not HEX number");
     } catch (const std::exception &ex) {
       Log::Error() << "Can't parse interface " << val;
       return false;
