@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-22 12:58+0300\n"
+"POT-Creation-Date: 2024-03-22 14:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,11 +130,15 @@ msgid "Black list:"
 msgstr ""
 
 #: стандартный ввод:29
-msgid "Block only USB Mass Storage, MTP/PTP."
+msgid ""
+"Block devices by classes of interface descriptors: 06 Image and 08 Mass "
+"Storage (example)."
 msgstr ""
 
 #: стандартный ввод:30
-msgid "Block and reject only Android devices."
+msgid ""
+"Block devices by a list of known PIDs and VIDs using Android Debug Bus "
+"(example)."
 msgstr ""
 
 #: стандартный ввод:32
@@ -233,11 +237,11 @@ msgid ""
 "checking the rules and configuration files for correctness."
 msgstr ""
 
-#: ajax.scm:209
+#: ajax.scm:211
 msgid "An empty csv file. Parsed 0 rules."
 msgstr ""
 
-#: ajax.scm:210
+#: ajax.scm:212
 msgid "An error occured while parsing csv file"
 msgstr ""
 

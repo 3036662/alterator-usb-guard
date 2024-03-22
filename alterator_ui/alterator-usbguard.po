@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-22 12:58+0300\n"
-"PO-Revision-Date: 2024-03-22 12:59+0300\n"
+"POT-Creation-Date: 2024-03-22 14:18+0300\n"
+"PO-Revision-Date: 2024-03-22 14:19+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -127,12 +127,20 @@ msgid "Black list:"
 msgstr "Черный список:"
 
 #: стандартный ввод:29
-msgid "Block only USB Mass Storage, MTP/PTP."
-msgstr "Блокировать только USB накопители и MTP/PTP."
+msgid ""
+"Block devices by classes of interface descriptors: 06 Image and 08 Mass "
+"Storage (example)."
+msgstr ""
+"Блокировать устройства по классам дескриптора интерфейса: 06 Image и 08 "
+"Mass Storage (пример)"
 
 #: стандартный ввод:30
-msgid "Block and reject only Android devices."
-msgstr "Блокировать только  устройства в режиме Android."
+msgid ""
+"Block devices by a list of known PIDs and VIDs using Android Debug Bus "
+"(example)."
+msgstr ""
+"Блокировать устройства по списку известных  PID:VID, использующих  Аndroid "
+"Debug Bus (пример)"
 
 #: стандартный ввод:32
 msgid "Unsorted rules"
@@ -234,14 +242,20 @@ msgstr ""
 "Произошла ошибка при запуске USBGuard с новыми правилами. Мы рекомендуем "
 "проверить правила и файлы конфигурации на корректность."
 
-#: ajax.scm:209
+#: ajax.scm:211
 msgid "An empty csv file. Parsed 0 rules."
 msgstr "Пустой csv-файл. Загружено 0 правил."
 
-#: ajax.scm:210
+#: ajax.scm:212
 msgid "An error occured while parsing csv file"
 msgstr "Произошла ошибка при разборе csv-файла"
 
 #: стандартный ввод:1
 msgid "USBGuard"
 msgstr "USBGuard  Контроль USB"
+
+#~ msgid "Block only USB Mass Storage, MTP/PTP."
+#~ msgstr "Блокировать только USB накопители и MTP/PTP."
+
+#~ msgid "Block and reject only Android devices."
+#~ msgstr "Блокировать только  устройства в режиме Android."
