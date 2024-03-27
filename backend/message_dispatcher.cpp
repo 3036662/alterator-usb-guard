@@ -6,8 +6,10 @@
 #include "utils.hpp"
 #include <boost/algorithm/algorithm.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/join.hpp>
 #include <iostream>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 using guard::utils::Log;
@@ -58,8 +60,35 @@ bool MessageDispatcher::Dispatch(const LispMessage &msg) const noexcept {
   if (msg.action == "read" && msg.objects == "rules_upload") {
     return UploadRulesFile(msg);
   }
+
+  // read logs
+  if (msg.action == "read" && msg.objects == "read_logs") {
+    return ReadUsbGuardLogs(msg);
+  }
   // empty response
   std::cout << "(\n)\n";
+  return true;
+}
+
+bool MessageDispatcher::ReadUsbGuardLogs(
+    const LispMessage &msg) const noexcept {
+  if (msg.params.count("page") == 0 || msg.params.count("filter") == 0) {
+    Log::Error() << "Wrong parameters for log reading";
+    return false;
+  }
+  uint page_number = utils::StrToUint(msg.params.at("page")).value_or(0);
+  std::string filter = msg.params.at("filter");
+  auto audit = guard_.GetConfigStatus().GetAudit();
+  std::vector<std::string> log_lines;
+  if (audit.has_value()) {
+    log_lines = audit->GetByPage({filter}, page_number, 10);
+  }
+  std::string res;
+
+  if (!log_lines.empty()) {
+    res = boost::join(log_lines, "\n\n");
+  }
+  std::cout << ToLisp({"log_data", utils::EscapeQuotes(res)});
   return true;
 }
 

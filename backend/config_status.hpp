@@ -1,8 +1,10 @@
 #pragma once
 
+#include "guard_audit.hpp"
 #include "guard_rule.hpp"
 #include "serializible_for_lisp.hpp"
 #include "types.hpp"
+#include <optional>
 #include <set>
 #include <unordered_map>
 
@@ -72,6 +74,14 @@ public:
    */
   bool TryToRun(bool run_daemon) const noexcept;
 
+  /**
+   * @brief Get the GuardAudit object
+   * @return std::optional<GuardAudit>
+   */
+  std::optional<GuardAudit> GetAudit() const noexcept;
+
+  // getters and setters
+
   inline bool guard_daemon_active() const noexcept {
     return guard_daemon_active_;
   }
@@ -110,7 +120,7 @@ private:
    * @return std::string config filename or empty string if nothing found
    */
   std::optional<std::string>
-  ExctractConfigFileName(const std::string &line) const noexcept;
+  ExtractConfigFileName(const std::string &line) const noexcept;
 
   /**
    * @brief Utility function to extcract path to a rules file
@@ -121,26 +131,35 @@ private:
    * @brief Utility function to extract users
    * from daemon config to this.ipc_allowed_users
    */
-  bool ExctractUsers(const std::string &line) noexcept;
+  bool ExtractUsers(const std::string &line) noexcept;
   /**
-   * @brief Utility function to exctract users
+   * @brief Utility function to extract users
    * from folder,defined by IPCAccessControlFiles param
    * to this.ipc_allowed_users
    */
   bool CheckUserFiles(const std::string &line) noexcept;
   /**
-   * @brief Utility function to exctract IPCAllowedGroups
+   * @brief Utility function to extract IPCAllowedGroups
    * from folder,defined by IPCAllowedGroups param
    * to this.ipc_allowed_groups
    */
   bool ExtractGroups(const std::string &line) noexcept;
 
   /**
-   * @brief Utility function to exctract ImplicitPolicyTarget
+   * @brief Utility function to extract ImplicitPolicyTarget
    * from folder,defined by ImplicitPolicyTarget param
    * to this.implicit_policy_target
    */
   bool ExtractPolicy(const std::string &line) noexcept;
+
+  /**
+   * @brief Extracts audit type from usbguard config (FileAudit|LinuxAudit)
+   */
+  bool ExtractAuditBackend(const std::string &line) noexcept;
+  /**
+   * @brief Extract path to audit file
+   */
+  bool ExtractAuditFilePath(const std::string &line) noexcept;
 
   const std::string usb_guard_daemon_name = "usbguard.service";
   const std::string unit_dir_path = "/lib/systemd/system";
@@ -155,11 +174,12 @@ private:
   bool guard_daemon_active_;
   bool config_file_permissions_OK_;
   bool rules_file_permissions_OK_;
-
   std::string daemon_config_file_path_;
   // filled by ParseDaemonConfig
   std::string daemon_rules_file_path;
   bool rules_files_exists_;
+  AuditType audit_backend_;
+  std::string audit_file_path_;
   std::set<std::string> ipc_allowed_users_;
   std::set<std::string> ipc_allowed_groups_;
   std::string implicit_policy_target_;

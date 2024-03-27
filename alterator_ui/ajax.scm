@@ -44,7 +44,7 @@
            ; if udev=OK
            (if (string=? "OK" (get-value 'udev status)) 
                 (begin
-                    (form-update-visibility "udev_status_ok" #t)
+                    (form-update-visibility "udev_status_ok" #f)
                     (form-update-visibility "udev_config_warnings" #f)
                     (form-update-visibility "suspicious_udev_files" #f)
                     (form-update-visibility "udev_status_warnig" #f)
@@ -137,6 +137,8 @@
                     (form-update-value "presets_input_hidden" "put_connected_to_white_list")
                 )
            )
+           ; set log audit type 
+           (form-update-value "audit_type" (get-value 'audit_type status) )
 
    )  ; //let
 ) ; // config_status check
@@ -227,12 +229,97 @@
     (form-update-activity "validate_rules"  #t)
 )
 
+
+; text area doesn't support value - form-update-value yields js exception
+(define (update_text_area name value)
+    (js "UpdateTextArrea" name value)
+)
+
+; if recent is true -show page 0 and don't use any filters
+(define (show_recent_logs recent)
+  (if (string=? "file" (form-value "audit_type"))
+    ; if logging to file
+    (if recent  
+        ; if recent
+        (begin
+            (form-update-value "current_page" "0")  
+            (form-update-value "log_search_input" "")  
+            ;(form-update-value "log_textarea" (woo-read-first "/usbguard/read_logs" 'page "0" 'filter "") )  
+            (update_text_area "log_textarea" 
+                (removeFirstElement (woo-read "/usbguard/read_logs" 'page (form-value "current_page") 'filter (form-value "log_search_input")))
+            )     
+        )
+        ;else use filter and page number
+        (update_text_area "log_textarea" 
+            (removeFirstElement (woo-read "/usbguard/read_logs" 'page (form-value "current_page") 'filter (form-value "log_search_input")))
+        )  
+    ) ; endif    
+    ; if linux audit - just show a message
+    (begin
+        (form-update-value "log_textarea" (_ "A Linux audit is used for logging. You can inspect it with ausearch -ts recent -m USER_DEVICE"))
+        (form-update-visibility "log_search_input" #f)
+        (form-update-visibility "log_search_button" #f)
+        (form-update-visibility "next_page" #f)
+        (form-update-visibility "prev_page" #f)
+    )      
+  ) ; endif
+)
+
+(define (logs_filter)
+    (form-update-value "current_page" "0")  
+    (show_recent_logs #f)
+)
+
+
+(define (hide_logs)
+    (form-update-visibility "logs_table" #f)
+    (form-update-visibility "hide_logs_button" #f)
+    (form-update-visibility "show_logs_button" #t)
+)
+
+(define (show_logs)
+    (form-update-visibility "show_logs_button" #f)
+    (form-update-visibility "hide_logs_button" #t)
+    (form-update-visibility "logs_table" #t)
+    (show_recent_logs #t)
+)
+
+
+(define (increment-string str)
+  (number->string (+ 1 (string->number str))))
+(define (decrement-string str)
+  (number->string (- (string->number str) 1)))
+
+
+(define (increment_page)
+  (form-update-value "current_page" 
+    (increment-string (form-value "current_page"))
+  )
+  (show_recent_logs #f) 
+)
+
+(define (decrement_page)
+  (if (>=  (string->number (form-value "current_page")) 1)  
+    (form-update-value "current_page" 
+        (decrement-string (form-value "current_page"))
+    )   
+  )
+  (show_recent_logs #f)
+)  
+
+
 (define (init)
   (validation_needed)  
   (form-bind "validate_rules" "validation_finished" validation_finished)  
   (form-bind "validate_rules" "validation_needed" validation_needed)
   (config_status_check)
   (ls_guard_rules)
+  (hide_logs)
+  (form-bind "next_page" "click" decrement_page )
+  (form-bind "prev_page" "click" increment_page)
+  (form-bind "show_logs_button" "click" show_logs)
+  (form-bind "hide_logs_button" "click" hide_logs)
+  (form-bind "log_search_button" "click" logs_filter)
   (form-bind "btn_prsnt_scan" "click" ls_usbs)
   (form-bind "btn_prsnt_dev_add" "click" allow_device)
   (form-bind "btn_prsnt_dev_block" "click" block_device)

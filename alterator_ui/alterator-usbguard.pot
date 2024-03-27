@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-22 14:18+0300\n"
+"POT-Creation-Date: 2024-03-26 15:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,6 +205,26 @@ msgstr ""
 msgid "CHECK THE RULES"
 msgstr ""
 
+#: стандартный ввод:63
+msgid "SHOW LOG"
+msgstr ""
+
+#: стандартный ввод:64
+msgid "HIDE LOG"
+msgstr ""
+
+#: стандартный ввод:65
+msgid "FILTER"
+msgstr ""
+
+#: стандартный ввод:66
+msgid "PREVIOS"
+msgstr ""
+
+#: стандартный ввод:67
+msgid "NEXT "
+msgstr ""
+
 #: ajax.scm:75
 msgid "Autorun is ENABLED"
 msgstr ""
@@ -221,28 +241,34 @@ msgstr ""
 msgid "Process is STOPPED"
 msgstr ""
 
-#: ajax.scm:151
+#: ajax.scm:153
 msgid ""
 "Error while trying to unblock a selected device. You can unblock it by "
 "creating a hash rule or interface rule."
 msgstr ""
 
-#: ajax.scm:164
+#: ajax.scm:166
 msgid "Error while trying to block a selected device"
 msgstr ""
 
-#: ajax.scm:177 ajax.scm:188
+#: ajax.scm:179 ajax.scm:190
 msgid ""
 "An error occurred when starting the USB Guard with new rules. We recommend "
 "checking the rules and configuration files for correctness."
 msgstr ""
 
-#: ajax.scm:211
+#: ajax.scm:213
 msgid "An empty csv file. Parsed 0 rules."
 msgstr ""
 
-#: ajax.scm:212
+#: ajax.scm:214
 msgid "An error occured while parsing csv file"
+msgstr ""
+
+#: ajax.scm:260
+msgid ""
+"A Linux audit is used for logging. You can inspect it with ausearch -ts "
+"recent -m USER_DEVICE"
 msgstr ""
 
 #: стандартный ввод:1

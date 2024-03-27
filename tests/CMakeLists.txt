@@ -13,6 +13,7 @@ add_executable(test
                ../backend/guard_utils.cpp
                ../backend/csv_rule.cpp
                ../backend/json_changes.cpp
+               ../backend/guard_audit.cpp
                )
 target_include_directories(test PRIVATE ../backend)
 target_include_directories(test PRIVATE .)

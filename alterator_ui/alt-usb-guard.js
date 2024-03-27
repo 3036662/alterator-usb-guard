@@ -556,3 +556,10 @@ function CatchDeviceSelection(){
   }
  }));
 }
+
+function UpdateTextArrea(id,data){
+  var textareaElement = $('textarea[name="'+id+'"]');
+  if (textareaElement.length > 0) {
+    textareaElement.val(data);
+  }
+}

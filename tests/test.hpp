@@ -2,6 +2,7 @@
 
 class Test {
 public:
+
   /// @brief test Udev rules inspection
   void Run1();
 
@@ -97,4 +98,11 @@ public:
    *
    */
   void Run17();
+
+  /**
+   * @brief UdbGuard audit reading from file
+   * 
+   */
+  
+  void Run18();
 };

@@ -50,5 +50,9 @@ int main(int argc, char *argv[]) {
 
   // // Test Guard:: ProcessJsonAllowConnected
   test.Run17();
+
+  // test Guard Audit reading
+  test.Run18();
+
   return 0;
 }

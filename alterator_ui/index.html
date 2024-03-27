@@ -290,6 +290,35 @@
           <input class="right_buttons btn" type="button" name="save_rules" id="save_rules_button" value="SAVE ALL RULES" translate="_" />
           <input class="right_buttons btn" type="button" name="validate_rules" id="validate_rules_button" value="CHECK THE RULES" translate="_" />            
         </form>
-      </div>
+    </div>
+    <form id="logs_form" onsubmit="return false;">
+      <input type="button" class="btn" id="show_logs_button" name="show_logs_button" value="SHOW LOG" />
+      <input type="button" class="btn" id="hide_logs_button" name="hide_logs_button" value="HIDE LOG" />
+      <table style="width:100%" name="logs_table">
+        <tbody>
+          <tr>
+          <td colspan="2">
+            <input name="log_search_input" id="log_search_input" />
+            <input name="log_search_button" type="button" class="btn" value="FILTER"/>
+          </td>
+          </tr>
+          <tr>
+          <td colspan="2">
+            <textarea  name="log_textarea" id="log_textarea" readonly="readonly">
+            </textarea>
+          </td>
+          </tr>
+          <tr>
+          <td colspan="2" class="cell_center">
+            <input type="button" name="prev_page" class="btn" value="PREVIOS" />
+            <input type="button" name="next_page" class="btn" value="NEXT " />
+            <input type="hidden"  name="current_page" value="0" />
+            <input type="hidden" name="audit_type" value="" />
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </form>  
+
     </body>
 </html>

@@ -85,7 +85,10 @@ std::string QuoteIfNotQuoted(const std::string &str) noexcept {
 std::optional<uint32_t> StrToUint(const std::string &str) noexcept {
   uint32_t res = 0;
   try {
-    res = static_cast<uint32_t>(std::stoul(str));
+    size_t pos = 0;
+    res = static_cast<uint32_t>(std::stoul(str, &pos, 10));
+    if (pos != str.size())
+      throw std::exception();
   } catch (std::exception &e) {
     std::cerr << "Error string to number conversion";
     std::cerr << e.what();

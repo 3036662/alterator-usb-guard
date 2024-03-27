@@ -1,17 +1,23 @@
 #include "config_status.hpp"
 #include "guard.hpp"
+#include "guard_audit.hpp"
 #include "guard_rule.hpp"
 #include "json_rule.hpp"
 #include "log.hpp"
 #include "systemd_dbus.hpp"
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
+#include <exception>
 #include <filesystem>
 #include <iostream>
+#include <optional>
+#include <stdexcept>
 #include <string>
 #include <thread>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 #include "utils.hpp"
 #include "guard_utils.hpp"
 
@@ -1336,4 +1342,96 @@ std::this_thread::sleep_for(std::chrono::milliseconds(10000));
   assert (!guard.GetConfigStatus().guard_daemon_enabled_);
 }
   Log::Test() << "TEST 17 ... OK";
+}
+
+void Test::Run18(){
+  Log::Test() <<"TEST18 ... Audit reading";
+  {
+    guard::Guard  guard;
+    std::optional<guard::GuardAudit> audit = guard.GetConfigStatus().GetAudit();
+    Log::Test() << audit->GetAll().size();
+  }
+
+  Log::Test() <<"non-existing file";
+  {
+    guard::GuardAudit audit=guard::GuardAudit(guard::AuditType::kFileAudit,"/");
+    assert( audit.GetAll().empty());  
+  }
+
+  Log::Test() <<"empty path";
+  {
+    try{  
+      guard::GuardAudit audit=guard::GuardAudit(guard::AuditType::kFileAudit,"");
+      throw std::logic_error("wrond-ex");
+    }
+    catch (const std::exception& ex){
+      assert( std::string(ex.what())=="The path to audit file is empty");  
+    }
+  }
+
+  Log::Test() <<"undefined audit type";
+  {
+    try{  
+      guard::GuardAudit audit=guard::GuardAudit(guard::AuditType::kUndefined,"");
+      throw std::logic_error("wrond-ex");
+    }
+    catch (const std::exception& ex){
+      Log::Test()<<ex.what();
+      assert( std::string(ex.what())=="Undefined audit type");  
+    }
+  }
+
+  Log::Test() <<"Filter test nothing found";
+  {
+    guard::Guard  guard;
+    std::optional<guard::GuardAudit> audit = guard.GetConfigStatus().GetAudit();
+    assert(audit->GetByFilter({"dksafj;asdkjg;lasdkjg"}).empty());
+  }
+
+  Log::Test() <<"Filter test all found";
+  {
+    guard::Guard  guard;
+    std::optional<guard::GuardAudit> audit = guard.GetConfigStatus().GetAudit();
+    assert(audit->GetByFilter({"."})==audit->GetAll());
+  }
+
+  Log::Test() <<"One filter";
+  {
+    guard::Guard  guard;
+    std::optional<guard::GuardAudit> audit = guard.GetConfigStatus().GetAudit();
+    std::vector<std::string> filtered=audit->GetByFilter({"8564:"});
+    assert(std::all_of(
+      filtered.cbegin(),
+      filtered.cend(),
+      [](const std::string&line){
+        return boost::contains(line,"8564:");
+      }
+    ));
+
+  }
+
+    Log::Test() <<"One filter";
+  {
+    guard::Guard  guard;
+    std::optional<guard::GuardAudit> audit = guard.GetConfigStatus().GetAudit();
+    std::vector<std::string> filtered=audit->GetByFilter({"8564:","8087:0026"});
+    assert(std::all_of(
+      filtered.cbegin(),
+      filtered.cend(),
+      [](const std::string&line){
+        return boost::contains(line,"8564:") ||
+              boost::contains(line,"8087:0026");
+      }
+    ));
+    //Log::Test()<< audit->GetByFilter({"8564:"}).size();
+    //Log::Test() <<audit->GetByFilter({"8087:0026"}).size();
+    //Log::Test() << audit->GetByFilter({"8564:","8087:0026"}).size();
+    assert (audit->GetByFilter({"8564:"}).size()+
+            audit->GetByFilter({"8087:0026"}).size() ==
+            audit->GetByFilter({"8564:","8087:0026"}).size()
+    );
+    Log::Test() << filtered.size();
+  }
+
+  Log::Test() <<"Test18 ... OK";
 }

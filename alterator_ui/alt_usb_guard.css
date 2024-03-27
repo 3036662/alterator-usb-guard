@@ -97,3 +97,27 @@
 .inline{
     display: inline;
 }
+
+#logs_form{
+    margin-top: 30px;    
+}
+
+#logs_form table{
+    margin-top: 20px;
+}
+
+#show_logs_button{
+    margin-bottom: 30px;
+}
+#log_search_input{
+    margin-left: 5px;
+}
+
+#log_textarea{
+    width:99%;
+    height: 400px;
+}
+
+.cell_center{
+    text-align: center;
+}

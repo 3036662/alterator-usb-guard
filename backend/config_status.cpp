@@ -1,4 +1,5 @@
 #include "config_status.hpp"
+#include "guard_audit.hpp"
 #include "guard_utils.hpp"
 #include "log.hpp"
 #include "systemd_dbus.hpp"
@@ -26,7 +27,7 @@ ConfigStatus::ConfigStatus() noexcept
       guard_daemon_enabled_{false}, guard_daemon_active_{false},
       config_file_permissions_OK_(false), rules_file_permissions_OK_(false),
       daemon_config_file_path_{GetDaemonConfigPath()},
-      rules_files_exists_(false) {
+      rules_files_exists_(false), audit_backend_(AuditType::kUndefined) {
   CheckDaemon();
   ParseDaemonConfig();
   CheckConfigFilesPermissions();
@@ -47,6 +48,8 @@ vecPairs ConfigStatus::SerializeForLisp() const {
   res.emplace_back(
       "config_files_permissions",
       config_file_permissions_OK_ && rules_file_permissions_OK_ ? "OK" : "BAD");
+  res.emplace_back("audit_type",
+                   audit_backend_ == AuditType::kFileAudit ? "file" : "audit");
   return res;
 }
 
@@ -77,7 +80,7 @@ std::string ConfigStatus::GetDaemonConfigPath() const noexcept {
         std::string line;
         // find ExecStart string
         while (getline(file_unit, line)) {
-          std::optional<std::string> val = ExctractConfigFileName(line);
+          std::optional<std::string> val = ExtractConfigFileName(line);
           if (val.has_value()) {
             res = val.value();
             break;
@@ -97,7 +100,7 @@ std::string ConfigStatus::GetDaemonConfigPath() const noexcept {
 }
 
 std::optional<std::string>
-ConfigStatus::ExctractConfigFileName(const std::string &line) const noexcept {
+ConfigStatus::ExtractConfigFileName(const std::string &line) const noexcept {
   using utils::Log;
   std::string res;
   if (!boost::algorithm::contains(line, "ExecStart"))
@@ -159,7 +162,7 @@ bool ConfigStatus::ExtractRuleFilePath(const std::string &line) noexcept {
   return false;
 }
 
-bool ConfigStatus::ExctractUsers(const std::string &line) noexcept {
+bool ConfigStatus::ExtractUsers(const std::string &line) noexcept {
   if (boost::starts_with(line, "IPCAllowedUsers=")) {
     size_t pos = line.find('=');
     if (pos != std::string::npos && ++pos < line.size()) {
@@ -254,6 +257,49 @@ bool ConfigStatus::ExtractPolicy(const std::string &line) noexcept {
   return false;
 }
 
+bool ConfigStatus::ExtractAuditBackend(const std::string &line) noexcept {
+  if (boost::starts_with(line, "AuditBackend=")) {
+    size_t pos = line.find('=');
+    if (pos != std::string::npos && ++pos < line.size()) {
+      std::string audit_backend(line, pos);
+      boost::trim(audit_backend);
+      if (!audit_backend.empty()) {
+        Log::Info() << "Audit backend type =" << audit_backend;
+        if (audit_backend == "FileAudit") {
+          audit_backend_ = AuditType::kFileAudit;
+          return true;
+        }
+        if (audit_backend == "LinuxAudit") {
+          audit_backend_ = AuditType::kLinuxAudit;
+          return true;
+        }
+        audit_backend_ = AuditType::kUndefined;
+        Log::Error() << "AuditType was not parsed";
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+bool ConfigStatus::ExtractAuditFilePath(const std::string &line) noexcept {
+  if (boost::starts_with(line, "AuditFilePath=")) {
+    size_t pos = line.find('=');
+    if (pos != std::string::npos && ++pos < line.size()) {
+      std::string audit_file(line, pos);
+      boost::trim(audit_file);
+      if (!audit_file.empty()) {
+        Log::Info() << "Audit file =" << audit_file;
+        audit_file_path_ = std::move(audit_file);
+      } else {
+        Log::Warning() << "Audit file path is empty";
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 void ConfigStatus::ParseDaemonConfig() noexcept {
   // cleanup
   ipc_allowed_users_.clear();
@@ -277,13 +323,18 @@ void ConfigStatus::ParseDaemonConfig() noexcept {
     if (ExtractRuleFilePath(line))
       continue;
     // parse allowed user from conf file
-    if (ExctractUsers(line))
+    if (ExtractUsers(line))
       continue;
     // parse allowed users folder and find all files in folder
     if (CheckUserFiles(line))
       continue;
     // find all groups in config file
     if (ExtractGroups(line))
+      continue;
+    // Audit type
+    if (ExtractAuditBackend(line))
+      continue;
+    if (ExtractAuditFilePath(line))
       continue;
     // ImplicitPolicyTarget
     ExtractPolicy(line);
@@ -457,6 +508,15 @@ bool ConfigStatus::TryToRun(bool run_daemon) const noexcept {
     sysd.StopUnit(usb_guard_daemon_name);
   }
   return result.value_or(false);
+}
+
+std::optional<GuardAudit> ConfigStatus::GetAudit() const noexcept {
+  try {
+    return std::make_optional<GuardAudit>(audit_backend_, audit_file_path_);
+  } catch (const std::exception &ex) {
+    Log::Error() << "Can't get GuardAudit";
+    return std::nullopt;
+  }
 }
 
 bool ConfigStatus::ChangeDaemonStatus(bool active,

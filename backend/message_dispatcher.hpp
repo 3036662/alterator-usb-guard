@@ -29,6 +29,7 @@ private:
   bool AllowDevice(const LispMessage &msg) const noexcept;
   bool BlockDevice(const LispMessage &msg) const noexcept;
   bool CheckConfig() const noexcept;
+  bool ReadUsbGuardLogs(const LispMessage &msg) const noexcept;
   static bool UploadRulesFile(const LispMessage &msg) noexcept;
 
   guard::Guard &guard_;
