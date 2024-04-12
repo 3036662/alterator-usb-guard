@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
   //test.Run12(); DEPRECATED
 
   // // Test systemd restart and stop
-  // test.Run13();
+  test.Run13();
 
   // // Test parsing json rule object
   test.Run14();

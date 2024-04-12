@@ -1304,8 +1304,8 @@ void Test::Run16(){
 
 void Test::Run17(){
   Log::Test() << " Test allow connected ";
-  Log::Warning() <<"Test with sleep 10sec";
-std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+ // Log::Warning() <<"Test with sleep 10sec";
+//std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 Log::Info() <<"Sleep ...";
 {
   guard::Guard guard;
@@ -1319,7 +1319,7 @@ Log::Info() <<"Sleep ...";
 }
 
 Log::Info() <<"Sleep ...";
-std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+//std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 {
   guard::Guard guard;
   std::string json ="{\"policy_type\":\"radio_white_list\",\"preset_mode\":\"put_connected_to_white_list\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"false\"}";
@@ -1330,7 +1330,7 @@ std::this_thread::sleep_for(std::chrono::milliseconds(10000));
   assert (!guard.GetConfigStatus().guard_daemon_enabled_);
 }
 Log::Info() <<"Sleep ...";
-std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+//std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 {
   guard::Guard guard;
   std::string json ="{\"policy_type\":\"radio_black_list\",\"preset_mode\":\"manual_mode\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"false\"}";

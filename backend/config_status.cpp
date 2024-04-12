@@ -413,18 +413,16 @@ ConfigStatus::ParseGuardRulesFile() const noexcept {
   return res;
 }
 
-/***********************************************************/
-
 bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
                                       bool run_daemon) noexcept {
   // temporary change the policy to "allow all"
   // The purpose is to launch USBGuard without blocking anything
   // to make sure it can parse new rules
-  bool initial_policy = implicit_policy_target_ == "block";
-  if (!ChangeImplicitPolicy(false)) {
-    Log::Error() << "Can't change usbguard policy";
-    return false;
-  }
+  // bool initial_policy = implicit_policy_target_ == "block";
+  // if (!ChangeImplicitPolicy(false)) {
+  //   Log::Error() << "Can't change usbguard policy";
+  //   return false;
+  // }
   if (rules_files_exists_) {
     // read old rules
     std::ifstream old_file(daemon_rules_file_path);
@@ -475,23 +473,24 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
   }
 
   // restore the policy
-  if (!ChangeImplicitPolicy(initial_policy)) {
-    Log::Error() << "Can't change usbguard policy";
-    return false;
-  }
-  if (run_daemon)
-    TryToRun(run_daemon);
+  // if (!ChangeImplicitPolicy(initial_policy)) {
+  //   Log::Error() << "Can't change usbguard policy";
+  //   return false;
+  // // }
+  // if (run_daemon)
+  //   TryToRun(run_daemon);
   return true;
 }
 
 bool ConfigStatus::TryToRun(bool run_daemon) const noexcept {
   dbus_bindings::Systemd sysd;
+  // check if unit is active
   auto init_state = sysd.IsUnitActive(usb_guard_daemon_name);
   if (!init_state.has_value())
     return false;
   Log::Info() << "Usbguard is "
               << (init_state.value_or("") ? "active" : "inactive");
-  // if stopped - try to start
+  // if stopped - try to start and exit
   if (!init_state.value_or(false)) {
     auto result = sysd.StartUnit(usb_guard_daemon_name);
     Log::Info() << "Test run - "
@@ -501,8 +500,15 @@ bool ConfigStatus::TryToRun(bool run_daemon) const noexcept {
     }
     return result.value_or(false);
   }
-  // if daemon is active - restart
-  auto result = sysd.RestartUnit(usb_guard_daemon_name);
+  //  else if daemon is active - restart
+  // auto result = sysd.RestartUnit(usb_guard_daemon_name);
+  // The restart method is commented out because it can cause a systemd timeout.
+  // Using stop and start.
+  auto result_stop = sysd.StopUnit(usb_guard_daemon_name);
+  if (!result_stop.value_or(false)) {
+    Log::Error() << "Can't stop service while trying to restart";
+  }
+  auto result = sysd.StartUnit(usb_guard_daemon_name);
   Log::Info() << "Restart - " << (result.value_or(false) ? "OK" : "FAIL");
   if (init_state.has_value() && !init_state.value_or(false) && !run_daemon) {
     sysd.StopUnit(usb_guard_daemon_name);
