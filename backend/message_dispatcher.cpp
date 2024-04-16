@@ -37,7 +37,7 @@ bool MessageDispatcher::Dispatch(const LispMessage &msg) const noexcept {
   }
   // get congiguration info
   if (msg.action == "read" && msg.objects == "config_status") {
-    Log::Info() << "Get config status";
+    // Log::Info() << "Get config status";
     std::cout << ToLispAssoc(guard_.GetConfigStatus());
     return true;
   }
@@ -140,7 +140,7 @@ bool MessageDispatcher::UploadRulesFile(const LispMessage &msg) noexcept {
 bool MessageDispatcher::SaveChangeRules(const LispMessage &msg,
                                         bool apply_rules) const noexcept {
   auto start = std::chrono::steady_clock::now();
-  Log::Debug() << "Time measurement has started";
+  // Log::Debug() << "Time measurement has started";
   if (msg.params.count("changes_json") == 0 ||
       msg.params.find("changes_json")->second.empty()) {
     std::cout << kMessBeg << kMessEnd;
@@ -172,7 +172,7 @@ bool MessageDispatcher::ListUsbGuardRules(
   guard::StrictnessLevel level =
       guard::GuardRule::StrToStrictnessLevel(msg.params.at("level"));
   auto start = std::chrono::steady_clock::now();
-  Log::Debug() << "Time measurement has started";
+  // Log::Debug() << "Time measurement has started";
   std::vector<guard::GuardRule> vec_rules =
       guard_.GetConfigStatus().ParseGuardRulesFile().first;
   std::cout << kMessBeg;
@@ -203,7 +203,7 @@ bool MessageDispatcher::ListUsbGuardRules(
 }
 
 bool MessageDispatcher::ListUsbDevices() const noexcept {
-  Log::Debug() << "Time measurement has started";
+  // Log::Debug() << "Time measurement has started";
   std::vector<guard::UsbDevice> vec_usb = guard_.ListCurrentUsbDevices();
   std::cout << kMessBeg;
   for (const auto &usb : vec_usb) {

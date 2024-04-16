@@ -168,7 +168,7 @@ bool ConfigStatus::ExtractUsers(const std::string &line) noexcept {
     if (pos != std::string::npos && ++pos < line.size()) {
       std::string users_string(line, pos);
       users_string = boost::trim_copy(users_string);
-      Log::Info() << "Found users in conf file " << line;
+       // Log::Info() << "Found users in conf file " << line;
       // split by space and add to set
       std::vector<std::string> splitted_string;
       try {
@@ -195,7 +195,7 @@ bool ConfigStatus::CheckUserFiles(const std::string &line) noexcept {
     if (pos != std::string::npos && ++pos < line.size()) {
       std::string path_to_folder(line, pos);
       boost::trim(path_to_folder);
-      Log::Info() << "Found users control folder " << line;
+      //  Log::Info() << "Found users control folder " << line;
       try {
         std::filesystem::path fs_path_to_folder(path_to_folder);
         std::vector<std::string> files =
@@ -477,8 +477,9 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
   //   Log::Error() << "Can't change usbguard policy";
   //   return false;
   // // }
-  // if (run_daemon)
-  //   TryToRun(run_daemon);
+
+  if (run_daemon)
+    TryToRun(run_daemon);
   return true;
 }
 
