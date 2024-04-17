@@ -513,7 +513,7 @@ std::unordered_map<std::string, std::string> InspectUdevRules(
   if (vec != nullptr)
     udev_paths = *vec;
 #endif
-  Log::Info() << "Inspecting udev folders";
+  // Log::Info() << "Inspecting udev folders";
   for (const std::string &path : udev_paths) {
     // Log::Info() << "Inspecting udev folder " << path;
     // find all files in folder

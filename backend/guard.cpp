@@ -1,5 +1,6 @@
 #include "guard.hpp"
 #include "config_status.hpp"
+#include "guard_rule.hpp"
 #include "guard_utils.hpp"
 #include "json_changes.hpp"
 #include "log.hpp"
@@ -122,12 +123,19 @@ std::optional<std::string>
 Guard::ProcessJsonRulesChanges(const std::string &msg,
                                bool apply_changes) noexcept {
   try {
+    ConfigStatus config = GetConfigStatus();
+    bool initial_active_status = config.guard_daemon_active();
+    bool initial_enable_status = config.guard_daemon_enabled();
+    Target initial_policy = config.implicit_policy();
     guard::json::JsonChanges js_changes(msg);
     // give a list of active devices if needed
     if (js_changes.ActiveDeviceListNeeded()) {
       ConnectToUsbGuard();
-      auto config = GetConfigStatus();
+      // if usbguard is not active, activate it with "allow"
       if (!HealthStatus()) {
+        Log::Debug() << "[ProcessJson] Starting usbguard with allow policy to "
+                        "get list of devices";
+        config.ChangeImplicitPolicy(false);
         config.TryToRun(true);
         ConnectToUsbGuard();
         if (!HealthStatus()) {
@@ -135,6 +143,10 @@ Guard::ProcessJsonRulesChanges(const std::string &msg,
         }
       }
       js_changes.active_devices(ListCurrentUsbDevices());
+      // after recieving devices, restore initial status
+      Log::Debug() << "[ProcessJson] Recovering the initial policy and status";
+      config.ChangeImplicitPolicy(initial_policy == Target::block);
+      config.ChangeDaemonStatus(initial_active_status, initial_enable_status);
     }
     return js_changes.Process(apply_changes);
   } catch (const std::exception &ex) {

@@ -121,7 +121,7 @@ ConfigStatus::ExtractConfigFileName(const std::string &line) const noexcept {
     try {
       if (std::filesystem::exists(*it_token)) {
         res = std::move(*it_token);
-        Log::Info() << "Found config file for usbguard " << res;
+        // Log::Info() << "Found config file for usbguard " << res;
       } else {
         Log::Warning() << "Can't find path to .conf file in .service file";
 
@@ -145,7 +145,7 @@ bool ConfigStatus::ExtractRuleFilePath(const std::string &line) noexcept {
     if (pos != std::string::npos && ++pos < line.size()) {
       std::string path_to_rules(line, pos);
       boost::trim(path_to_rules);
-      Log::Info() << "Find path to rules file " << path_to_rules;
+      // Log::Info() << "Find path to rules file " << path_to_rules;
       if (!path_to_rules.empty()) {
         daemon_rules_file_path = std::move(path_to_rules);
         try {
@@ -168,7 +168,7 @@ bool ConfigStatus::ExtractUsers(const std::string &line) noexcept {
     if (pos != std::string::npos && ++pos < line.size()) {
       std::string users_string(line, pos);
       users_string = boost::trim_copy(users_string);
-       // Log::Info() << "Found users in conf file " << line;
+      // Log::Info() << "Found users in conf file " << line;
       // split by space and add to set
       std::vector<std::string> splitted_string;
       try {
@@ -264,7 +264,7 @@ bool ConfigStatus::ExtractAuditBackend(const std::string &line) noexcept {
       std::string audit_backend(line, pos);
       boost::trim(audit_backend);
       if (!audit_backend.empty()) {
-        Log::Info() << "Audit backend type =" << audit_backend;
+        // Log::Info() << "Audit backend type =" << audit_backend;
         if (audit_backend == "FileAudit") {
           audit_backend_ = AuditType::kFileAudit;
           return true;
@@ -289,7 +289,7 @@ bool ConfigStatus::ExtractAuditFilePath(const std::string &line) noexcept {
       std::string audit_file(line, pos);
       boost::trim(audit_file);
       if (!audit_file.empty()) {
-        Log::Info() << "Audit file =" << audit_file;
+        // Log::Info() << "Audit file =" << audit_file;
         audit_file_path_ = std::move(audit_file);
       } else {
         Log::Warning() << "Audit file path is empty";
@@ -427,7 +427,8 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
     // read old rules
     std::ifstream old_file(daemon_rules_file_path);
     if (!old_file.is_open()) {
-      Log::Error() << "Can't open file " << daemon_rules_file_path;
+      Log::Error() << "[OverwriteRulesFile] Can't open file "
+                   << daemon_rules_file_path;
       return false;
     }
     std::stringstream old_content;
@@ -444,32 +445,33 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
     file << new_content;
     file.close();
     // parse new rules
-    if (!new_content.empty()) {
-      auto parsed_new_file = ParseGuardRulesFile();
-      // If some errors occurred while parsing new rules - recover
-      if (parsed_new_file.first.size() != parsed_new_file.second ||
-          !TryToRun(run_daemon)) {
-        Log::Error() << "Error parsing new rules,old file will be recovered";
-        std::ofstream file3(daemon_rules_file_path);
-        if (!file3.is_open()) {
-          Log::Error() << "[ERROR] Can't open file " << daemon_rules_file_path
-                       << " for writing";
-          return false;
-        }
-        file3 << old_content.str();
-        file3.close();
-        dbus_bindings::Systemd sysd;
-        // try to run with recovered rules
-        if (!TryToRun(run_daemon)) {
-          Log::Error()
-              << "Can't start usbguard service. UsbGuard will be disabled";
-          ChangeImplicitPolicy(false);
-          TryToRun(false);
-          ChangeDaemonStatus(false, false);
-        }
+    // if (!new_content.empty()) {
+    auto parsed_new_file = ParseGuardRulesFile();
+    // If some errors occurred while parsing new rules - recover
+    if (parsed_new_file.first.size() != parsed_new_file.second ||
+        !TryToRun(run_daemon)) {
+      Log::Error() << "[OverwriteRulesFile] Error parsing new rules,old file "
+                      "will be recovered";
+      std::ofstream file3(daemon_rules_file_path);
+      if (!file3.is_open()) {
+        Log::Error() << "[OverwriteRulesFile] Can't open file "
+                     << daemon_rules_file_path << " for writing";
         return false;
       }
+      file3 << old_content.str();
+      file3.close();
+      dbus_bindings::Systemd sysd;
+      // try to run with recovered rules
+      if (!TryToRun(run_daemon)) {
+        Log::Error() << "[OverwriteRulesFile] Can't start usbguard service. "
+                        "UsbGuard will be disabled";
+        ChangeImplicitPolicy(false);
+        // TryToRun(false);
+        ChangeDaemonStatus(false, false);
+      }
+      return false;
     }
+    //}
   }
 
   // restore the policy
@@ -477,9 +479,9 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
   //   Log::Error() << "Can't change usbguard policy";
   //   return false;
   // // }
+  // if (run_daemon)
+  //  TryToRun(run_daemon);
 
-  if (run_daemon)
-    TryToRun(run_daemon);
   return true;
 }
 
@@ -489,14 +491,15 @@ bool ConfigStatus::TryToRun(bool run_daemon) const noexcept {
   auto init_state = sysd.IsUnitActive(usb_guard_daemon_name);
   if (!init_state.has_value())
     return false;
-  Log::Info() << "Usbguard is "
+  Log::Info() << "[TryToRun] Usbguard is "
               << (init_state.value_or("") ? "active" : "inactive");
   // if stopped - try to start and exit
   if (!init_state.value_or(false)) {
     auto result = sysd.StartUnit(usb_guard_daemon_name);
-    Log::Info() << "Test run - "
+    Log::Info() << "[TryToRun] Test run - "
                 << ((result.has_value() && *result) ? "OK" : "FAIL");
     if (!run_daemon) {
+      Log::Debug() << "[TryToRun] stopping sercice";
       sysd.StopUnit(usb_guard_daemon_name);
     }
     return result.value_or(false);
@@ -507,10 +510,11 @@ bool ConfigStatus::TryToRun(bool run_daemon) const noexcept {
   // Using stop and start.
   auto result_stop = sysd.StopUnit(usb_guard_daemon_name);
   if (!result_stop.value_or(false)) {
-    Log::Error() << "Can't stop service while trying to restart";
+    Log::Error() << "[TryToRun] Can't stop service while trying to restart";
   }
   auto result = sysd.StartUnit(usb_guard_daemon_name);
-  Log::Info() << "Restart - " << (result.value_or(false) ? "OK" : "FAIL");
+  Log::Info() << "[TryToRun] Restart - "
+              << (result.value_or(false) ? "OK" : "FAIL");
   if (init_state.has_value() && !init_state.value_or(false) && !run_daemon) {
     sysd.StopUnit(usb_guard_daemon_name);
   }
@@ -532,32 +536,34 @@ bool ConfigStatus::ChangeDaemonStatus(bool active,
   auto init_state = sysd.IsUnitActive(usb_guard_daemon_name);
   if (!init_state.has_value())
     return false;
-  Log::Info() << "Usbguard is " << (*init_state ? "active" : "inactive");
+  Log::Info() << "[ChangeDaemonStatus] Usbguard is "
+              << (*init_state ? "active" : "inactive");
   auto enabled_state = sysd.IsUnitEnabled(usb_guard_daemon_name);
   if (!enabled_state) {
     Log::Error() << "Can't define if USBGuard enabled or disabled";
     return false;
   }
-  Log::Info() << "Usbguard is " << (*enabled_state ? "enabled" : "disabled");
+  Log::Info() << "[ChangeDaemonStatus] Usbguard is "
+              << (*enabled_state ? "enabled" : "disabled");
   // if we need to stop the service
   if (*init_state && !active) {
-    Log::Info() << "Stopping the service";
+    Log::Info() << "[ChangeDaemonStatus] Stopping the service";
     auto res = sysd.StopUnit(usb_guard_daemon_name);
     if (!res || !*res) {
-      Log::Error() << "Can't stop the USBGuard";
+      Log::Error() << "[ChangeDaemonStatus] Can't stop the USBGuard";
       return false;
     }
   } else if (!*init_state && active) {
     Log::Info() << "Starting the service";
     auto res = sysd.StartUnit(usb_guard_daemon_name);
     if (!res || !*res) {
-      Log::Error() << "Can't start the USBGuard";
+      Log::Error() << "[ChangeDaemonStatus] Can't start the USBGuard";
       return false;
     }
   }
   // if now the daemon is enabled and we need to disable it
   if (*enabled_state && !enabled) {
-    Log::Info() << "Disabling the service";
+    Log::Info() << "[ChangeDaemonStatus] Disabling the service";
     auto res = sysd.DisableUnit(usb_guard_daemon_name);
     if (!res || !*res) {
       Log::Error() << "Can't disable the USBGuard";
@@ -567,7 +573,7 @@ bool ConfigStatus::ChangeDaemonStatus(bool active,
     auto res = sysd.EnableUnit(usb_guard_daemon_name);
     Log::Info() << "Enabling the service";
     if (!res || !*res) {
-      Log::Error() << "Can't enable the USBGuard";
+      Log::Error() << "[ChangeDaemonStatus] Can't enable the USBGuard";
       return false;
     }
   }
