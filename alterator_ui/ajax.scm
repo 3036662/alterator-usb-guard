@@ -135,6 +135,7 @@
                 (begin
                     (form-update-value "checkbox_use_control_hidden" #f)                  
                     (form-update-value "presets_input_hidden" "put_connected_to_white_list")
+                    (js  "DisableManualModeButtons")
                 )
            )
            ; set log audit type 

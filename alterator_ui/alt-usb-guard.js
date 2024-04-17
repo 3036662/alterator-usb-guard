@@ -487,6 +487,11 @@ function ActivateManualModeButtons(activate){
   }
 }
 
+function DisableManualModeButtons(){
+  ActivateManualModeButtons(false);
+}
+
+
 
 // check all appended rules if checkbox in table header is checked
 function CatchTableHeaderCheckbok(table_id){
