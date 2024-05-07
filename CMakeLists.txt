@@ -14,8 +14,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 # dbus + systemd
 find_package(sdbus-c++ REQUIRED)
 pkg_check_modules(SYSTEMD REQUIRED IMPORTED_TARGET systemd)
-# libudev
-pkg_check_modules(UDEV REQUIRED IMPORTED_TARGET libudev)
+
 
 
 # alterator lisp bingings
@@ -34,6 +33,8 @@ ENDIF (DEFINED USBGUARD)
 
 # the daemon
 IF (DEFINED USBMOUNT)
+# libudev
+pkg_check_modules(UDEV REQUIRED IMPORTED_TARGET libudev)
 message("Building daemon...")
 add_subdirectory(daemon)
 # alterator-usb-mount
