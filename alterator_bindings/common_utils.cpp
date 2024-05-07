@@ -1,6 +1,5 @@
-#include "utils.hpp"
+#include "common_utils.hpp"
 #include "log.hpp"
-#include "usb_device.hpp"
 #include <cstddef>
 #include <exception>
 #include <filesystem>
@@ -8,9 +7,10 @@
 #include <optional>
 #include <stdexcept>
 #include <string>
+#include <unordered_set>
 #include <utility>
 
-namespace utils {
+namespace common_utils {
 
 std::string UnUtf8(const std::string &str) noexcept {
   std::string res;
@@ -48,7 +48,7 @@ std::string UnUtf8(const std::string &str) noexcept {
       throw std::runtime_error("Bad utf-8 string");
     }
   } catch (const std::exception &ex) {
-    guard::utils::Log::Error() << ex.what();
+    Log::Error() << ex.what();
   }
   return res;
 }
@@ -68,7 +68,7 @@ std::string UnQuote(const std::string &str) noexcept {
       res = std::string(str, 1, str.size() - 2);
     }
   } catch (const std::exception &ex) {
-    guard::utils::Log::Debug() << "Error Unquoting string(UnQoute)";
+    Log::Debug() << "Error Unquoting string(UnQoute)";
     return str;
   }
   return res;
@@ -85,6 +85,8 @@ std::string QuoteIfNotQuoted(const std::string &str) noexcept {
 std::optional<uint32_t> StrToUint(const std::string &str) noexcept {
   uint32_t res = 0;
   try {
+    if (!str.empty() && str[0] == '-')
+      throw std::exception();
     size_t pos = 0;
     res = static_cast<uint32_t>(std::stoul(str, &pos, 10));
     if (pos != str.size())
@@ -149,23 +151,28 @@ std::string EscapeAll(const std::string &str) noexcept {
   return res;
 }
 
-std::vector<guard::UsbDevice> fakeLibGetUsbList() noexcept {
-  std::vector<guard::UsbDevice> res;
-  for (uint i = 0; i < 10; ++i) {
-    std::string str_num = std::to_string(i);
-    guard::UsbDevice::DeviceData dev_data{i,
-                                          "allowed",
-                                          "name" + str_num,
-                                          "vid" + str_num,
-                                          "pid" + str_num,
-                                          "port" + str_num,
-                                          "conn" + str_num,
-                                          "00::00::00",
-                                          "serial" + str_num,
-                                          "hash" + str_num};
-    res.emplace_back(dev_data);
+std::string HtmlEscape(const std::string& str) noexcept{
+  std::string res;
+  std::unordered_map<char,std::string> escape_map{
+    {'\t',"&#9;"},
+    {'\n',"&#10;"},
+    {'\"',"&#34;"},
+    {'\\',"&#92;"},
+    {'\'',"&#39;"}
+  };
+  for (auto it=str.cbegin();it<str.cend();++it){
+    if (escape_map.count(*it)==0){
+      res.push_back(*it);
+    }
+    else {
+      try {
+        res+=escape_map.at(*it); 
+      } catch (const std::exception& ex){
+        res+=*it;
+      }
+    }
   }
   return res;
 }
 
-} // namespace utils
+} // namespace common_utils

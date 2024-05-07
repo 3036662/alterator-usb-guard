@@ -1,6 +1,5 @@
 #pragma once
 #include "config_status.hpp"
-#include "guard_rule.hpp"
 #include "usb_device.hpp"
 #include <IPCClient.hpp>
 #include <USBGuard.hpp>

@@ -1,0 +1,12 @@
+add_compile_definitions(UNIT_TEST=1)
+find_package(Catch2  REQUIRED)
+add_executable(test_dal test_dal.cpp)
+target_link_libraries(test_dal PRIVATE Catch2::Catch2)
+target_include_directories(test_dal PUBLIC "${CATCH2_INCLUDE_DIR}")
+target_include_directories(test_dal PUBLIC ${CMAKE_SOURCE_DIR}/daemon/dal )
+target_link_libraries(test_dal PRIVATE DAL)
+target_link_libraries(test_dal PRIVATE boost_json)
+
+include(CTest)
+include(Catch)
+catch_discover_tests(test_dal)

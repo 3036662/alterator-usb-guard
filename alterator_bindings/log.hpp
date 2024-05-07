@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-namespace guard::utils {
+namespace common_utils {
 
 class Log {
 public:
@@ -55,4 +55,4 @@ public:
   };
 };
 
-} // namespace guard::utils
+} // namespace common_utils

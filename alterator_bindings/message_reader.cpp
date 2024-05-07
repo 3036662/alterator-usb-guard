@@ -1,12 +1,16 @@
 #include "message_reader.hpp"
 #include "lisp_message.hpp"
+#include "message_dispatcher.hpp"
 #include <boost/algorithm/algorithm.hpp>
 #include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <unordered_map>
 
-MessageReader::MessageReader(guard::Guard &guard) noexcept
-    : dispatcher_(guard) {}
+// MessageReader::MessageReader(guard::Guard &guard) noexcept
+//     : dispatcher_(guard) {}
+
+MessageReader::MessageReader(DispatchFunc dispatcher_func) noexcept
+    : dispatcher_(std::move(dispatcher_func)) {}
 
 void MessageReader::Loop() const noexcept {
   std::string line;

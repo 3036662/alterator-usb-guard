@@ -1,11 +1,11 @@
 #include "guard.hpp"
+#include "common_utils.hpp"
 #include "config_status.hpp"
 #include "guard_rule.hpp"
 #include "guard_utils.hpp"
 #include "json_changes.hpp"
 #include "log.hpp"
 #include "usb_device.hpp"
-#include "utils.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/json.hpp>
@@ -24,7 +24,7 @@
 
 namespace guard {
 
-using ::guard::utils::Log;
+using common_utils::Log;
 
 Guard::Guard() noexcept : ptr_ipc_(nullptr) { ConnectToUsbGuard(); }
 
@@ -85,7 +85,7 @@ bool Guard::AllowOrBlockDevice(const std::string &device_id, bool allow,
                                bool permanent) noexcept {
   if (device_id.empty() || !HealthStatus())
     return false;
-  std::optional<uint32_t> id_numeric = ::utils::StrToUint(device_id);
+  std::optional<uint32_t> id_numeric = common_utils::StrToUint(device_id);
   if (!id_numeric)
     return false;
   usbguard::Rule::Target policy =

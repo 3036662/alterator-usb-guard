@@ -1,8 +1,8 @@
 #include "json_changes.hpp"
+#include "common_utils.hpp"
 #include "guard_rule.hpp"
 #include "json_rule.hpp"
 #include "log.hpp"
-#include "utils.hpp"
 #include <boost/json/array.hpp>
 #include <boost/json/object.hpp>
 #include <boost/json/serialize.hpp>
@@ -13,7 +13,7 @@
 
 namespace guard::json {
 
-using guard::utils::Log;
+using common_utils::Log;
 
 JsonChanges::JsonChanges(const std::string &msg)
     : p_jobj_(nullptr), daemon_activate_(false), target_policy_(Target::block),
@@ -174,10 +174,10 @@ void JsonChanges::AddBlockAndroid() {
         element.as_object().contains("pid")) {
       std::stringstream string_builder;
       string_builder << "block id "
-                     << ::utils::UnQuote(
+                     << common_utils::UnQuote(
                             element.as_object().at("vid").as_string().c_str())
                      << ":"
-                     << ::utils::UnQuote(
+                     << common_utils::UnQuote(
                             element.as_object().at("pid").as_string().c_str());
       try {
         rules_to_add_.emplace_back(string_builder.str());
@@ -202,8 +202,8 @@ boost::json::object JsonChanges::AddAppendByPresetToResponse() const {
       switch (rule.level()) {
       case StrictnessLevel::hash: {
         json::object tmp_hash;
-        tmp_hash["hash"] = ::utils::UnQuote(rule.hash());
-        tmp_hash["description"] = ::utils::UnQuote(rule.device_name());
+        tmp_hash["hash"] = common_utils::UnQuote(rule.hash());
+        tmp_hash["description"] = common_utils::UnQuote(rule.device_name());
         tmp_hash["target"] = static_cast<uint>(rule.target());
         res["hash"].as_array().emplace_back(std::move(tmp_hash));
       } break;
@@ -251,7 +251,9 @@ void JsonChanges::AddBlockUsbStorages() {
 void JsonChanges::AddAllowHid() {
   try {
     rules_to_add_.emplace_back("allow with-interface 03:*:*");
+    rules_to_add_.emplace_back("allow with-interface 09:*:*");
     added_by_preset_.emplace_back("allow with-interface 03:*:*");
+    added_by_preset_.emplace_back("allow with-interface 09:*:*");
   } catch (const std::logic_error &ex) {
     Log::Error() << "Can't add a rules for HID devices";
     Log::Error() << ex.what();
@@ -265,15 +267,17 @@ void JsonChanges::ProcessAllowConnected() {
   }
   for (const UsbDevice &dev : active_devices_.value()) {
     std::stringstream string_builder;
-    string_builder << "allow name " << ::utils::QuoteIfNotQuoted(dev.name())
-                   << " hash " << ::utils::QuoteIfNotQuoted(dev.hash());
+    string_builder << "allow name "
+                   << common_utils::QuoteIfNotQuoted(dev.name()) << " hash "
+                   << common_utils::QuoteIfNotQuoted(dev.hash());
     try {
       rules_to_add_.emplace_back(string_builder.str());
       added_by_preset_.emplace_back(string_builder.str());
     } catch (const std::logic_error &ex) {
       Log::Error() << "Can't create a rule for device"
-                   << "allow name " << ::utils::QuoteIfNotQuoted(dev.name())
-                   << " hash " << ::utils::QuoteIfNotQuoted(dev.hash());
+                   << "allow name "
+                   << common_utils::QuoteIfNotQuoted(dev.name()) << " hash "
+                   << common_utils::QuoteIfNotQuoted(dev.hash());
       Log::Error() << ex.what();
       throw;
     }
@@ -281,7 +285,7 @@ void JsonChanges::ProcessAllowConnected() {
 }
 
 void JsonChanges::ProcessManualMode() {
-  using ::utils::StrToUint;
+  using common_utils::StrToUint;
   obj_result_["rules_OK"] = json::array();
   obj_result_["rules_BAD"] = json::array();
   if (p_jobj_ != nullptr && p_jobj_->contains("appended_rules"))

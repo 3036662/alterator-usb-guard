@@ -1,7 +1,7 @@
 #include "guard_rule.hpp"
+#include "common_utils.hpp"
 #include "guard_utils.hpp"
 #include "log.hpp"
-#include "utils.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
@@ -16,9 +16,9 @@
 
 namespace guard {
 
-using guard::utils::Log;
-using ::utils::EscapeQuotes;
-using ::utils::QuoteIfNotQuoted;
+using common_utils::EscapeQuotes;
+using common_utils::Log;
+using common_utils::QuoteIfNotQuoted;
 
 // static
 const std::map<Target, std::string> GuardRule::map_target{

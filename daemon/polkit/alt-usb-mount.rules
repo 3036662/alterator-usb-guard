@@ -1,0 +1,28 @@
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.udisks2.filesystem-unmount-others"
+        && action.lookup("drive.removable.bus")==="usb") {
+        //polkit.log("action=" + action);
+        //polkit.log("subject=" + subject);  
+        //polkit.log(action.lookup("device")); 
+        var response =polkit.spawn(["/usr/libexec/altusbmount_askdbus",action.lookup("device"),"unmount"]);
+        polkit.log("dbus response="+ response);
+        if (response==="YES"){
+            return polkit.Result.YES;
+        }
+    }
+    return polkit.Result.NOT_HANDLED;
+});
+
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.udisks2.filesystem-mount"
+        && action.lookup("drive.removable.bus")==="usb") {
+        polkit.log("action=" + action);
+        polkit.log("subject=" + subject);      
+        var response =polkit.spawn(["/usr/libexec/altusbmount_askdbus",action.lookup("device"),"mount"]);
+        polkit.log("dbus response="+ response);
+        if (response==="NO"){
+            return polkit.Result.NO;
+        }
+    }
+    return polkit.Result.NOT_HANDLED;
+});

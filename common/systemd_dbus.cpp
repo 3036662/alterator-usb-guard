@@ -6,7 +6,7 @@
 
 namespace dbus_bindings {
 
-using guard::utils::Log;
+using common_utils::Log;
 
 Systemd::Systemd() noexcept : connection_{nullptr} { ConnectToSystemDbus(); }
 

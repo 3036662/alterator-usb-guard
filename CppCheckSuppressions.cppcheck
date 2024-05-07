@@ -1,6 +1,4 @@
-duplInheritedMember:backend/guard_rule.hpp
-duplInheritedMember:backend/serializible_for_lisp.hpp
-duplInheritedMember:backend/config_status.cpp
-duplInheritedMember:backend/usb_device.cpp
-duplInheritedMember:backend/usb_device.hpp
+duplInheritedMember
 missingIncludeSystem
+missingInclude
+unusedFunction

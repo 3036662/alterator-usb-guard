@@ -1,5 +1,5 @@
 #pragma once
-#include "serializible_for_lisp.hpp"
+#include "serializable_for_lisp.hpp"
 #include <boost/json.hpp>
 #include <boost/json/object.hpp>
 #include <functional>

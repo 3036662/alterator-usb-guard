@@ -1,7 +1,7 @@
 #ifndef MESSAGE_READER_HPP
 #define MESSAGE_READER_HPP
 
-#include "guard.hpp"
+#include "lisp_message.hpp"
 #include "message_dispatcher.hpp"
 #include <string>
 
@@ -13,9 +13,12 @@
  */
 class MessageReader {
 public:
-  /// @brief  Constructor
-  /// @param guard Guard object
-  explicit MessageReader(guard::Guard &guard) noexcept;
+
+  /**
+   * @brief Construct a new Message Reader object
+   * @param Function bool(*)(const LispMessage&) as dispatcher implementation
+   */
+  MessageReader(DispatchFunc) noexcept;
 
   /// @brief Main loop - reades messages and sens them to dispatcher
   void Loop() const noexcept;

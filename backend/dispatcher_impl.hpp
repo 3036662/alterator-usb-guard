@@ -1,25 +1,13 @@
-#pragma once
-
 #include "guard.hpp"
 #include "lisp_message.hpp"
-#include <string>
+#include "message_dispatcher.hpp"
 
-/**
- * @class MessageDispatcher
- * @brief Accepts messages (LispMessage) from MessageReader and perfoms
- * appropriate actions
- */
-class MessageDispatcher {
+namespace guard {
+
+class DispatcherImpl {
 public:
-  /**
-   * @brief Constructor for Message Dispatcher
-   * @param guard The Guard object
-   */
-  explicit MessageDispatcher(guard::Guard &guard) noexcept;
-  /**
-   * @brief Perfom an appropriate action for msg
-   * @param msg LispMessage from MessageReader
-   */
+  explicit DispatcherImpl(Guard &guard);
+
   bool Dispatch(const LispMessage &msg) const noexcept;
 
 private:
@@ -32,7 +20,10 @@ private:
   bool ReadUsbGuardLogs(const LispMessage &msg) const noexcept;
   static bool UploadRulesFile(const LispMessage &msg) noexcept;
 
-  guard::Guard &guard_;
-  const std::string kMessBeg = "(";
-  const std::string kMessEnd = ")";
+  static constexpr const char *kMessBeg = "(";
+  static constexpr const char *kMessEnd = ")";
+
+  Guard &guard_;
 };
+
+} // namespace guard

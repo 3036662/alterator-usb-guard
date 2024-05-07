@@ -121,3 +121,77 @@
 .cell_center{
     text-align: center;
 }
+
+.separator{
+    display: block;
+    float: left;
+    width: 100%;
+    height: 1px;
+}
+
+/* Alterator-like button*/
+
+.hidden {
+    display: none;
+}
+
+.like_btn{
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: #455a85;
+    border: 1px solid #1b2575;
+    margin: 2px;
+    cursor: pointer;
+    font-size: 9pt;
+    padding: 2.5px 10px;
+    vertical-align: middle;
+    font-family: "Liberation Sans", Tahoma, Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+.like_btn:hover{
+    background-color: #5b76af;
+}
+
+.like_btn_disabled{
+    font-weight: bold;
+    cursor: default;
+    color: #c3c7cb;
+    background-color: #E2E6EB;
+    border: 1px solid #c0c0c0;
+    margin: 2px;
+    font-size: 9pt;
+    padding: 2.5px 10px;
+    vertical-align: middle;
+    font-family: "Liberation Sans", Tahoma, Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+/*  Logs */
+
+#logs_form table{
+    margin-top: 20px;
+}
+
+/* #show_logs_button{
+    margin-bottom: 30px;
+} */
+#log_search_input{
+    margin-left: 5px;
+    display: block;
+    float: left;
+    margin-top: 2px;
+    height: 18px;
+}
+
+#log_textarea{
+    width:99%;
+    height: 400px;
+}
+
+.cell_center{
+    text-align: center;
+}
+
+.log_page_info{
+color: gray;
+font-size: 8pt;
+}

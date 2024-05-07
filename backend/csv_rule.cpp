@@ -1,6 +1,6 @@
 #include "csv_rule.hpp"
+#include "common_utils.hpp"
 #include "log.hpp"
-#include "utils.hpp"
 #include <cstddef>
 #include <stdexcept>
 
@@ -30,7 +30,7 @@ std::string CsvRule::BuildString() const noexcept {
   if (!vidpid_.empty())
     string_builder << "id " << vidpid_ << " ";
   if (!hash_.empty())
-    string_builder << "hash " << ::utils::QuoteIfNotQuoted(hash_) << " ";
+    string_builder << "hash " << common_utils::QuoteIfNotQuoted(hash_) << " ";
   if (!interface_.empty())
     string_builder << "with-interface " << interface_ << " ";
   return string_builder.str();
