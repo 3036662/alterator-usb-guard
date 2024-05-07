@@ -2,7 +2,6 @@
 #include "log.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
-#include <catch2/catch.hpp>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
