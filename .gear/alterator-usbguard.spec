@@ -37,9 +37,11 @@ Alterator Module to control USB devices via USBGuard.
 %_altdata_dir/design/styles/alt_usb_guard.css
 %_altdata_dir/ui/usbguard/ajax.scm
 %_altdata_dir/ui/usbguard/index.html
+%_altdata_dir/help/ru_RU/usbguard.html
 %_usr/lib/alterator/backend3/usbguard
 %_sysconfdir/usbguard/android_vidpid.json
 %lang(ru)  %_datadir/locale/ru/LC_MESSAGES/alterator-usbguard.mo
+
 
 %changelog
 * Tue May 07 2024 Oleg Proskurin <proskur@altlinux.org> 0.11-alt1
