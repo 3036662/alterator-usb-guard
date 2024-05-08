@@ -81,6 +81,12 @@ install(FILES
     DESTINATION "/usr/share/alterator/applications/"
 )
 
+install(FILES
+    ${CMAKE_SOURCE_DIR}/alterator_ui/usbguard.html
+    DESTINATION "/usr/share/alterator/help/ru_RU/"
+)
+
+
 
 
 set(BUILD_MO_COMMAND "msgfmt --output-file=${CMAKE_BINARY_DIR}/alterator-usbguard.mo ${CMAKE_SOURCE_DIR}/alterator_ui/alterator-usbguard.po)")
