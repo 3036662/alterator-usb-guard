@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-07 13:42+0300\n"
-"PO-Revision-Date: 2024-05-07 13:45+0300\n"
+"PO-Revision-Date: 2024-05-15 10:35+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: стандартный ввод:1
 msgid "Run the UsbMount daemon"
@@ -44,7 +44,7 @@ msgstr "Список утсройств"
 
 #: стандартный ввод:6
 msgid "Block"
-msgstr "Утсройство"
+msgstr "Устройство"
 
 #: стандартный ввод:7
 msgid "Filesystem"

@@ -6,7 +6,6 @@ add_compile_options(-Wall -Wextra -pedantic)
 project(alterator_usbguard LANGUAGES CXX VERSION 0.1)
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(USBGUARD REQUIRED IMPORTED_TARGET libusbguard)
 message("USBGUARD_FOUND: ${USBGUARD_FOUND}")
 find_package(Boost REQUIRED)
 include(GNUInstallDirs)
@@ -27,7 +26,8 @@ add_subdirectory(common)
 
 
 # backend for alterator-usbguard
-IF (DEFINED USBGUARD) 
+IF (DEFINED USBGUARD)
+pkg_check_modules(USBGUARD REQUIRED IMPORTED_TARGET libusbguard)
 add_subdirectory(backend)
 ENDIF (DEFINED USBGUARD)
 

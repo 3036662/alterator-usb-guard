@@ -17,6 +17,9 @@ target_link_libraries(altusbd PRIVATE DAL)
 target_link_libraries(altusbd PRIVATE boost_json)
 target_link_libraries(altusbd PRIVATE daemon_libs)
 
+find_package(Threads REQUIRED)
+target_link_libraries(altusbd PRIVATE Threads::Threads)
+
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
    add_subdirectory(test)
@@ -46,10 +49,16 @@ find_package(spdlog REQUIRED)
 find_package(fmt REQUIRED)
 target_link_libraries(altusbd PRIVATE fmt)
 
+set(LOG_PATH /var/log)
 
 install(TARGETS altusbd
-    RUNTIME DESTINATION "/usr/bin"
+    RUNTIME DESTINATION "/usr/sbin"
 )
+
+#install(FILES 
+#    ${CMAKE_SOURCE_DIR}/daemon/service_files/alterator-usb-automount.conf
+#    DESTINATION "/lib/tmpfiles.d/"
+#)
 
 install(FILES 
     ${CMAKE_SOURCE_DIR}/daemon/service_files/altusbd.service

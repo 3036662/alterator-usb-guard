@@ -92,11 +92,13 @@ GuardRule::GuardRule(const std::string &raw_str) {
   // the string. default_predicat - Function is the default behavior of values
   // validating.
   // hash length MUST be > 7 symbols
-  hash_ = utils::ParseToken(
-      tokens, "hash", [](const std::string &val) { return val.size() > 7; });
+  hash_ = utils::ParseToken(tokens, "hash", [](const std::string &val) {
+    return val.size() > 7 && val.size() < 101;
+  });
   parent_hash_ =
-      utils::ParseToken(tokens, "parent-hash",
-                        [](const std::string &val) { return val.size() > 7; });
+      utils::ParseToken(tokens, "parent-hash", [](const std::string &val) {
+        return val.size() > 7 && val.size() < 101;
+      });
   device_name_ = utils::ParseToken(tokens, "name", default_predicat);
   serial_ = utils::ParseToken(tokens, "serial", default_predicat);
   port_ = ParseTokenWithOperator(tokens, "via-port", default_predicat);

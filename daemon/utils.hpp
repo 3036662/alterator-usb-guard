@@ -97,6 +97,11 @@ uint64_t StrToUint(const std::string &str);
 
 bool ValidVid(const std::string &);
 
+/**
+ * @brief Remove / \ "
+ */
+std::string SanitizeMount(const std::string &str) noexcept;
+
 namespace udev {
 /**
  * @brief A custom deleter for udev_enumerate struct

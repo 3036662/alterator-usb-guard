@@ -2,6 +2,10 @@
     display: none;
 }
 
+#interface_wrap{
+    margin-top: 12px;
+}
+
 /* Alterator-like table */
 
 
@@ -133,6 +137,37 @@
     vertical-align: middle;
     font-family: "Liberation Sans", Tahoma, Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
+
+
+.like_btn_y{
+    font-weight: bold;
+    color: black;
+    background-color: #ff9631;
+    border: 1px solid #ff9631;
+    cursor: pointer;
+    font-size: 9pt;
+    padding: 2.5px 10px;
+    vertical-align: middle;
+    font-family: "Liberation Sans", Tahoma, Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+.like_btn_y:hover{
+    background-color: #f4bc85;
+}
+
+.like_btn_disabled_y{
+    cursor: default;
+    color: #c3c7cb;
+	background-color: #E2E6EB;
+    margin: 2px;
+    font-size: 9pt;
+    padding: 2.5px 10px;
+    vertical-align: middle;
+    font-family: "Liberation Sans", Tahoma, Verdana, Geneva, Arial, Helvetica, sans-serif;
+    border: 1px solid #c0c0c0;
+}
+
+
 
 .validation_warning {
     display: none;

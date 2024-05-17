@@ -59,7 +59,7 @@ void Daemon::Run() {
   }
   udev_->Stop();
   thread_monitor.join();
-  logger_->debug("stopped the Daemon loop");
+  logger_->info("stopped the Daemon loop");
 }
 
 } // namespace usbmount

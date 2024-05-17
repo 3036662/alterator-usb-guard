@@ -27,9 +27,9 @@ Device::Device(const json::object &obj) {
       !obj.at("vid").is_string() || !obj.at("pid").is_string() ||
       !obj.at("serial").is_string())
     throw std::invalid_argument("Ill-formed device JSON object");
-  vid_ = obj.at("vid").as_string();
-  pid_ = obj.at("pid").as_string();
-  serial_ = obj.at("serial").as_string();
+  vid_ = obj.at("vid").as_string().c_str();
+  pid_ = obj.at("pid").as_string().c_str();
+  serial_ = obj.at("serial").as_string().c_str();
 }
 
 Device::Device(const DeviceParams &params)
@@ -60,7 +60,7 @@ User::User(const json::object &obj) {
       !obj.at("uid").is_number() || !obj.at("name").is_string())
     throw std::invalid_argument("Ill-formed User JSON object");
   uid_ = obj.at("uid").to_number<uint64_t>();
-  name_ = obj.at("name").as_string();
+  name_ = obj.at("name").as_string().c_str();
 }
 
 User::User(uid_t uid, const std::string &name) : uid_(uid), name_(name) {
@@ -81,7 +81,7 @@ Group::Group(const json::object &obj) {
       !obj.at("gid").is_number() || !obj.at("name").is_string())
     throw std::invalid_argument("Ill-formed User JSON object");
   gid_ = obj.at("gid").to_number<uint64_t>();
-  name_ = obj.at("name").as_string();
+  name_ = obj.at("name").as_string().c_str();
 }
 
 Group::Group(gid_t gid, const std::string &name) : gid_(gid), name_(name) {
@@ -102,9 +102,9 @@ MountEntry::MountEntry(const json::object &obj) {
       !obj.contains("fs_type") || !obj.at("dev_name").is_string() ||
       !obj.at("mount_point").is_string() || !obj.at("fs_type").is_string())
     throw std::invalid_argument("Ill-formed MounEntry object");
-  dev_name_ = obj.at("dev_name").as_string();
-  mount_point_ = obj.at("mount_point").as_string();
-  fs_type_ = obj.at("fs_type").as_string();
+  dev_name_ = obj.at("dev_name").as_string().c_str();
+  mount_point_ = obj.at("mount_point").as_string().c_str();
+  fs_type_ = obj.at("fs_type").as_string().c_str();
 }
 
 MountEntry::MountEntry(const MountEntryParams &params)

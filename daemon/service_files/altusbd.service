@@ -4,7 +4,7 @@ Description=Alterator usb mount module
 [Service]
 Type=dbus
 BusName=ru.alterator.usbd
-ExecStart=/usr/bin/altusbd
+ExecStart=/usr/sbin/altusbd
 ExecReload=/bin/kill -HUP $MAINPID
 User=root
 SyslogIdentifier=alt_usb_guard

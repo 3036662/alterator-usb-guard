@@ -69,7 +69,7 @@ private:
    */
   void SetMountOptions(MountOptions &opts) const noexcept;
 
-  const char *mount_root = "/run/alt-usb-mount/";
+  const char *mount_root = "/media/";
   const std::shared_ptr<spdlog::logger> logger_;
   std::shared_ptr<UsbUdevDevice> ptr_device_;
 

@@ -1,7 +1,9 @@
+#include "common_utils.hpp"
 #include "config_status.hpp"
 #include "guard.hpp"
 #include "guard_audit.hpp"
 #include "guard_rule.hpp"
+#include "guard_utils.hpp"
 #include "json_rule.hpp"
 #include "log.hpp"
 #include "systemd_dbus.hpp"
@@ -18,13 +20,10 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include "common_utils.hpp"
-#include "guard_utils.hpp"
 
 using common_utils::Log;
 using common_utils::WrapWithQuotes;
 using namespace guard::utils;
-
 
 void Test::Run1() {
   Log::Test() << "Test udev rules files search";
@@ -201,7 +200,7 @@ void Test::Run7() {
       "0e:02:00 0e:02:00 0e:02:00 }");
   std::vector<std::string> exp = {"0e:*:*"};
   assert(res == exp);
-  res =FoldUsbInterfacesList("with-interface { 03:01:02 04:01:01 }");
+  res = FoldUsbInterfacesList("with-interface { 03:01:02 04:01:01 }");
   exp = {"03:01:02", "04:01:01"};
   assert(res == exp);
   res = FoldUsbInterfacesList("with-interface 09:00:00");
@@ -219,7 +218,7 @@ void Test::Run7() {
   assert(res == exp);
 
   res = FoldUsbInterfacesList("with-interface ffg:gf:g0");
-  Log::Debug() <<res[0];
+  Log::Debug() << res[0];
   exp = {"ffg:gf:g0"};
   assert(res == exp);
 
@@ -280,8 +279,7 @@ void Test::Run9() {
 
   {
     std::vector<std::string> expected{"\"a b\"", "\"c d e\"", "fff", "ggg"};
-    assert(SplitRawRule("      \"a b\"    \"c d e\" fff     ggg ") ==
-           expected);
+    assert(SplitRawRule("      \"a b\"    \"c d e\" fff     ggg ") == expected);
   }
 
   {
@@ -298,43 +296,40 @@ void Test::Run9() {
 
 void Test::Run10() {
 
-
-
   std::string str = "allow name \"name\"";
   {
     guard::GuardRule parser(str);
     assert((parser.target() == guard::Target::allow) && !parser.vid_ &&
-           !parser.pid_ && !parser.hash_ && 
-           !parser.serial_ && !parser.port_ && !parser.with_interface_ &&
-           !parser.cond_);
+           !parser.pid_ && !parser.hash_ && !parser.serial_ && !parser.port_ &&
+           !parser.with_interface_ && !parser.cond_);
   }
-  
-  str = "allow hash \"0,;UW~fn\" id  7Dbb:* serial \"R0Ci+jH\'\" parent-hash  \"f<A^w5kG\" name \"g-!};_LI\" with-interface equals { 4d:61:* B1:bA:* db:dE:A9 B2:*:* 3A:aE:* 6d:*:* } via-port  \"|+|iC%y4\" ";
-  {
-    guard::GuardRule parser(str);
-  }
+
+  str = "allow hash \"0,;UW~fn\" id  7Dbb:* serial \"R0Ci+jH\'\" parent-hash  "
+        "\"f<A^w5kG\" name \"g-!};_LI\" with-interface equals { 4d:61:* "
+        "B1:bA:* db:dE:A9 B2:*:* 3A:aE:* 6d:*:* } via-port  \"|+|iC%y4\" ";
+  { guard::GuardRule parser(str); }
   str = "block id 8564:1000";
   {
     guard::GuardRule parser(str);
-    assert((parser.target() == guard::Target::block) && *parser.vid_ == "8564" &&
-           *parser.pid_ == "1000" && !parser.hash_ && !parser.device_name_ &&
-           !parser.serial_ && !parser.port_ && !parser.with_interface_ &&
-           !parser.cond_);
+    assert((parser.target() == guard::Target::block) &&
+           *parser.vid_ == "8564" && *parser.pid_ == "1000" && !parser.hash_ &&
+           !parser.device_name_ && !parser.serial_ && !parser.port_ &&
+           !parser.with_interface_ && !parser.cond_);
   }
   str = "block id 8564:*";
   {
     guard::GuardRule parser(str);
-    assert((parser.target() == guard::Target::block) && *parser.vid_ == "8564" &&
-           *parser.pid_ == "*" && !parser.hash_ && !parser.device_name_ &&
-           !parser.serial_ && !parser.port_ && !parser.with_interface_ &&
-           !parser.cond_);
+    assert((parser.target() == guard::Target::block) &&
+           *parser.vid_ == "8564" && *parser.pid_ == "*" && !parser.hash_ &&
+           !parser.device_name_ && !parser.serial_ && !parser.port_ &&
+           !parser.with_interface_ && !parser.cond_);
   }
 
   str = "block id 8564:* hash 4Q3Ski/Lqi8RbTFr10zFlIpagY9AKVMszyzBQJVKE+c=";
   {
     guard::GuardRule parser(str);
-    assert((parser.target() == guard::Target::block) && *parser.vid_ == "8564" &&
-           *parser.pid_ == "*" &&
+    assert((parser.target() == guard::Target::block) &&
+           *parser.vid_ == "8564" && *parser.pid_ == "*" &&
            *parser.hash_ == "4Q3Ski/Lqi8RbTFr10zFlIpagY9AKVMszyzBQJVKE+c=" &&
            !parser.device_name_ && !parser.serial_ && !parser.port_ &&
            !parser.with_interface_ && !parser.cond_);
@@ -381,6 +376,7 @@ void Test::Run10() {
   {
     try {
       guard::GuardRule parser(str);
+      assert(false);
     } catch (const std::logic_error &ex) {
       Log::Test() << "Catched expected exception";
       assert(std::string(ex.what()) == "Cant parse rule string");
@@ -391,6 +387,7 @@ void Test::Run10() {
   {
     try {
       guard::GuardRule parser(str);
+      assert(false);
     } catch (const std::logic_error &ex) {
       Log::Test() << "Catched expected exception";
       assert(std::string(ex.what()) == "Cant parse rule string");
@@ -401,6 +398,7 @@ void Test::Run10() {
   {
     try {
       guard::GuardRule parser(str);
+      assert(false);
     } catch (const std::logic_error &ex) {
       Log::Test() << "Catched expected exception";
       assert(std::string(ex.what()) == "Cant parse rule string");
@@ -441,6 +439,63 @@ void Test::Run10() {
   {
     try {
       guard::GuardRule parser(str);
+      assert(false);
+    } catch (const std::logic_error &ex) {
+      Log::Test() << "Catched expected exception";
+      Log::Test() << ex.what();
+    }
+  }
+
+  str = "allow via-interface " + WrapWithQuotes("*:*:*") + " ";
+  {
+    try {
+      guard::GuardRule parser(str);
+      assert(false);
+    } catch (const std::logic_error &ex) {
+      Log::Test() << "Catched expected exception";
+      Log::Test() << ex.what();
+    }
+  }
+
+
+  str = "allow via-interface " + WrapWithQuotes("*:1:1") + " ";
+  {
+    try {
+      guard::GuardRule parser(str);
+      assert(false);
+    } catch (const std::logic_error &ex) {
+      Log::Test() << "Catched expected exception";
+      Log::Test() << ex.what();
+    }
+  }
+
+  str = "allow via-interface " + WrapWithQuotes("*:11:11") + " ";
+  {
+    try {
+      guard::GuardRule parser(str);
+      assert(false);
+    } catch (const std::logic_error &ex) {
+      Log::Test() << "Catched expected exception";
+      Log::Test() << ex.what();
+    }
+  }
+
+  str = "allow via-interface " + WrapWithQuotes("333:*:*") + " ";
+  {
+    try {
+      guard::GuardRule parser(str);
+      assert(false);
+    } catch (const std::logic_error &ex) {
+      Log::Test() << "Catched expected exception";
+      Log::Test() << ex.what();
+    }
+  }
+
+  str = "allow via-interface " + WrapWithQuotes("03:333:*") + " ";
+  {
+    try {
+      guard::GuardRule parser(str);
+      assert(false);
     } catch (const std::logic_error &ex) {
       Log::Test() << "Catched expected exception";
       Log::Test() << ex.what();
@@ -521,6 +576,7 @@ Log::Test() << "Localtime time with parameter";
      bool cought{false};
     try{
       GuardRule parser(str);
+       assert(false);
     }
     catch (const std::logic_error& ex){
       Log::Test() << "Cought an expected exception.";
@@ -536,6 +592,7 @@ Log::Test() << "Localtime time with parameter";
     bool cought{false};
     try{
       GuardRule parser(str);
+       assert(false);
     }
     catch (const std::logic_error& ex){
       Log::Test() << "Cought an expected exception.";
@@ -711,6 +768,7 @@ Log::Test() << "rule-evaluated time with no parameter";
     try{
       GuardRule parser(str);
       std::string cond_result=parser.ConditionsToString();
+       assert(false);
     }
     catch (const std::logic_error& ex){
       assert(std::string(ex.what()) == "No parameters found for condition allowed-matches");
@@ -723,6 +781,7 @@ Log::Test() << "rule-evaluated time with no parameter";
     try{
       GuardRule parser(str);
       assert(parser.BuildString()=="allow if true");
+       assert(false);
       
     }
     catch (const std::logic_error& ex){
@@ -735,6 +794,7 @@ Log::Test() << "rule-evaluated time with no parameter";
     str = "allow id 1000:2000 hash \"sdaasdklkjd\" name \"device_name\" via-port all-of{}";
     try{
       GuardRule parser(str);
+       assert(false);
       
     }
     catch (const std::logic_error& ex){
@@ -880,6 +940,7 @@ void Test::Run14(){
     try{                 
     guard::json::JsonRule json_rule(ptr_obj);
     guard::GuardRule rule(json_rule.BuildString());
+     assert(false);
     }
     catch(const std::logic_error& ex){
       assert(std::string (ex.what()) == "Empty value for field vid" );
@@ -900,6 +961,7 @@ void Test::Run14(){
     try{                 
           guard::json::JsonRule json_rule(ptr_obj);
     guard::GuardRule rule(json_rule.BuildString());
+     assert(false);
     }
     catch(const std::logic_error& ex){
       assert(std::string (ex.what()) == "Empty value for field pid" );
@@ -920,6 +982,7 @@ void Test::Run14(){
     try{                 
           guard::json::JsonRule json_rule(ptr_obj);
     guard::GuardRule rule(json_rule.BuildString());
+     assert(false);
     }
     catch(const std::logic_error& ex){
       assert(std::string (ex.what()) == "Can't find any fields for a rule" );
@@ -939,6 +1002,7 @@ void Test::Run14(){
     try{                 
         guard::json::JsonRule json_rule(ptr_obj);
     guard::GuardRule rule(json_rule.BuildString());
+     assert(false);
     }
     catch(const std::logic_error& ex){
       assert(std::string (ex.what()) == "Rule target is mandatory" );
@@ -1023,6 +1087,7 @@ void Test::Run14(){
     try{                 
           guard::json::JsonRule json_rule(ptr_obj);
     guard::GuardRule rule(json_rule.BuildString());
+     assert(false);
     }
     catch(const std::logic_error& ex){
          assert(std::string(ex.what()) == "Cant parse rule string");
@@ -1364,6 +1429,7 @@ void Test::Run18(){
     try{  
       guard::GuardAudit audit=guard::GuardAudit(guard::AuditType::kFileAudit,"");
       throw std::logic_error("wrond-ex");
+       assert(false);
     }
     catch (const std::exception& ex){
       Log::Test()<<ex.what();
@@ -1376,6 +1442,7 @@ void Test::Run18(){
     try{  
       guard::GuardAudit audit=guard::GuardAudit(guard::AuditType::kUndefined," /var/log/usbguard/usbguard-audit.log");
       throw std::logic_error("wrond-ex");
+       assert(false);
     }
     catch (const std::exception& ex){
       Log::Test()<<ex.what();

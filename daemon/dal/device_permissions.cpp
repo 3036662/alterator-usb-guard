@@ -69,7 +69,7 @@ const PermissionEntry &DevicePermissions::Read(uint64_t index) const {
   if (!entry)
     throw std::runtime_error("Pointer cast PermissionEntry failed");
   return *entry;
-};
+}
 
 std::optional<uint64_t>
 DevicePermissions::Find(const Device &dev) const noexcept {

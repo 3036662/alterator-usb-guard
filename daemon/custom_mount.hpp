@@ -1,4 +1,5 @@
 #pragma once
+#include "config.hpp"
 #include "dal/dto.hpp"
 #include "dal/local_storage.hpp"
 #include "usb_udev_device.hpp"
@@ -42,7 +43,7 @@ public:
    */
   bool UnMount() noexcept;
 
-  static constexpr const char *mount_root = "/run/alt-usb-mount/";
+  static constexpr const char *mount_root = BASE_MOUNT_POINT;
 
 private:
   /**

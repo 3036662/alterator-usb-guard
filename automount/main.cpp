@@ -1,4 +1,4 @@
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
+// define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
 #include "custom_mount.hpp"
 #include "usb_udev_device.hpp"
 #include "utils.hpp"

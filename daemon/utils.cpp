@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include "config.hpp"
 #include "custom_mount.hpp"
 #include "dal/dto.hpp"
 #include "dal/local_storage.hpp"
@@ -38,7 +39,7 @@ std::shared_ptr<spdlog::logger> InitLogFile(const std::string &path) noexcept {
   try {
     fs::path file_path(path);
     fs::create_directories(file_path.parent_path());
-    spdlog::set_level(spdlog::level::debug);
+    // spdlog::set_level(spdlog::level::debug);
     // return spdlog::basic_logger_mt("usb-automount", path);
     return spdlog::basic_logger_mt<spdlog::async_factory>("usb-automount",
                                                           path);
@@ -56,11 +57,11 @@ void MountDevice(std::shared_ptr<UsbUdevDevice> ptr_device,
       return;
     CustomMount mounter(ptr_device, logger);
     if (ptr_device->action() == Action::kAdd) {
-      logger->debug("Mount {} ", ptr_device->block_name());
+      logger->info("Mount {} ", ptr_device->block_name());
       if (!mounter.Mount())
         logger->error("Mount failed");
     } else if (ptr_device->action() == Action::kRemove) {
-      logger->debug("Unmounting {}", ptr_device->block_name());
+      logger->info("Unmounting {}", ptr_device->block_name());
       mounter.UnMount();
     }
     logger->flush();
@@ -112,21 +113,25 @@ bool ReviewMountPoints(const std::shared_ptr<spdlog::logger> &logger) noexcept {
   auto mtab_mountpoints = GetSystemMountPoints(logger);
   dbase->mount_points.RemoveExpired(mtab_mountpoints);
   // remove empty folders
-  const std::string mount_folder = "/run/alt-usb-mount/";
+  const std::string mount_folder = BASE_MOUNT_POINT;
   namespace fs = std::filesystem;
   try {
-    logger->debug("[ReviewMountPoints] Inspect folders");
-    for (const auto &entry : fs::directory_iterator(mount_folder)) {
-      if (fs::is_directory(entry.path()) && !fs::is_empty(entry.path())) {
-        for (const auto &sub_entry : fs::directory_iterator(entry.path())) {
-          if (fs::is_directory(sub_entry.path()) &&
-              fs::is_empty(sub_entry.path()) &&
-              mtab_mountpoints.count(sub_entry.path().string()) == 0) {
-            logger->info("Removing empty {}", sub_entry.path().string());
-            fs::remove(sub_entry.path());
+    if (fs::exists(mount_folder)) {
+      logger->debug("[ReviewMountPoints] Inspect folders");
+      for (const auto &entry : fs::directory_iterator(mount_folder)) {
+        if (fs::is_directory(entry.path()) && !fs::is_empty(entry.path())) {
+          for (const auto &sub_entry : fs::directory_iterator(entry.path())) {
+            if (fs::is_directory(sub_entry.path()) &&
+                fs::is_empty(sub_entry.path()) &&
+                mtab_mountpoints.count(sub_entry.path().string()) == 0) {
+              logger->info("Removing empty {}", sub_entry.path().string());
+              fs::remove(sub_entry.path());
+            }
           }
         }
       }
+    } else {
+      fs::create_directories(mount_folder);
     }
   } catch (const std::exception &ex) {
     logger->warn("Error while inpecting folders in " + mount_folder);
@@ -319,6 +324,17 @@ bool ValidVid(const std::string &str) {
   if (val < 0 || val > 0xFFFF)
     return false;
   return true;
+}
+
+std::string SanitizeMount(const std::string &str) noexcept {
+  std::string res;
+  for (const auto symbol : str) {
+    if (symbol == '\\' || symbol == '/' || symbol == '\'' || symbol == '\"')
+      res.push_back('_');
+    else
+      res.push_back(symbol);
+  }
+  return res;
 }
 
 namespace udev {

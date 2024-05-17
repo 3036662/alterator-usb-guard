@@ -98,7 +98,7 @@ int main(int argc, const char *argv[]) {
     if (p_fs != NULL)
       filesystem = p_fs;
 
-    std::string mount_point = "/run/media/oleg/";
+    std::string mount_point = "/media/oleg/";
     if (!label.empty()) {
       mount_point += label;
     } else if (!uid.empty()) {

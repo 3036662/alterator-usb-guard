@@ -66,4 +66,11 @@ TEST_CASE("Test utils") {
     REQUIRE(!ValidVid("a0x0"));
     REQUIRE(!ValidVid("-000"));
   }
+
+  SECTION("Mount string sanitize") {
+    using namespace usbmount::utils;
+    REQUIRE(SanitizeMount("sdlfkjs\"d/l\'kf\\j") == "sdlfkjs_d_l_kf_j");
+    REQUIRE(SanitizeMount("sdlfkjssdfsdfa24332&&dfs") ==
+            "sdlfkjssdfsdfa24332&&dfs");
+  }
 }

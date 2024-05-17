@@ -69,7 +69,7 @@ const MountEntry &Mountpoints::Read(uint64_t index) const {
   if (!entry)
     throw std::runtime_error("Pointer cast to MountEntry failed");
   return *entry;
-};
+}
 
 void Mountpoints::Update(uint64_t index, const Dto &dto) {
   const MountEntry &entry = dynamic_cast<const MountEntry &>(dto);

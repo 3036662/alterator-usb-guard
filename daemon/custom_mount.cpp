@@ -70,8 +70,8 @@ bool CustomMount::Mount() noexcept {
           {ptr_device_->block_name(), end_mount_point_.value_or(""),
            ptr_device_->filesystem()}));
       dbase_->mount_points.Create(entry);
-      logger_->debug("Created mountpouint for {} in the db",
-                     ptr_device_->block_name());
+      logger_->info("Created mountpouint for {} in the db",
+                    ptr_device_->block_name());
     } catch (const std::exception &ex) {
       logger_->error("Can't  add {} device mountpoint to database",
                      ptr_device_->block_name());
@@ -178,9 +178,9 @@ bool CustomMount::CreateMountEndpoint() noexcept {
   try {
     if (!ptr_device_->fs_label().empty() &&
         !fs::exists(endpoint + ptr_device_->fs_label())) {
-      endpoint += ptr_device_->fs_label();
+      endpoint += utils::SanitizeMount(ptr_device_->fs_label());
     } else if (!ptr_device_->fs_uid().empty()) {
-      endpoint += ptr_device_->fs_uid();
+      endpoint += utils::SanitizeMount(ptr_device_->fs_uid());
     } else { // just in case
       endpoint += "usb";
     }
@@ -246,7 +246,7 @@ bool CustomMount::PerfomMount() noexcept {
       RemoveMountPoint(end_mount_point_.value());
       return false;
     }
-    logger_->debug("[PerfomMount] Mounted as READ ONLY");
+    logger_->warn("[PerfomMount] Mounted as READ ONLY");
   }
   // chown+chmod after mount if not read-only fs
   // if (!mount_opts.read_only) {
@@ -367,7 +367,7 @@ void CustomMount::SetMountOptions(MountOptions &opts) const noexcept {
     logger_->info("Filesystem {}, mounting with default parameters",
                   ptr_device_->filesystem());
   }
-  logger_->debug("Mount data = {}", opts.mount_data);
+  logger_->info("Mount data = {}", opts.mount_data);
 }
 
 bool CustomMount::FixNtfs(const std::string &block) const noexcept {

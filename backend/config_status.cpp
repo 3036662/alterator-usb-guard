@@ -539,12 +539,12 @@ bool ConfigStatus::StartUsbguardDbus(
   std::optional<bool> dbus_start_res;
   if (start) {
     Log::Debug() << "[StartUsbguardDbus] Starting usbguard-dbus service";
-    dbus_start_res = sysd.StartUnit(usb_guard_dbus_daemon_namel);
+    dbus_start_res = sysd.StartUnit(usb_guard_dbus_daemon_name);
     Log::Debug() << "[StartUsbguardDbus] "
                  << (dbus_start_res.value_or(false) ? "OK" : "FAILED");
   } else {
     Log::Debug() << "[StopUsbguardDbus] Stoping usbguard-dbus service";
-    dbus_start_res = sysd.StopUnit(usb_guard_dbus_daemon_namel);
+    dbus_start_res = sysd.StopUnit(usb_guard_dbus_daemon_name);
     Log::Debug() << "[StopUsbguardDbus] "
                  << (dbus_start_res.value_or(false) ? "OK" : "FAILED");
   }
@@ -556,12 +556,12 @@ bool ConfigStatus::EnableUsbguardDbus(
   std::optional<bool> dbus_enable_res;
   if (enable) {
     Log::Debug() << "[EnableUsbguardDbus] Enabling usbguard-dbus service";
-    dbus_enable_res = sysd.EnableUnit(usb_guard_dbus_daemon_namel);
+    dbus_enable_res = sysd.EnableUnit(usb_guard_dbus_daemon_name);
     Log::Debug() << "[EnableUsbguardDbus] "
                  << (dbus_enable_res.value_or(false) ? "OK" : "FAILED");
   } else {
     Log::Debug() << "[DisableUsbguardDbus] Disabling usbguard-dbus service";
-    dbus_enable_res = sysd.DisableUnit(usb_guard_dbus_daemon_namel);
+    dbus_enable_res = sysd.DisableUnit(usb_guard_dbus_daemon_name);
     Log::Debug() << "[DisableUsbguardDbus] "
                  << (dbus_enable_res.value_or(false) ? "OK" : "FAILED");
   }

@@ -72,17 +72,17 @@ void DbusMethods::Health(const sdbus::MethodCall &call) {
 void DbusMethods::CanAnotherUserUnmount(sdbus::MethodCall call) {
   std::string dev;
   call >> dev;
-  logger_->debug("Polkit request for device (CanUserUnMount)" + dev);
+  logger_->info("Polkit request for device (CanUserUnMount)" + dev);
   auto reply = call.createReply();
   // if this device was mounted by this program - reply YES
   try {
     auto index = dbase_->mount_points.Find(dev);
     if (index) {
       reply << "YES";
-      logger_->debug("Daemon response to polkit = YES");
+      logger_->info("Daemon response to polkit = YES");
     } else {
       reply << "UNKNOWN_MOUNTPOINT";
-      logger_->debug("Daemon response to polkit = UNKNOWN_MOUNTPOINT");
+      logger_->info("Daemon response to polkit = UNKNOWN_MOUNTPOINT");
     }
   } catch (const std::exception &ex) {
     logger_->error("Dbus::CanUserUnmount Can't query the dbase for device + {}",
@@ -99,16 +99,16 @@ void DbusMethods::CanUserMount(sdbus::MethodCall call) {
   Read local db define is this user is allowed to mount this drive
   (if drive is in db - reply NO - automount will mount it )
   */
-  logger_->debug("Polkit request for device (CanUserMount)" + dev);
+  logger_->info("Polkit request for device (CanUserMount)" + dev);
   sdbus::MethodReply reply = call.createReply();
   try {
     UsbUdevDevice device({dev, "add"});
     dal::Device dto_device({device.vid(), device.pid(), device.serial()});
     if (dbase_->permissions.Find(dto_device)) {
-      logger_->debug("daemon reply to polkit = NO");
+      logger_->info("daemon reply to polkit = NO");
       reply << "NO";
     } else {
-      logger_->debug("daemon reply to polkit = YES");
+      logger_->info("daemon reply to polkit = YES");
       reply << "YES";
     }
     logger_->flush();

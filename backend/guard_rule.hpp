@@ -75,12 +75,10 @@ public:
    */
   explicit GuardRule(const std::string &raw_str);
 
-#if 0 /* EDG frontend can't compile with this */
-  GuardRule &operator=(const GuardRule &) noexcept = default;
-  GuardRule &operator=(GuardRule &&) noexcept = default;
-  GuardRule(GuardRule &&) noexcept = default;
-  GuardRule(const GuardRule &) noexcept = default;
-#endif
+  // GuardRule &operator=(const GuardRule &) noexcept = delete;
+  // GuardRule &operator=(GuardRule &&) noexcept = delete;
+  // GuardRule(GuardRule &&)  = default;
+  // GuardRule(const GuardRule &)  = default;
 
   /**
    * @brief Build rule string for usbguard

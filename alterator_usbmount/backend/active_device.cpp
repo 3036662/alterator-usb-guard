@@ -11,13 +11,13 @@ ActiveDevice::ActiveDevice(const json::object &obj) {
       !obj.contains("serial") || !obj.contains("mount") ||
       !obj.contains("status") || !obj.contains("fs"))
     throw std::invalid_argument("Error parsing Json object");
-  block = obj.at("device").as_string();
-  fs = obj.at("fs").as_string();
-  vid = obj.at("vid").as_string();
-  pid = obj.at("pid").as_string();
-  serial = obj.at("serial").as_string();
-  mount_point = obj.at("mount").as_string();
-  status = obj.at("status").as_string();
+  block = obj.at("device").as_string().c_str();
+  fs = obj.at("fs").as_string().c_str();
+  vid = obj.at("vid").as_string().c_str();
+  pid = obj.at("pid").as_string().c_str();
+  serial = obj.at("serial").as_string().c_str();
+  mount_point = obj.at("mount").as_string().c_str();
+  status = obj.at("status").as_string().c_str();
 }
 
 vecPairs ActiveDevice::SerializeForLisp() const noexcept {

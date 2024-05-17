@@ -272,13 +272,17 @@ bool InterfaceValidator(const std::string &val) noexcept {
   }
   if (spl.size() != 3)
     return false;
-  if (spl[0] == "*" && (spl[1] != "*" || spl[2] != "*"))
+  if (spl[0] == "*")
     return false;
   if (spl[1] == "*" && spl[2] != "*")
     return false;
   for (const auto &element : spl) {
-    if (element.size() != 2 && element == "*")
-      return true;
+    if (element.size() != 2) {
+      if (element == "*")
+        continue;
+      else
+        return false;
+    }
     try {
       size_t pos = 0;
       std::stoi(element, &pos, 16);

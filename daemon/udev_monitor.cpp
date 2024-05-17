@@ -87,7 +87,7 @@ void UdevMonitor::Run() noexcept {
       ProcessDevice();
     }
   }
-  logger_->debug("Stop signal recieved");
+  logger_->info("Stop signal recieved");
 }
 
 void UdevMonitor::ProcessDevice() noexcept {
@@ -236,12 +236,12 @@ void UdevMonitor::ApplyMountRulesIfNotMounted() noexcept {
   for (const auto &dev : device_objects) {
     auto device = std::make_shared<UsbUdevDevice>(dev);
     device->SetAction("add");
-    logger_->debug("[ApplyMountRulesIfNotMounted] found {}",
-                   device->block_name());
+    logger_->info("[ApplyMountRulesIfNotMounted] found {}",
+                  device->block_name());
     auto mountpoints = utils::GetSystemMountedDevices(logger_);
     // if not mounted yet
     if (mountpoints.count(device->block_name()) == 0) {
-      logger_->debug("process {}", device->block_name());
+      logger_->info("process {}", device->block_name());
       ProcessDevice(std::move(device));
     }
   }

@@ -68,9 +68,39 @@ function InitUi(health) {
         }
     });
 
+    //disable create_rule_btn after list update
+    document.getElementById('btn_prsnt_scan').addEventListener('click',function(e){
+        DisableButton(document.getElementById('btn_create_rule'));
+    });
 
+    ChooseBtnStyle();
     InitLogs();
    
+}
+
+// switch button style for mate 
+function ChooseBtnStyle(){
+    try {
+        const sourceElement = document.getElementById('main').querySelector('.btn'); 
+        const sourceStyles = window.getComputedStyle(sourceElement);
+        let color =sourceStyles.getPropertyValue('background-color');        
+        if (color==="rgb(255, 150, 49)"){
+            let buttons=document.querySelectorAll('.like_btn');        
+            buttons.forEach(btn => {                
+                btn.classList.remove('like_btn');
+                btn.classList.add('like_btn_y');                    
+            });
+            buttons=document.querySelectorAll('.like_btn_disabled');
+            buttons.forEach(btn => {
+                let buttons=document.querySelectorAll('.like_btn');        
+                btn.classList.remove('like_btn_disabled');
+                btn.classList.add('like_btn_disabled_y');                    
+            });
+        }
+    }
+    catch (e){
+        console.log(e);
+    };
 }
 
 function SetHealthStatus(health){
@@ -599,8 +629,14 @@ function DisableButtonDeleteIfNoRowsCkecked() {
 function DisableButton(button) {
     if (!button) return;
     button.disabled = true;
-    button.classList.add('like_btn_disabled');
-    button.classList.remove('like_btn');
+    if (button.classList.contains('like_btn')){
+        button.classList.add('like_btn_disabled');
+        button.classList.remove('like_btn');
+    }
+    if (button.classList.contains('like_btn_y')){
+        button.classList.add('like_btn_disabled_y');
+        button.classList.remove('like_btn_y');
+    }
 }
 
 /**
@@ -610,8 +646,14 @@ function DisableButton(button) {
 function EnableButton(button) {
     if (!button) return;
     button.disabled = false;
-    button.classList.remove('like_btn_disabled');
-    button.classList.add('like_btn');
+    if (button.classList.contains('like_btn_disabled')){
+        button.classList.remove('like_btn_disabled');
+        button.classList.add('like_btn');
+    }
+    if (button.classList.contains('like_btn_disabled_y')){
+        button.classList.remove('like_btn_disabled_y');
+        button.classList.add('like_btn_y');
+    }
 }
 
 
@@ -801,7 +843,13 @@ function DblClickOnUserOrGroup(event, storage_name) {
         td_el.classList.toggle('padding_td');
         td_el.appendChild(dropdown);
         td_el.style.width = target_width;
-        dropdown.focus();
+        dropdown.focus();        
+        dropdown.addEventListener('change',function(e){
+                document.getElementById('reset_rule_btn').focus();
+        });
+        dropdown.addEventListener('input',function(e){
+                document.getElementById('reset_rule_btn').focus();
+        });        
     }
 }
 
@@ -896,7 +944,7 @@ function DblClickOnEditable(event) {
         td_el.classList.toggle('padding_td');
         td_el.appendChild(input);
         td_el.style.width = target_width;
-        input.focus();
+        input.focus();        
     }
 }
 
@@ -1079,7 +1127,16 @@ function MakeTheRowEditable(row) {
                 td.classList.toggle('padding_td');
                 span_el.classList.toggle('hidden');
                 td.appendChild(select);
-                td.style.width = target_width;
+                td.style.width = target_width;                
+                // finish editing when last selested changed
+                if (td.classList.contains('rule_group')){
+                    select.addEventListener('change',function(e){
+                        document.getElementById('reset_rule_btn').focus();
+                    });
+                    select.addEventListener('input',function(e){
+                        document.getElementById('reset_rule_btn').focus();
+                    });
+                }
             }
         }
     });

@@ -177,7 +177,7 @@ private:
                           dbus_bindings::Systemd &sysd) const noexcept;
 
   const std::string usb_guard_daemon_name = "usbguard.service";
-  const std::string usb_guard_dbus_daemon_namel = "usbguard-dbus.service";
+  const std::string usb_guard_dbus_daemon_name = "usbguard-dbus.service";
   const std::string unit_dir_path = "/lib/systemd/system";
   const std::string usbguard_default_config_path =
       "/etc/usbguard/usbguard-daemon.conf";
