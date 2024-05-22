@@ -13,6 +13,7 @@
 #include <boost/regex.hpp>
 #include <cerrno>
 #include <cstdint>
+#include <cstdlib>
 #include <cstring>
 #include <exception>
 #include <filesystem>
@@ -156,10 +157,10 @@ std::optional<IdMinMax> GetSystemUidMinMax(const logger_t &logger) noexcept {
     logger->error("[GetSystemUidMinMax] can't open {}", fname);
     return std::nullopt;
   }
-  boost::regex whitespace("\\s+");
   IdMinMax res{0, 0, 0, 0};
   bool res_ok = false;
   try {
+    boost::regex whitespace("\\s+");
     std::string line;
     while (std::getline(defs_file, line)) {
       boost::trim(line);
@@ -239,24 +240,29 @@ std::vector<dal::User> GetHumanUsers(const IdMinMax &id_limits,
     logger->error("[GetHumanUsers] Can't open file {}", fpath);
     return res;
   }
-  std::string line;
-  while (std::getline(file, line)) {
-    std::vector<std::string> tokens;
-    boost::split(tokens, line, [](const char symbol) { return symbol == ':'; });
-    if (tokens.size() == 7 && !tokens[0].empty() &&
-        shells.count(tokens[6]) > 0) {
-      try {
-        uid_t uid = StrToUint(tokens[2]);
-        gid_t gid = StrToUint(tokens[3]);
-        if (uid >= id_limits.uid_min && uid <= id_limits.uid_max &&
-            gid >= id_limits.gid_min && gid <= id_limits.gid_max)
-          res.emplace_back(uid, std::move(tokens[0]));
-      } catch (const std::exception &ex) {
-        logger->warn("Can't parse {} string: {}", fpath, line);
-        continue;
+  try {
+    std::string line;
+    while (std::getline(file, line)) {
+      std::vector<std::string> tokens;
+      boost::split(tokens, line,
+                   [](const char symbol) { return symbol == ':'; });
+      if (tokens.size() == 7 && !tokens[0].empty() &&
+          shells.count(tokens[6]) > 0) {
+        try {
+          uid_t uid = StrToUint(tokens[2]);
+          gid_t gid = StrToUint(tokens[3]);
+          if (uid >= id_limits.uid_min && uid <= id_limits.uid_max &&
+              gid >= id_limits.gid_min && gid <= id_limits.gid_max)
+            res.emplace_back(uid, std::move(tokens[0]));
+        } catch (const std::exception &ex) {
+          logger->warn("Can't parse {} string: {}", fpath, line);
+          continue;
+        }
       }
+      tokens.clear();
     }
-    tokens.clear();
+  } catch (const std::exception &ex) {
+    logger->error("[GetHumanUsers] {} ", ex.what());
   }
   file.close();
   return res;
@@ -279,23 +285,29 @@ std::vector<dal::Group> GetHumanGroups(const IdMinMax &id_limits,
     logger->error("[GetHumanUsers] Can't open file {}", fpath);
     return res;
   }
-  std::string line;
-  while (std::getline(file, line)) {
-    std::vector<std::string> tokens;
-    boost::split(tokens, line, [](const char symbol) { return symbol == ':'; });
-    if (tokens.size() >= 3 && !tokens[0].empty()) {
-      try {
-        uid_t uid = StrToUint(tokens[2]);
-        if (uid >= id_limits.uid_min && uid <= id_limits.uid_max) {
-          res.emplace_back(uid, std::move(tokens[0]));
+  try {
+    std::string line;
+    while (std::getline(file, line)) {
+      std::vector<std::string> tokens;
+      boost::split(tokens, line,
+                   [](const char symbol) { return symbol == ':'; });
+      if (tokens.size() >= 3 && !tokens[0].empty()) {
+        try {
+          uid_t uid = StrToUint(tokens[2]);
+          if (uid >= id_limits.uid_min && uid <= id_limits.uid_max) {
+            res.emplace_back(uid, std::move(tokens[0]));
+          }
+        } catch (const std::exception &ex) {
+          logger->warn("Can't parse {} string: {}", fpath, line);
+          continue;
         }
-      } catch (const std::exception &ex) {
-        logger->warn("Can't parse {} string: {}", fpath, line);
-        continue;
       }
+      tokens.clear();
     }
-    tokens.clear();
+  } catch (const std::exception &ex) {
+    logger->error("[GetHumanGroups] {}", ex.what());
   }
+
   file.close();
   return res;
 }

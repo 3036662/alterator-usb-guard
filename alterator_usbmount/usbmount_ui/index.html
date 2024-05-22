@@ -15,8 +15,8 @@
       </label>    
       </td>
       <td class="td_vertical_center" id="run_daemon_label">
-        <span class="hidden" id="lbl_run_daemon"  translate="_">Run the UsbMount daemon</span>
-        <span class="hidden" id="lbl_stop_daemon" translate="_">Stop the UsbMount daemon</span>
+        <span class="hidden" id="lbl_run_daemon"  translate="_">The USBMount service is active</span>
+        <span class="hidden" id="lbl_stop_daemon" translate="_">The USBMount service is inactive</span>
       </td>
       <td class="td_vertical_center">
         <input type="button" name="btn_save_status" class="like_btn" value="SAVE" id="btn_save_status" />
@@ -78,15 +78,15 @@
 
       </tbody>
     </table>
-    <div  class="validation_warning" id="validation_warning"><span translate="_">Some invalid values were provided,please check the red cells</span></div>
-    <div class="left_buttons">
+    <!--  <div class="left_buttons">
       <input type="button" class="like_btn" value="Delete checked rows" id="delete_rule_btn" />  
-      <input type="button" class="like_btn" value="Reset all" id="reset_all_btn" />
-    </div>
+      <input type="button" class="like_btn" value="Reset all" id="reset_all_btn" /> 
+    </div> -->
     <div class="right_buttons">
       <input type="button" class="like_btn" value="Edit" id="edit_rule_btn" />
       <input type="button" class="like_btn" value="Reset row" id="reset_rule_btn" />
-      <input type="button" class="like_btn" value="Delete current" id="delete_curr_btn"/>
+     <!-- <input type="button" class="like_btn" value="Delete current" id="delete_curr_btn"/> -->
+      <input type="button" class="like_btn" value="Delete rule" id="delete_rule_btn" /> 
       <input type="button" class="like_btn" value="Add" id="add_rule_btn" />
     </div>
     <div class="separator"></div>
@@ -94,6 +94,9 @@
       <input type="button" class="like_btn" value="SAVE" id="btn_save" name="btn_save"/>      
     </div>
   </div>
+  <div class="separator"></div>
+  <div  class="validation_warning" id="validation_warning"><span translate="_">Some invalid values were provided,please check the red cells</span></div>
+  <div  class="validation_warning" id="validation_warning_duplicate"><span translate="_">Some duplicate rules were provided,please check the red cells</span></div>
 <form class=".hidden"><input type="hidden" name="new_rules_data" id="hidden_inp_data_to_save"/></form> 
 </div>
 <div class="separator"></div>

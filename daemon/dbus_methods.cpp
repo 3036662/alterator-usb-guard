@@ -268,7 +268,13 @@ void DbusMethods::CreateRules(const boost::json::array &arr_created) {
     std::vector<dal::Group> new_groups{*it_system_group};
     dal::PermissionEntry new_entry(dal::Device({vid, pid, serial}),
                                    std::move(new_users), std::move(new_groups));
-    dbase_->permissions.Create(new_entry);
+    if (!dbase_->permissions.Find(dal::Device({vid, pid, serial}))) {
+      dbase_->permissions.Create(new_entry);
+    } else {
+      logger_->error("[DbusMethods::CreateRules] Attempt of creating a "
+                     "dublicate rule for device vid = {} pid = {} SN = {}",
+                     vid, pid, serial);
+    }
   }
 }
 

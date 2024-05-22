@@ -26,7 +26,7 @@
 (define (save-rules)
 ;(woo-error (object->string   (car(removeFirstElement(woo-read "/usbmount/save_rules" 'data (form-value "new_rules_data")))) ))
      (if (string=? "OK" (caar(removeFirstElement(woo-read "/usbmount/save_rules" 'data (form-value "new_rules_data")))))  
-      (ls-rules)
+      (update_ui)
       (woo-error (_ "Save rules operation FAILED"))
      ); //if
 )

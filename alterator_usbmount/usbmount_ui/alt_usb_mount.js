@@ -10,21 +10,27 @@ function InitUi(health) {
     document.getElementById('add_rule_btn').addEventListener('click', function (e) {
         AppendRow();
     });
-    let delete_curr_btn = document.getElementById('delete_curr_btn');
-    DisableButton(delete_curr_btn);
-    delete_curr_btn.addEventListener('click', DeleteSelectedRow);
-    // keybord "Insert" on a table
+
+    /*
+    //  Commented beacuse delete_curr_btn is not used now
+
+     let delete_curr_btn = document.getElementById('delete_curr_btn');
+     DisableButton(delete_curr_btn);
+      delete_curr_btn.addEventListener('click', DeleteSelectedRow);
+    */
+
+    // keybord "Insert" and "Delete" on a table
     let table_body = document.getElementById('rules_list_table').tBodies[0];
     table_body.addEventListener('keydown', function (e) {
         if (e.key == "Insert") {
             document.getElementById('add_rule_btn').dispatchEvent(new Event('click'));
         }
         if (e.key == "Delete" && table_body.querySelectorAll('tr.tr_selected').length != 0) {
-            document.getElementById('delete_curr_btn').dispatchEvent(new Event('click'));
+            document.getElementById('delete_rule_btn').dispatchEvent(new Event('click'));
         }
     });
 
-    // enable the "Create a rule button if some row is selected"
+    // enable the "Create a rule button if some device is selected"
     DisableButton(document.getElementById('btn_create_rule'));
     document.getElementById('devices_list_table').tabIndex = 0;
     document.getElementById('devices_list_table').addEventListener('click', function (e) {
@@ -52,179 +58,177 @@ function InitUi(health) {
     });
     // SAVE button
     DisableButton(document.getElementById('btn_save'));
-    document.getElementById('btn_save').addEventListener('click',SaveRules);
-
-    document.getElementById('checkbox_daemon_status').addEventListener('change',ShowLableForTooggle);
-
+    document.getElementById('btn_save').addEventListener('click', SaveRules);
+    // daemon on/of switch - show a tip
+    document.getElementById('checkbox_daemon_status').addEventListener('change', ShowLableForTooggle);
     // toggle status switch
     SetHealthStatus(health);
     // run the service
-    document.getElementById('btn_save_status').addEventListener('click',(e)=>{
-        let toggle_daemon=document.getElementById('checkbox_daemon_status');
-        if (toggle_daemon.checked){
+    document.getElementById('btn_save_status').addEventListener('click', (e) => {
+        let toggle_daemon = document.getElementById('checkbox_daemon_status');
+        if (toggle_daemon.checked) {
             e.target.dispatchEvent(new Event("btn_run_service"));
-        } else{
+        } else {
             e.target.dispatchEvent(new Event("btn_stop_service"));
         }
     });
-
     //disable create_rule_btn after list update
-    document.getElementById('btn_prsnt_scan').addEventListener('click',function(e){
+    document.getElementById('btn_prsnt_scan').addEventListener('click', function (e) {
         DisableButton(document.getElementById('btn_create_rule'));
     });
-
+    // workaround for mate - change button color to yellow
     ChooseBtnStyle();
     InitLogs();
-   
 }
 
 // switch button style for mate 
-function ChooseBtnStyle(){
+function ChooseBtnStyle() {
     try {
-        const sourceElement = document.getElementById('main').querySelector('.btn'); 
+        const sourceElement = document.getElementById('main').querySelector('.btn');
         const sourceStyles = window.getComputedStyle(sourceElement);
-        let color =sourceStyles.getPropertyValue('background-color');        
-        if (color==="rgb(255, 150, 49)"){
-            let buttons=document.querySelectorAll('.like_btn');        
-            buttons.forEach(btn => {                
-                btn.classList.remove('like_btn');
-                btn.classList.add('like_btn_y');                    
-            });
-            buttons=document.querySelectorAll('.like_btn_disabled');
+        let color = sourceStyles.getPropertyValue('background-color');
+        if (color === "rgb(255, 150, 49)") {
+            let buttons = document.querySelectorAll('.like_btn');
             buttons.forEach(btn => {
-                let buttons=document.querySelectorAll('.like_btn');        
+                btn.classList.remove('like_btn');
+                btn.classList.add('like_btn_y');
+            });
+            buttons = document.querySelectorAll('.like_btn_disabled');
+            buttons.forEach(btn => {
+                let buttons = document.querySelectorAll('.like_btn');
                 btn.classList.remove('like_btn_disabled');
-                btn.classList.add('like_btn_disabled_y');                    
+                btn.classList.add('like_btn_disabled_y');
             });
         }
     }
-    catch (e){
+    catch (e) {
         console.log(e);
     };
 }
 
-function SetHealthStatus(health){
-    let toggle_daemon=document.getElementById('checkbox_daemon_status');
-    if (health==="OK") toggle_daemon.checked=true;
-    else toggle_daemon.checked=false;
-    localStorage.setItem("health_status",health);
-    toggle_daemon.dispatchEvent(new Event('change')); 
-    if (health!=="OK"){
+function SetHealthStatus(health) {
+    let toggle_daemon = document.getElementById('checkbox_daemon_status');
+    if (health === "OK") toggle_daemon.checked = true;
+    else toggle_daemon.checked = false;
+    localStorage.setItem("health_status", health);
+    toggle_daemon.dispatchEvent(new Event('change'));
+    if (health !== "OK") {
         document.getElementById('id_tip_run_service').classList.remove('hidden');
-        document.getElementById('interface_wrap').classList.add('hidden');       
-    }else{
+        document.getElementById('interface_wrap').classList.add('hidden');
+    } else {
         document.getElementById('id_tip_run_service').classList.add('hidden');
-        document.getElementById('interface_wrap').classList.remove('hidden');    
-    }         
+        document.getElementById('interface_wrap').classList.remove('hidden');
+    }
 }
 
 function UnEscape(htmlStr) {
-    htmlStr = htmlStr.replace(/&#9;/g , "\t");	 
-    htmlStr = htmlStr.replace(/&#10;/g , "\n");     
-    htmlStr = htmlStr.replace(/&#34;/g , "\"");  
-    htmlStr = htmlStr.replace(/&#39;/g , "\'");   
-    htmlStr = htmlStr.replace(/&#92;/g , "\\");
+    htmlStr = htmlStr.replace(/&#9;/g, "\t");
+    htmlStr = htmlStr.replace(/&#10;/g, "\n");
+    htmlStr = htmlStr.replace(/&#34;/g, "\"");
+    htmlStr = htmlStr.replace(/&#39;/g, "\'");
+    htmlStr = htmlStr.replace(/&#92;/g, "\\");
     return htmlStr;
-  }
+}
 
-function LockLogPagination(){
+// lock pagination while loading a new page
+function LockLogPagination() {
     DisableButton(document.getElementById('btn_prev_page'));
     DisableButton(document.getElementById('btn_next_page'));
 }
-  
 
-function InitLogs(){
-    document.getElementById('show_logs_button').addEventListener('click',e=>{
+
+function InitLogs() {
+    document.getElementById('show_logs_button').addEventListener('click', e => {
         document.getElementById('logs_table').classList.remove('hidden');
         e.target.classList.add('hidden');
         document.getElementById('hide_logs_button').classList.remove('hidden');
     });
 
-    document.getElementById('hide_logs_button').addEventListener('click',e=>{
+    document.getElementById('hide_logs_button').addEventListener('click', e => {
         document.getElementById('logs_table').classList.add('hidden');
         e.target.classList.add('hidden');
         document.getElementById('show_logs_button').classList.remove('hidden');
     });
 
-    document.getElementById('btn_prev_page').addEventListener('click',e=>{
-        if (window.log_current_page<window.log_total_pages){
+    document.getElementById('btn_prev_page').addEventListener('click', e => {
+        if (window.log_current_page < window.log_total_pages) {
             ++window.log_current_page;
-            document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
+            document.getElementById('hidd_inp_curr_page').value = window.log_current_page;
             LockLogPagination();
             document.getElementById('hidd_inp_curr_page').dispatchEvent(new Event("page_change"));
-        }        
-    });
-
-    document.getElementById('btn_next_page').addEventListener('click',e=>{
-        if (window.log_current_page>0){
-         --window.log_current_page;
-         document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
-         LockLogPagination();
-         document.getElementById('hidd_inp_curr_page').dispatchEvent(new Event("page_change"));
         }
     });
 
-    document.getElementById('log_search_button').addEventListener('click',e=>{
-        window.log_current_page=0;
-        document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
-        let input_val=document.getElementById('log_search_input').value.replace(/[&<>"']/g, "");
-        document.getElementById('log_search_input').value=input_val;
-        document.getElementById('hidd_inp_filter').value=input_val;
+    document.getElementById('btn_next_page').addEventListener('click', e => {
+        if (window.log_current_page > 0) {
+            --window.log_current_page;
+            document.getElementById('hidd_inp_curr_page').value = window.log_current_page;
+            LockLogPagination();
+            document.getElementById('hidd_inp_curr_page').dispatchEvent(new Event("page_change"));
+        }
+    });
+
+    document.getElementById('log_search_button').addEventListener('click', e => {
+        window.log_current_page = 0;
+        document.getElementById('hidd_inp_curr_page').value = window.log_current_page;
+        let input_val = document.getElementById('log_search_input').value.replace(/[&<>"']/g, "");
+        document.getElementById('log_search_input').value = input_val;
+        document.getElementById('hidd_inp_filter').value = input_val;
         DisableButton(e.target);
         LockLogPagination();
         document.getElementById('hidd_inp_curr_page').dispatchEvent(new Event("page_change"));
     });
 
-    document.getElementById('log_search_input').addEventListener('keydown', function(event) {
+    document.getElementById('log_search_input').addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-          document.getElementById('log_search_button').dispatchEvent(new Event('click'));
+            document.getElementById('log_search_button').dispatchEvent(new Event('click'));
         }
     });
 }
 
-function SetLogData(data){
-    try{
-      let obj_data=JSON.parse(data);
-      window.log_current_page=obj_data.current_page;
-      window.log_total_pages=obj_data.total_pages;
-      document.getElementById('log_textarea').textContent=UnEscape(obj_data.data.join('\n'));
-      document.getElementById('hidd_inp_curr_page').value=obj_data.current_page;
-      document.getElementById('span_curr_page').textContent=" "+(window.log_current_page+1)+" ";
-      document.getElementById('span_total_pages').textContent=" "+(window.log_total_pages+1);
-      if ( window.log_current_page===0){
-        DisableButton(document.getElementById('btn_next_page'));
-      } else if (window.log_current_page>0){
-        EnableButton(document.getElementById('btn_next_page'));
-      }
-      if (window.log_current_page>= window.log_total_pages){
-        DisableButton(document.getElementById('btn_prev_page'));
-      } else {
-        EnableButton(document.getElementById('btn_prev_page'));
-      }
-      EnableButton(document.getElementById('log_search_button'));
+function SetLogData(data) {
+    try {
+        let obj_data = JSON.parse(data);
+        window.log_current_page = obj_data.current_page;
+        window.log_total_pages = obj_data.total_pages;
+        document.getElementById('log_textarea').textContent = UnEscape(obj_data.data.join('\n'));
+        document.getElementById('hidd_inp_curr_page').value = obj_data.current_page;
+        document.getElementById('span_curr_page').textContent = " " + (window.log_current_page + 1) + " ";
+        document.getElementById('span_total_pages').textContent = " " + (window.log_total_pages + 1);
+        if (window.log_current_page === 0) {
+            DisableButton(document.getElementById('btn_next_page'));
+        } else if (window.log_current_page > 0) {
+            EnableButton(document.getElementById('btn_next_page'));
+        }
+        if (window.log_current_page >= window.log_total_pages) {
+            DisableButton(document.getElementById('btn_prev_page'));
+        } else {
+            EnableButton(document.getElementById('btn_prev_page'));
+        }
+        EnableButton(document.getElementById('log_search_button'));
     }
-    catch(e){
+    catch (e) {
         console.log(e.message);
     }
 }
 
 
 
-function ShowLableForTooggle(e){
-    let toggle=e.target;
+function ShowLableForTooggle(e) {
+    let toggle = e.target;
     if (!toggle) return;
-    let run_lbl=document.getElementById('lbl_run_daemon');
-    let stop_lbl=document.getElementById('lbl_stop_daemon');
-    let health= localStorage.getItem('health_status');
-    let button=document.getElementById('btn_save_status');
-    if (toggle.checked== true){
+    let run_lbl = document.getElementById('lbl_run_daemon');
+    let stop_lbl = document.getElementById('lbl_stop_daemon');
+    let health = localStorage.getItem('health_status');
+    let button = document.getElementById('btn_save_status');
+    if (toggle.checked == true) {
         run_lbl.classList.remove('hidden');
         stop_lbl.classList.add('hidden');
-        health==="OK" ? DisableButton(button): EnableButton(button);              
-    }else{
+        health === "OK" ? DisableButton(button) : EnableButton(button);
+    } else {
         run_lbl.classList.add('hidden');
         stop_lbl.classList.remove('hidden');
-        health==="OK" ? EnableButton(button): DisableButton(button);                  
+        health === "OK" ? EnableButton(button) : DisableButton(button);
     }
 }
 
@@ -275,7 +279,7 @@ function CreateRuleForDevice(alterator_row) {
         });
         if (row) {
             ResetRow(row);
-            RowSelect(document.getElementById('rules_list_table'),row);
+            RowSelect(document.getElementById('rules_list_table'), row);
             MakeTheRowEditable(row);
         }
     }
@@ -283,7 +287,7 @@ function CreateRuleForDevice(alterator_row) {
         //check if already created in rules table
         let existing_row;
         let appended_rules = rules_tbody.querySelectorAll('tr.row_appended_by_user');
-        if (appended_rules){
+        if (appended_rules) {
             appended_rules.forEach(td => {
                 if (td.querySelector('span.rule_vid_val').textContent.trim() === vid &&
                     td.querySelector('span.rule_pid_val').textContent.trim() === pid &&
@@ -293,12 +297,12 @@ function CreateRuleForDevice(alterator_row) {
             });
         }
         if (existing_row) {
-            RowSelect(document.getElementById('rules_list_table'),existing_row);
+            RowSelect(document.getElementById('rules_list_table'), existing_row);
             MakeTheRowEditable(existing_row);
         }
         else {
-            let new_row=AppendRow(CreateRuleTemplate(vid, pid, serial));
-            RowSelect(document.getElementById('rules_list_table'),existing_row);
+            let new_row = AppendRow(CreateRuleTemplate(vid, pid, serial));
+            RowSelect(document.getElementById('rules_list_table'), existing_row);
         }
     }
 }
@@ -463,23 +467,23 @@ function BindRowSelect() {
 function BindEditableRowKeys(row) {
     row.tabIndex = 0;
     row.addEventListener('keyup', (event) => {
-        try{
-        let tr = event.target.parentElement.parentElement;
-        let curr_index = -1;
-        if (tr.classList.contains('editing') && event.keyCode == 13) {
-            let inputs = tr.querySelectorAll('.edit_inline');
+        try {
+            let tr = event.target.parentElement.parentElement;
+            let curr_index = -1;
+            if (tr.classList.contains('editing') && event.keyCode == 13) {
+                let inputs = tr.querySelectorAll('.edit_inline');
 
-            inputs.forEach((input, index) => {
-                if (input === event.target) curr_index = index;
-            });
-            // not last input go to next input
-            if (curr_index >= 0 && curr_index < inputs.length - 1) {
-                inputs[curr_index + 1].focus();
-            } else if (curr_index = inputs.length - 1) {
-                event.target.dispatchEvent(new Event('focusout'));
+                inputs.forEach((input, index) => {
+                    if (input === event.target) curr_index = index;
+                });
+                // not last input go to next input
+                if (curr_index >= 0 && curr_index < inputs.length - 1) {
+                    inputs[curr_index + 1].focus();
+                } else if (curr_index = inputs.length - 1) {
+                    event.target.dispatchEvent(new Event('focusout'));
+                }
             }
-        }
-        } catch (e){
+        } catch (e) {
             console.log(e.message);
             return;
         }
@@ -529,7 +533,8 @@ function RowSelect(table, row) {
     });
     EnableButton(document.getElementById('reset_rule_btn'));
     row.classList.toggle('tr_selected');
-    EnableButton(document.getElementById('delete_curr_btn'));
+    //EnableButton(document.getElementById('delete_curr_btn'));
+    EnableButton(document.getElementById('delete_rule_btn'));
     if (!row.classList.contains('editing') && !row.classList.contains('tr_deleted_rule'))
         EnableButton(document.getElementById("edit_rule_btn"));
 }
@@ -545,7 +550,7 @@ function BindTableHeaderCheckbox(table) {
             if (!checkbox) return;
             let inputs;
             try {
-                table = checkbox.parentElement.parentElement.parentElement.parentElement;
+                table = document.getElementById('rules_list_table');
                 let body = table.tBodies[0];
                 inputs = body.querySelectorAll('input.list_checkbox');
 
@@ -589,18 +594,23 @@ function OnRowChecked(e) {
     if (e.target.checked == true) {
         let delete_btn = document.getElementById('delete_rule_btn');
         if (delete_btn.disabled == true) EnableButton(delete_btn);
+        let reset_btn = document.getElementById('reset_rule_btn');
+        if (reset_btn.disabled) EnableButton(reset_btn);
     }
     // if not checked, check all rows, if nothing is checked - disable button
     else if (e.target.checked == false) {
-        DisableButtonDeleteIfNoRowsCkecked();
+        DisableButtonDeleteResetIfNoRowsCkeckedOrSelected();
     }
 }
 
-// if no row are checked - disable the "delete checked" button
-function DisableButtonDeleteIfNoRowsCkecked() {
+// if no row are checked or selected - disable the "delete" and "reset" button
+function DisableButtonDeleteResetIfNoRowsCkeckedOrSelected() {
     try {
         let tbody = document.getElementById('rules_list_table').tBodies[0];
         if (!tbody || tbody.nodeName != "TBODY") return;
+
+        let selected = tbody.querySelectorAll('tr.tr_selected');
+        if (selected.length > 0) return;
         let inputs = tbody.querySelectorAll('input.list_checkbox');
         let some = false;
         for (let i = 0; i < inputs.length; ++i) {
@@ -612,6 +622,7 @@ function DisableButtonDeleteIfNoRowsCkecked() {
         // if nothing is checked
         if (!some) {
             DisableButton(document.getElementById('delete_rule_btn'));
+            DisableButton(document.getElementById('reset_rule_btn'));
             // uncheck a checkbox in the header
             document.getElementById('rules_list_table').tHead.querySelector('input.list_checkbox').checked = false;
         }
@@ -629,11 +640,11 @@ function DisableButtonDeleteIfNoRowsCkecked() {
 function DisableButton(button) {
     if (!button) return;
     button.disabled = true;
-    if (button.classList.contains('like_btn')){
+    if (button.classList.contains('like_btn')) {
         button.classList.add('like_btn_disabled');
         button.classList.remove('like_btn');
     }
-    if (button.classList.contains('like_btn_y')){
+    if (button.classList.contains('like_btn_y')) {
         button.classList.add('like_btn_disabled_y');
         button.classList.remove('like_btn_y');
     }
@@ -646,11 +657,11 @@ function DisableButton(button) {
 function EnableButton(button) {
     if (!button) return;
     button.disabled = false;
-    if (button.classList.contains('like_btn_disabled')){
+    if (button.classList.contains('like_btn_disabled')) {
         button.classList.remove('like_btn_disabled');
         button.classList.add('like_btn');
     }
-    if (button.classList.contains('like_btn_disabled_y')){
+    if (button.classList.contains('like_btn_disabled_y')) {
         button.classList.remove('like_btn_disabled_y');
         button.classList.add('like_btn_y');
     }
@@ -726,11 +737,19 @@ function BindDeleteCheckedRows() {
         let table = document.getElementById('rules_list_table');
         try {
             let checkboxes = table.tBodies[0].querySelectorAll('input.list_checkbox');
+            let some_rows_are_checked = false;
             checkboxes.forEach(checkbox => {
                 if (!checkbox.checked) return;
                 let tr = checkbox.parentElement.parentElement;
                 DeleteRow(tr);
+                some_rows_are_checked = true;
             });
+            // if no checked checkoboxes where found - delete current row    
+            if (!some_rows_are_checked) {
+                let table = document.getElementById('rules_list_table');
+                let selected_row = table.querySelector('tr.tr_selected');
+                if (selected_row) DeleteRow(selected_row);
+            }
         }
         catch (e) {
             console.log(e.message);
@@ -773,7 +792,7 @@ function DeleteRow(tr) {
         ResetRow(tr); // reset if some change were made              
         if (tr && tr.nodeName == "TR") tr.classList.add('tr_deleted_rule'); // mark as deleted
     }
-    DisableButtonDeleteIfNoRowsCkecked();
+    DisableButtonDeleteResetIfNoRowsCkeckedOrSelected();
     ShowToolTipIfSomeInvalid();
 }
 
@@ -798,25 +817,46 @@ function SetUsersAndGroups(data) {
 function BindReset() {
     let button = document.getElementById('reset_rule_btn');
     DisableButton(button);
-    // reset a row
     button.addEventListener('click', function (e) {
         let table = document.getElementById('rules_list_table');
-        let selected_row = table.querySelector('tr.tr_selected');
-        if (selected_row) {
-            ResetRow(selected_row);
-            ShowSaveButtonIfSomethigChaged();
+        // reset for all checked checkboxes
+        let tbody = document.getElementById('rules_list_table').tBodies[0];
+        let inputs = tbody.querySelectorAll('input.list_checkbox');
+        let some_rows_are_checked = false;
+        for (let i = 0; i < inputs.length; ++i) {
+            if (inputs[i].checked) {
+                some_rows_are_checked = true;
+                let checked_row = inputs[i].parentElement.parentElement;
+                if (checked_row && checked_row.nodeName === "TR") {
+                    ResetRow(checked_row)
+                }
+            }
         }
+        if (some_rows_are_checked) {
+            let header_checkbox = table.tHead.querySelector('input.list_checkbox');
+            header_checkbox.checked = false;
+        }
+        // if no checked checkoboxes where found - reset current row    
+        if (!some_rows_are_checked) {
+            let selected_row = table.querySelector('tr.tr_selected');
+            if (selected_row) {
+                ResetRow(selected_row)
+            }
+        }
+        ShowSaveButtonIfSomethigChaged();
     });
+
+    // reset all button is not used now
     // reset all
-    let button_all = document.getElementById('reset_all_btn');
-    button_all.addEventListener('click', function (e) {
-        ResetRulesList();
-        DisableButton(document.getElementById('edit_rule_btn'));
-        DisableButton(document.getElementById('delete_curr_btn'));
-        DisableButton(document.getElementById('reset_rule_btn'));
-        DisableButtonDeleteIfNoRowsCkecked();
-        DisableButton(document.getElementById('btn_save'));
-    });
+    // let button_all = document.getElementById('reset_all_btn');
+    // button_all.addEventListener('click', function (e) {
+    //     ResetRulesList();
+    //     DisableButton(document.getElementById('edit_rule_btn'));
+    //     DisableButton(document.getElementById('delete_curr_btn'));
+    //     DisableButton(document.getElementById('reset_rule_btn'));
+    //     DisableButtonDeleteIfNoRowsCkecked();
+    //     DisableButton(document.getElementById('btn_save'));
+    // });
 
 }
 
@@ -843,13 +883,13 @@ function DblClickOnUserOrGroup(event, storage_name) {
         td_el.classList.toggle('padding_td');
         td_el.appendChild(dropdown);
         td_el.style.width = target_width;
-        dropdown.focus();        
-        dropdown.addEventListener('change',function(e){
-                document.getElementById('reset_rule_btn').focus();
+        dropdown.focus();
+        dropdown.addEventListener('change', function (e) {
+            document.getElementById('reset_rule_btn').focus();
         });
-        dropdown.addEventListener('input',function(e){
-                document.getElementById('reset_rule_btn').focus();
-        });        
+        dropdown.addEventListener('input', function (e) {
+            document.getElementById('reset_rule_btn').focus();
+        });
     }
 }
 
@@ -944,7 +984,7 @@ function DblClickOnEditable(event) {
         td_el.classList.toggle('padding_td');
         td_el.appendChild(input);
         td_el.style.width = target_width;
-        input.focus();        
+        input.focus();
     }
 }
 
@@ -977,10 +1017,11 @@ function SaveInputValueToSpan(input, do_not_save) {
     let sibling_span = input.parentElement.querySelector('span.span_val');
     if (sibling_span) initial_text = sibling_span.textContent;
     if (!sibling_span || initial_text === 'undefined' || !parent_td || parent_td.nodeName != 'TD') return;
-    let input_val=input.value.replace(/[&<>"']/g, "");
+    let input_val = input.value.replace(/[&<>"']/g, "");
     if (parent_td.parentElement.classList.contains('row_appended_by_user') && input_val.length == 0) {
         parent_td.classList.add('td_value_changed');
         parent_td.classList.add('td_value_bad');
+        sibling_span.textContent = "";
     }
     if (!do_not_save && input_val != "" && input_val != sibling_span.textContent) {
         sibling_span.textContent = input_val;
@@ -1008,27 +1049,34 @@ function SaveInputValueToSpan(input, do_not_save) {
 }
 
 function ShowToolTipIfSomeInvalid() {
+    CheckNoDublicateRows();
     let table = document.getElementById('rules_list_table');
     let not_valid_cells = table.tBodies[0].querySelectorAll('td.td_value_bad');
-    let warinig = document.getElementById('validation_warning');
+    let dublcate_rows = table.tBodies[0].querySelectorAll('tr.bad_duplicate');
+    let warning = document.getElementById('validation_warning');
+    let all_ok = true;
     if (not_valid_cells.length > 0) {
-        warinig.style.display = 'block';
+        warning.style.display = 'block';
         DisableButton(document.getElementById('btn_save'));
-    }
-    else {
-        warinig.style.display = 'none';
-        ShowSaveButtonIfSomethigChaged();     
-    }
+        all_ok = false;
+    } else { warning.style.display = 'none';}
+    let warning_duplicates = document.getElementById('validation_warning_duplicate');
+    if (dublcate_rows.length > 0) {
+        warning_duplicates.style.display = 'block';
+        DisableButton(document.getElementById('btn_save'));
+        all_ok = false;
+    } else { warning_duplicates.style.display = 'none'; }
+    if (all_ok) ShowSaveButtonIfSomethigChaged();
 }
 
-function ShowSaveButtonIfSomethigChaged(){
+function ShowSaveButtonIfSomethigChaged() {
     let table = document.getElementById('rules_list_table');
-    let tr_changed=table.tBodies[0].querySelectorAll('td.td_value_changed');
-    let tr_deleted=table.tBodies[0].querySelectorAll('tr.tr_deleted_rule');
-    if ((tr_changed && tr_changed.length>0) || (tr_deleted && tr_deleted.length>0) ){
-         EnableButton(document.getElementById('btn_save'));
+    let tr_changed = table.tBodies[0].querySelectorAll('td.td_value_changed');
+    let tr_deleted = table.tBodies[0].querySelectorAll('tr.tr_deleted_rule');
+    if ((tr_changed && tr_changed.length > 0) || (tr_deleted && tr_deleted.length > 0)) {
+        EnableButton(document.getElementById('btn_save'));
     }
-    else{
+    else {
         DisableButton(document.getElementById('btn_save'));
     }
 }
@@ -1046,14 +1094,17 @@ function ResetRow(row) {
         cell.classList.remove('td_value_good');
         cell.classList.remove('td_value_changed');
     });
+    let checkbox = row.querySelector('input.list_checkbox');
+    if (checkbox) checkbox.checked = false;
     let val_span = td.querySelector('span.span_val');
     if (!val_span) return;
     let rule_id = val_span.textContent;
     try {
         let rule_obj;
-        // if the rule is appended, use an empty object
+        // if the rule is appended, just remove this row
         if (row.classList.contains('row_appended_by_user')) {
-            rule_obj = CreateEmptyRuleObj();
+            DeleteRow(row);
+            return;
         }
         // else read the rule from the local storage
         else {
@@ -1127,13 +1178,13 @@ function MakeTheRowEditable(row) {
                 td.classList.toggle('padding_td');
                 span_el.classList.toggle('hidden');
                 td.appendChild(select);
-                td.style.width = target_width;                
+                td.style.width = target_width;
                 // finish editing when last selested changed
-                if (td.classList.contains('rule_group')){
-                    select.addEventListener('change',function(e){
+                if (td.classList.contains('rule_group')) {
+                    select.addEventListener('change', function (e) {
                         document.getElementById('reset_rule_btn').focus();
                     });
-                    select.addEventListener('input',function(e){
+                    select.addEventListener('input', function (e) {
                         document.getElementById('reset_rule_btn').focus();
                     });
                 }
@@ -1217,78 +1268,121 @@ function ValidateGroup(group) {
     return some;
 }
 
+
+
+
+function CheckNoDublicateRows() {
+    try {
+        let tbody = document.getElementById('rules_list_table').tBodies[0];
+        let rows = tbody.querySelectorAll('tr');
+        let seen = new Map();
+        let duplicates = [];
+        rows.forEach(function callback(row, index, array) {
+            row.classList.remove('bad_duplicate');
+            row.classList.remove('td_value_bad');
+            vid = row.querySelector('span.rule_vid_val').textContent.trim();
+            pid = row.querySelector('span.rule_pid_val').textContent.trim();
+            serial = row.querySelector('span.rule_serial_val').textContent.trim();
+            let key = vid + pid + serial;
+            if (!row.classList.contains('tr_deleted_rule')) {
+                if (seen.has(key)) {
+                    duplicates.push(index);
+                    duplicates.push(seen.get(key));
+                } else {
+                    seen.set(key, index);
+                }
+            }
+        });
+        if (duplicates.length === 0) return true;
+        duplicates.forEach(dup_row => {
+            rows[dup_row].classList.add("bad_duplicate");
+            rows[dup_row].classList.add('td_value_bad');
+            let tds = rows[dup_row].querySelectorAll('td.td_value_good');
+            tds.forEach(td => { td.classList.remove('td_value_good') });
+        });
+        return false;
+    }
+    catch (e) {
+        console.log(e.message);
+    }
+}
+
 // ------------------- Save -------------
 
 // Save -send to the backend
-function SaveRules(){
-    let tbody=document.getElementById('rules_list_table').tBodies[0];
-    let rows=tbody.querySelectorAll('tr');
-    let res ={
-        created:[],
-        updated:[],
-        deleted:[],
-        notchanged:[]
+function SaveRules() {
+    if (!CheckNoDublicateRows()) {
+        ShowToolTipIfSomeInvalid();
+        return;
     }
-    rows.forEach(row=>{
-        let rule_id=row.querySelector('td.rule_id').textContent.trim();
-        let is_existing=!row.classList.contains('row_appended_by_user') && rule_id.length>0;
-        let is_deleted=is_existing && row.classList.contains('tr_deleted_rule');
-        let changed_vals=row.querySelectorAll('td.td_value_changed');
-        let is_updated=is_existing && !is_deleted && changed_vals && changed_vals.length>0;
-        let is_not_changed=is_existing && !is_updated && !is_deleted; 
-        let is_created=!is_existing && changed_vals && changed_vals.length>0;
-        let vid,pid,serial,user,group,all_fields;
-        try{
-            vid=row.querySelector('span.rule_vid_val').textContent.trim();
-            pid=row.querySelector('span.rule_pid_val').textContent.trim();
-            serial=row.querySelector('span.rule_serial_val').textContent.trim();
-            user=row.querySelector('span.rule_user_val').textContent.trim();
-            group=row.querySelector('span.rule_group_val').textContent.trim();
-            all_fields=vid && pid && serial && user && group;
-        } catch (e){
+    let tbody = document.getElementById('rules_list_table').tBodies[0];
+    let rows = tbody.querySelectorAll('tr');
+    let res = {
+        created: [],
+        updated: [],
+        deleted: [],
+        notchanged: []
+    }
+    rows.forEach(row => {
+        let rule_id = row.querySelector('td.rule_id').textContent.trim();
+        let is_existing = !row.classList.contains('row_appended_by_user') && rule_id.length > 0;
+        let is_deleted = is_existing && row.classList.contains('tr_deleted_rule');
+        let changed_vals = row.querySelectorAll('td.td_value_changed');
+        let is_updated = is_existing && !is_deleted && changed_vals && changed_vals.length > 0;
+        let is_not_changed = is_existing && !is_updated && !is_deleted;
+        let is_created = !is_existing && changed_vals && changed_vals.length > 0;
+        let vid, pid, serial, user, group, all_fields;
+        try {
+            vid = row.querySelector('span.rule_vid_val').textContent.trim();
+            pid = row.querySelector('span.rule_pid_val').textContent.trim();
+            serial = row.querySelector('span.rule_serial_val').textContent.trim();
+            user = row.querySelector('span.rule_user_val').textContent.trim();
+            group = row.querySelector('span.rule_group_val').textContent.trim();
+            all_fields = vid && pid && serial && user && group;
+        } catch (e) {
             console.log(e.message);
             return;
         }
         // rules is created
-        if (is_created  && all_fields){
+        if (is_created && all_fields) {
             res.created.push({
-                id:rule_id,
-                vid:vid,
-                pid:pid,
-                serial:serial,
-                user:user,
-                group:group
+                id: rule_id,
+                vid: vid,
+                pid: pid,
+                serial: serial,
+                user: user,
+                group: group
             });
         }
         // rule deleted
-        if (is_deleted){
+        if (is_deleted) {
             res.deleted.push(rule_id);
             return;
         }
         // updated
-        if (is_updated && all_fields){
-            let vid_updated=row.querySelector('td.rule_vid').classList.contains('td_value_changed');
-            let pid_updated=row.querySelector('td.rule_pid').classList.contains('td_value_changed');
-            let serial_updated=row.querySelector('td.rule_serial').classList.contains('td_value_changed');
-            let user_updated=row.querySelector('td.rule_user').classList.contains('td_value_changed');
-            let group_updated=row.querySelector('td.rule_group').classList.contains('td_value_changed');
+        if (is_updated && all_fields) {
+            let vid_updated = row.querySelector('td.rule_vid').classList.contains('td_value_changed');
+            let pid_updated = row.querySelector('td.rule_pid').classList.contains('td_value_changed');
+            let serial_updated = row.querySelector('td.rule_serial').classList.contains('td_value_changed');
+            let user_updated = row.querySelector('td.rule_user').classList.contains('td_value_changed');
+            let group_updated = row.querySelector('td.rule_group').classList.contains('td_value_changed');
             res.updated.push({
-                id:rule_id,
+                id: rule_id,
                 vid: vid_updated ? vid : "",
                 pid: pid_updated ? pid : "",
-                serial: serial_updated ? serial :"",
-                user:user_updated ? user : "",
+                serial: serial_updated ? serial : "",
+                user: user_updated ? user : "",
                 group: group_updated ? group : ""
             });
             return;
         }
-        if (is_not_changed){
+        if (is_not_changed) {
             res.notchanged.push(rule_id);
             return;
         }
     });
     // save to hidden input and fire an event for lisp
-    document.getElementById('hidden_inp_data_to_save').value=JSON.stringify(res);
+    document.getElementById('hidden_inp_data_to_save').value = JSON.stringify(res);
     document.getElementById('btn_save').dispatchEvent(new Event('rules_data_ready'));
 }
 

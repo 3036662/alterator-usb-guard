@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-07 13:42+0300\n"
-"PO-Revision-Date: 2024-05-15 10:35+0300\n"
+"POT-Creation-Date: 2024-05-21 14:04+0300\n"
+"PO-Revision-Date: 2024-05-21 14:04+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -19,14 +19,14 @@ msgstr ""
 "X-Generator: Poedit 3.4.4\n"
 
 #: стандартный ввод:1
-msgid "Run the UsbMount daemon"
-msgstr "Запустить службу UsbMount"
+msgid "The USBMount service is active"
+msgstr "Служба USBMount активна"
 
 #: стандартный ввод:2
-msgid "Stop the UsbMount daemon"
-msgstr "Остановить службу UsbMount"
+msgid "The USBMount service is inactive"
+msgstr "Служба USBMount остановлена"
 
-#: стандартный ввод:3 ввод:28
+#: стандартный ввод:3 ввод:25
 msgid "SAVE"
 msgstr "Сохранить"
 
@@ -40,7 +40,7 @@ msgstr ""
 
 #: стандартный ввод:5
 msgid "List of devices"
-msgstr "Список утсройств"
+msgstr "Список уcтройств"
 
 #: стандартный ввод:6
 msgid "Block"
@@ -91,60 +91,58 @@ msgid "Group"
 msgstr "Группа"
 
 #: стандартный ввод:21
+msgid "Edit"
+msgstr "Изменить"
+
+#: стандартный ввод:22
+msgid "Reset row"
+msgstr "Сбросить"
+
+#: стандартный ввод:23
+msgid "Delete rule"
+msgstr "Удалить"
+
+#: стандартный ввод:24
+msgid "Add"
+msgstr "Добавить"
+
+#: стандартный ввод:26
 msgid "Some invalid values were provided,please check the red cells"
 msgstr ""
 "Введены некорректные значения, обратите внимание на ячейки, отмеченные "
 "красным"
 
-#: стандартный ввод:22
-msgid "Delete checked rows"
-msgstr "Удалить выбранные строки"
-
-#: стандартный ввод:23
-msgid "Reset all"
-msgstr "Сбросить все"
-
-#: стандартный ввод:24
-msgid "Edit"
-msgstr "Изменить"
-
-#: стандартный ввод:25
-msgid "Reset row"
-msgstr "Сбросить"
-
-#: стандартный ввод:26
-msgid "Delete current"
-msgstr "Удалить"
-
 #: стандартный ввод:27
-msgid "Add"
-msgstr "Добавить"
+msgid "Some duplicate rules were provided,please check the red cells"
+msgstr ""
+"Обнаружены дублирующие правила, обратите внимание на строки, отмеченные "
+"красным"
 
-#: стандартный ввод:29
+#: стандартный ввод:28
 msgid "Show log"
 msgstr "Журнал"
 
-#: стандартный ввод:30
+#: стандартный ввод:29
 msgid "Hide log"
 msgstr "Свернуть"
 
-#: стандартный ввод:31
+#: стандартный ввод:30
 msgid "Filter"
 msgstr "Фильтровать"
 
-#: стандартный ввод:32
+#: стандартный ввод:31
 msgid "◁ Previous"
 msgstr "◁ Назад"
 
-#: стандартный ввод:33
+#: стандартный ввод:32
 msgid "Next ▷"
 msgstr "Вперед  ▷"
 
-#: стандартный ввод:34
+#: стандартный ввод:33
 msgid "Page"
 msgstr "Страница"
 
-#: стандартный ввод:35
+#: стандартный ввод:34
 msgid "of"
 msgstr "из"
 
@@ -163,6 +161,18 @@ msgstr "Не удалось остановить службу"
 #: стандартный ввод:1
 msgid "USBMount"
 msgstr "USBMount"
+
+#~ msgid "Run the UsbMount daemon"
+#~ msgstr "Запустить службу UsbMount"
+
+#~ msgid "Stop the UsbMount daemon"
+#~ msgstr "Остановить службу UsbMount"
+
+#~ msgid "Delete checked rows"
+#~ msgstr "Удалить выбранные строки"
+
+#~ msgid "Reset all"
+#~ msgstr "Сбросить все"
 
 #~ msgid "Connnected usb devices:"
 #~ msgstr "Подключенные блочные устройства:"

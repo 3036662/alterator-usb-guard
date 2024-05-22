@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-07 13:42+0300\n"
+"POT-Creation-Date: 2024-05-21 14:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: стандартный ввод:1
-msgid "Run the UsbMount daemon"
+msgid "The USBMount service is active"
 msgstr ""
 
 #: стандартный ввод:2
-msgid "Stop the UsbMount daemon"
+msgid "The USBMount service is inactive"
 msgstr ""
 
-#: стандартный ввод:3 ввод:28
+#: стандартный ввод:3 ввод:25
 msgid "SAVE"
 msgstr ""
 
@@ -88,58 +88,54 @@ msgid "Group"
 msgstr ""
 
 #: стандартный ввод:21
-msgid "Some invalid values were provided,please check the red cells"
-msgstr ""
-
-#: стандартный ввод:22
-msgid "Delete checked rows"
-msgstr ""
-
-#: стандартный ввод:23
-msgid "Reset all"
-msgstr ""
-
-#: стандартный ввод:24
 msgid "Edit"
 msgstr ""
 
-#: стандартный ввод:25
+#: стандартный ввод:22
 msgid "Reset row"
 msgstr ""
 
-#: стандартный ввод:26
-msgid "Delete current"
+#: стандартный ввод:23
+msgid "Delete rule"
 msgstr ""
 
-#: стандартный ввод:27
+#: стандартный ввод:24
 msgid "Add"
 msgstr ""
 
-#: стандартный ввод:29
+#: стандартный ввод:26
+msgid "Some invalid values were provided,please check the red cells"
+msgstr ""
+
+#: стандартный ввод:27
+msgid "Some duplicate rules were provided,please check the red cells"
+msgstr ""
+
+#: стандартный ввод:28
 msgid "Show log"
 msgstr ""
 
-#: стандартный ввод:30
+#: стандартный ввод:29
 msgid "Hide log"
 msgstr ""
 
-#: стандартный ввод:31
+#: стандартный ввод:30
 msgid "Filter"
 msgstr ""
 
-#: стандартный ввод:32
+#: стандартный ввод:31
 msgid "◁ Previous"
 msgstr ""
 
-#: стандартный ввод:33
+#: стандартный ввод:32
 msgid "Next ▷"
 msgstr ""
 
-#: стандартный ввод:34
+#: стандартный ввод:33
 msgid "Page"
 msgstr ""
 
-#: стандартный ввод:35
+#: стандартный ввод:34
 msgid "of"
 msgstr ""
 
