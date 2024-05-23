@@ -6,7 +6,6 @@ add_compile_options(-Wall -Wextra -pedantic)
 project(alterator_usbguard LANGUAGES CXX VERSION 0.1)
 
 find_package(PkgConfig REQUIRED)
-message("USBGUARD_FOUND: ${USBGUARD_FOUND}")
 find_package(Boost REQUIRED)
 include(GNUInstallDirs)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
@@ -26,41 +25,20 @@ add_subdirectory(common)
 
 
 # backend for alterator-usbguard
-IF (DEFINED USBGUARD)
 pkg_check_modules(USBGUARD REQUIRED IMPORTED_TARGET libusbguard)
+message("USBGUARD_FOUND: ${USBGUARD_FOUND}")
 add_subdirectory(backend)
-ENDIF (DEFINED USBGUARD)
-
-# the daemon
-IF (DEFINED USBMOUNT)
-# libudev
-pkg_check_modules(UDEV REQUIRED IMPORTED_TARGET libudev)
-message("Building daemon...")
-add_subdirectory(daemon)
-# alterator-usb-mount
-add_subdirectory(alterator_usbmount)
-ENDIF (DEFINED USBMOUNT)
 
 
 # only for debug
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     # android vid_pid parser
-    add_subdirectory(android_vidpid_parser)
-    # the automount
-    message("Building automount...")
-    add_subdirectory(automount)
-    # fstab test
-    add_executable(test_fstab fstab_test.cpp)
-    target_link_libraries(test_fstab PRIVATE PkgConfig::UDEV)
-    target_include_directories(test_fstab PUBLIC ${UDEV_INCLUDE_DIRS})    
-endif()
-
-# tests
-IF (DEFINED UNIT_TEST)
     message("Building tests...")
+    add_subdirectory(android_vidpid_parser)    
     add_compile_definitions(UNIT_TEST=1)
     add_subdirectory(tests)
-ENDIF (DEFINED UNIT_TEST)
+endif()
+
 
 # docs
 IF (DEFINED BUILD_DOCS)
@@ -80,4 +58,4 @@ else (DOXYGEN_FOUND)
 endif (DOXYGEN_FOUND)
 ENDIF (DEFINED BUILD_DOCS)
 
-#cmake -S . -B build -DUNIT_TEST=1 -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/clang++ -G Ninja
+#cmake -S . -B build  -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/clang++ -G Ninja
