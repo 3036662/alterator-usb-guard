@@ -1,0 +1,16 @@
+[Unit]
+Description=Alterator usb mount module
+
+[Service]
+Type=dbus
+BusName=ru.alterator.usbd
+ExecStart=/usr/sbin/altusbd
+ExecReload=/bin/kill -HUP $MAINPID
+User=root
+SyslogIdentifier=alt_usb_guard
+Restart=always
+RestartSec=1
+
+[Install]
+WantedBy=multi-user.target
+Alias=dbus-org.altusbd.service

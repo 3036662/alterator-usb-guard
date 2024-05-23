@@ -7,7 +7,7 @@
 #include <memory>
 #include <string>
 
-void printDeviceProperties(std::shared_ptr<udev_device> device);
+void printDeviceProperties(std::shared_ptr<udev_device>& device);
 bool mountBlock(const char *block);
 
 int main(int argrc, char *argc[]) {
@@ -38,7 +38,7 @@ int main(int argrc, char *argc[]) {
           udev_monitor_receive_device(monitor.get()), &udev_device_unref);
       if (device) {
         std::cout << "Gotcha !" << "\n";
-        //  printDeviceProperties(device);
+          //printDeviceProperties(device);
 
         const char *action =
             udev_device_get_property_value(device.get(), "ACTION");
@@ -60,7 +60,7 @@ int main(int argrc, char *argc[]) {
           std::cout << "MODEL_ID = " << model_id << "\n";
         }
         std::cout << "\n" << "\n";
-
+         printDeviceProperties(device);
         if (action!=nullptr && vendor_id!=nullptr && model_id!=nullptr && strcmp(vendor_id, "8564") == 0 &&
             strcmp(model_id, "1000") == 0) {
           std::cout << "We have found the chosen device!" << "\n";
@@ -74,7 +74,8 @@ int main(int argrc, char *argc[]) {
                 udev_device_get_property_value(device.get(), "DEVNAME");
             if (block!=nullptr) {
               std::cout << "dev = " << block << "\n";
-              mountBlock(block);
+             // mountBlock(block);
+             //printDeviceProperties(device);
             }
           }
         }
@@ -85,9 +86,10 @@ int main(int argrc, char *argc[]) {
 }
 
 void printDeviceProperties(std::shared_ptr<udev_device> &device) {
+  std::cerr <<"PRINT PROPERTIES"<<"\n";
   struct udev_list_entry *properties =
       udev_device_get_properties_list_entry(device.get());
-  if (properties!=nullptr)
+  if (properties==nullptr)
     return;
   struct udev_list_entry *entry;
   udev_list_entry_foreach(entry, properties) {

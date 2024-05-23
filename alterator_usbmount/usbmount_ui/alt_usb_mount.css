@@ -1,0 +1,311 @@
+.hidden {
+    display: none;
+}
+
+#interface_wrap{
+    margin-top: 12px;
+}
+
+/* Alterator-like table */
+
+
+.alterator-listbox caption{
+    background-color: white;
+    border: solid;
+    border-width: thin;
+    margin-bottom: 2px;
+    font-weight: 600;
+
+}
+
+.right_buttons{
+    float: right;
+    margin-top: 15px;
+}
+.left_buttons{
+    float: left;
+    margin-top: 15px;
+}
+
+.rules_wrap{
+    margin-top: 62px;
+}
+.rules_list{
+    width: 100%;
+    font-size: 8pt;
+    border: 1px solid #808080;
+    border-spacing: 0;
+    font-family: Arial;
+    text-align: left;
+  
+}
+.rules_list caption{
+    background-color: white;
+    border: solid;
+    border-width: thin;
+    margin-bottom: 2px;
+    font-weight: 600;
+}
+
+.rules_list thead tr th{
+    padding: 4px;
+    background-color: #e6e6e6;
+    border: 1px solid #808080;
+    vertical-align: middle;
+
+}
+
+.rules_list tr td{
+    color: #001056;
+    border-right: 1px solid #808080;
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+
+
+.padding_td{
+    padding: 4px;
+}
+
+.tr_odd{
+   background-color: #f7f5f5; 
+}
+
+.tr_even{
+    background-color: white;
+}
+.tr_selected{
+    border-bottom: 3px solid #3399ff;
+    border-top: 3px solid #3399ff;
+}
+
+.tr_deleted_rule {
+    text-decoration: line-through;
+    font-weight: 700;
+}
+
+
+
+.edit_inline{
+    max-width: 98%;
+    margin: auto;
+    border: 1px solid gray;
+    font-size: 8pt;
+    font-family: Arial;
+}
+
+.td_value_good{
+    /*background-color: #a9f972;*/
+    background: linear-gradient(#ccffcc, #fff);
+}
+
+.td_value_bad{
+    /*background-color: #fb5151;*/
+    background: linear-gradient(#ffcccc, #fff);
+    border-color: 2px solid white;
+}
+
+/* Alterator-like button*/
+
+.like_btn{
+    font-weight: bold;
+    color: #FFFFFF;
+    background-color: #455a85;
+    border: 1px solid #1b2575;
+    margin: 2px;
+    cursor: pointer;
+    font-size: 9pt;
+    padding: 2.5px 10px;
+    vertical-align: middle;
+    font-family: "Liberation Sans", Tahoma, Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+.like_btn:hover{
+    background-color: #5b76af;
+}
+
+.like_btn_disabled{
+    font-weight: bold;
+    cursor: default;
+    color: #c3c7cb;
+    background-color: #E2E6EB;
+    border: 1px solid #c0c0c0;
+    margin: 2px;
+    font-size: 9pt;
+    padding: 2.5px 10px;
+    vertical-align: middle;
+    font-family: "Liberation Sans", Tahoma, Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+
+.like_btn_y{
+    font-weight: bold;
+    color: black;
+    background-color: #ff9631;
+    border: 1px solid #ff9631;
+    cursor: pointer;
+    font-size: 9pt;
+    padding: 2.5px 10px;
+    vertical-align: middle;
+    font-family: "Liberation Sans", Tahoma, Verdana, Geneva, Arial, Helvetica, sans-serif;
+}
+
+.like_btn_y:hover{
+    background-color: #f4bc85;
+}
+
+.like_btn_disabled_y{
+    cursor: default;
+    color: #c3c7cb;
+	background-color: #E2E6EB;
+    margin: 2px;
+    font-size: 9pt;
+    padding: 2.5px 10px;
+    vertical-align: middle;
+    font-family: "Liberation Sans", Tahoma, Verdana, Geneva, Arial, Helvetica, sans-serif;
+    border: 1px solid #c0c0c0;
+}
+
+
+
+.validation_warning {
+    display: none;
+    background-color: white;
+    color: #f32b63;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    margin-top: 94px;
+    margin-bottom: 20px;
+}
+
+.tip_wrapper {
+    background-color: white;
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
+    border: 2px solid gray;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+  .separator{
+    display: block;
+    float: left;
+    width: 100%;
+    height: 1px;
+  }
+
+  /* The slider */
+
+.switch {
+   position: relative;
+   display: inline-block;
+   width: 40px;
+   height: 23px;
+}
+  
+/* Hide default HTML checkbox */
+.switch input {
+   opacity: 0;
+   width: 0;
+   height: 0;
+}
+  
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 17px;
+    width: 17px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 28px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .td_vertical_center{
+    vertical-align: middle; 
+  }
+  
+  #run_daemon_label{
+    padding-left: 10px;
+    font-weight: bold;
+    font-size: 15px;
+  }
+
+  #btn_save_status{
+    margin-left: 20px;
+    font-size: 15px;
+  }
+
+  /* Logs */
+
+#logs_form{
+    margin-top: 100px;    
+}
+
+#logs_form table{
+    margin-top: 20px;
+}
+
+/* #show_logs_button{
+    margin-bottom: 30px;
+} */
+#log_search_input{
+    margin-left: 5px;
+    display: block;
+    float: left;
+    margin-top: 2px;
+    height: 18px;
+}
+
+#log_textarea{
+    width:99%;
+    height: 400px;
+}
+
+.cell_center{
+    text-align: center;
+}
+
+.log_page_info{
+color: gray;
+font-size: 8pt;
+}

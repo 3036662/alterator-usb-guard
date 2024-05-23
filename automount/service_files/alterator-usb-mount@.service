@@ -1,0 +1,11 @@
+[Unit] 
+Description=Mount USB Drive on %i 
+ 
+[Service]
+RemainAfterExit=true
+Type=oneshot
+ExecStart=/usr/bin/alterator_usb_automount  %i add
+ExecStop=/usr/bin/alterator_usb_automount  %i remove
+
+[Install]
+WantedBy=multi-user.target

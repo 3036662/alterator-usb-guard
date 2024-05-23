@@ -1,6 +1,6 @@
 #pragma once
+#include "serializable_for_lisp.hpp"
 #include "types.hpp"
-#include "usb_device.hpp"
 #include <boost/algorithm/string.hpp>
 #include <chrono>
 #include <cstdint>
@@ -9,7 +9,7 @@
 #include <utility>
 #include <vector>
 
-namespace utils {
+namespace common_utils {
 
 std::string UnUtf8(const std::string &str) noexcept;
 
@@ -110,6 +110,8 @@ std::string EscapeQuotes(const std::string &str) noexcept;
 
 std::string EscapeAll(const std::string &str) noexcept;
 
+std::string HtmlEscape(const std::string& str) noexcept;
+
 /**
  * @brief Utility function for timing
  */
@@ -120,8 +122,4 @@ auto since(std::chrono::time_point<clock_t, duration_t> const &start) {
   return std::chrono::duration_cast<result_t>(clock_t::now() - start);
 }
 
-/// @brief Mock usb list just for develop and testing purposes
-/// @return Mocked vector of Usbdevice
-std::vector<guard::UsbDevice> fakeLibGetUsbList() noexcept;
-
-} // namespace utils
+} // namespace common_utils

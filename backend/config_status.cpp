@@ -1,9 +1,9 @@
 #include "config_status.hpp"
+#include "common_utils.hpp"
 #include "guard_audit.hpp"
 #include "guard_utils.hpp"
 #include "log.hpp"
 #include "systemd_dbus.hpp"
-#include "utils.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/trim.hpp>
@@ -18,8 +18,8 @@
 #include <utility>
 
 namespace guard {
-using guard::utils::Log;
-using ::utils::FindAllFilesInDirRecursive;
+using common_utils::FindAllFilesInDirRecursive;
+using common_utils::Log;
 
 ConfigStatus::ConfigStatus() noexcept
     : udev_warnings_{utils::InspectUdevRules()},
@@ -101,7 +101,7 @@ std::string ConfigStatus::GetDaemonConfigPath() const noexcept {
 
 std::optional<std::string>
 ConfigStatus::ExtractConfigFileName(const std::string &line) const noexcept {
-  using utils::Log;
+  using common_utils::Log;
   std::string res;
   if (!boost::algorithm::contains(line, "ExecStart"))
     return std::nullopt;
@@ -499,8 +499,10 @@ bool ConfigStatus::TryToRun(bool run_daemon) const noexcept {
     Log::Info() << "[TryToRun] Test run - "
                 << ((result.has_value() && *result) ? "OK" : "FAIL");
     if (!run_daemon) {
-      Log::Debug() << "[TryToRun] stopping sercice";
+      Log::Debug() << "[TryToRun] stopping service";
       sysd.StopUnit(usb_guard_daemon_name);
+    } else {
+      StartUsbguardDbus(true, sysd);
     }
     return result.value_or(false);
   }
@@ -517,6 +519,8 @@ bool ConfigStatus::TryToRun(bool run_daemon) const noexcept {
               << (result.value_or(false) ? "OK" : "FAIL");
   if (init_state.has_value() && !init_state.value_or(false) && !run_daemon) {
     sysd.StopUnit(usb_guard_daemon_name);
+  } else {
+    StartUsbguardDbus(true, sysd);
   }
   return result.value_or(false);
 }
@@ -528,6 +532,40 @@ std::optional<GuardAudit> ConfigStatus::GetAudit() const noexcept {
     Log::Error() << "Can't get GuardAudit";
     return std::nullopt;
   }
+}
+
+bool ConfigStatus::StartUsbguardDbus(
+    bool start, dbus_bindings::Systemd &sysd) const noexcept {
+  std::optional<bool> dbus_start_res;
+  if (start) {
+    Log::Debug() << "[StartUsbguardDbus] Starting usbguard-dbus service";
+    dbus_start_res = sysd.StartUnit(usb_guard_dbus_daemon_name);
+    Log::Debug() << "[StartUsbguardDbus] "
+                 << (dbus_start_res.value_or(false) ? "OK" : "FAILED");
+  } else {
+    Log::Debug() << "[StopUsbguardDbus] Stoping usbguard-dbus service";
+    dbus_start_res = sysd.StopUnit(usb_guard_dbus_daemon_name);
+    Log::Debug() << "[StopUsbguardDbus] "
+                 << (dbus_start_res.value_or(false) ? "OK" : "FAILED");
+  }
+  return dbus_start_res.value_or(false);
+}
+
+bool ConfigStatus::EnableUsbguardDbus(
+    bool enable, dbus_bindings::Systemd &sysd) const noexcept {
+  std::optional<bool> dbus_enable_res;
+  if (enable) {
+    Log::Debug() << "[EnableUsbguardDbus] Enabling usbguard-dbus service";
+    dbus_enable_res = sysd.EnableUnit(usb_guard_dbus_daemon_name);
+    Log::Debug() << "[EnableUsbguardDbus] "
+                 << (dbus_enable_res.value_or(false) ? "OK" : "FAILED");
+  } else {
+    Log::Debug() << "[DisableUsbguardDbus] Disabling usbguard-dbus service";
+    dbus_enable_res = sysd.DisableUnit(usb_guard_dbus_daemon_name);
+    Log::Debug() << "[DisableUsbguardDbus] "
+                 << (dbus_enable_res.value_or(false) ? "OK" : "FAILED");
+  }
+  return dbus_enable_res.value_or(false);
 }
 
 bool ConfigStatus::ChangeDaemonStatus(bool active,
@@ -560,6 +598,7 @@ bool ConfigStatus::ChangeDaemonStatus(bool active,
       Log::Error() << "[ChangeDaemonStatus] Can't start the USBGuard";
       return false;
     }
+    StartUsbguardDbus(true, sysd);
   }
   // if now the daemon is enabled and we need to disable it
   if (*enabled_state && !enabled) {
@@ -569,6 +608,7 @@ bool ConfigStatus::ChangeDaemonStatus(bool active,
       Log::Error() << "Can't disable the USBGuard";
       return false;
     }
+    EnableUsbguardDbus(false, sysd);
   } else if (!*enabled_state && enabled) {
     auto res = sysd.EnableUnit(usb_guard_daemon_name);
     Log::Info() << "Enabling the service";
@@ -576,6 +616,7 @@ bool ConfigStatus::ChangeDaemonStatus(bool active,
       Log::Error() << "[ChangeDaemonStatus] Can't enable the USBGuard";
       return false;
     }
+    EnableUsbguardDbus(true, sysd);
   }
   return true;
 }

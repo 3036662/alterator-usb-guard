@@ -6,32 +6,53 @@ add_compile_options(-Wall -Wextra -pedantic)
 project(alterator_usbguard LANGUAGES CXX VERSION 0.1)
 
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(USBGUARD REQUIRED IMPORTED_TARGET libusbguard)
 message("USBGUARD_FOUND: ${USBGUARD_FOUND}")
-
 find_package(Boost REQUIRED)
-
 include(GNUInstallDirs)
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-
 # dbus + systemd
 find_package(sdbus-c++ REQUIRED)
-pkg_check_modules(SYSDTEMD REQUIRED systemd )
+pkg_check_modules(SYSTEMD REQUIRED IMPORTED_TARGET systemd)
 
 
-# backend
+
+# alterator lisp bingings
+add_subdirectory(alterator_bindings)
+
+# common
+
+add_subdirectory(common)
+
+
+
+# backend for alterator-usbguard
+IF (DEFINED USBGUARD)
+pkg_check_modules(USBGUARD REQUIRED IMPORTED_TARGET libusbguard)
 add_subdirectory(backend)
+ENDIF (DEFINED USBGUARD)
 
-# for now - required only for fstab test
-#pkg_check_modules(UDEV REQUIRED IMPORTED_TARGET libudev)
-#add_executable(test_fstab fstab_test.cpp)
-#target_link_libraries(test_fstab PRIVATE PkgConfig::UDEV)
-#target_include_directories(test_fstab PUBLIC ${UDEV_INCLUDE_DIRS})
+# the daemon
+IF (DEFINED USBMOUNT)
+# libudev
+pkg_check_modules(UDEV REQUIRED IMPORTED_TARGET libudev)
+message("Building daemon...")
+add_subdirectory(daemon)
+# alterator-usb-mount
+add_subdirectory(alterator_usbmount)
+ENDIF (DEFINED USBMOUNT)
 
-# android vid_pid parser
+
+# only for debug
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-add_subdirectory(android_vidpid_parser)
+    # android vid_pid parser
+    add_subdirectory(android_vidpid_parser)
+    # the automount
+    message("Building automount...")
+    add_subdirectory(automount)
+    # fstab test
+    add_executable(test_fstab fstab_test.cpp)
+    target_link_libraries(test_fstab PRIVATE PkgConfig::UDEV)
+    target_include_directories(test_fstab PUBLIC ${UDEV_INCLUDE_DIRS})    
 endif()
 
 # tests
@@ -42,7 +63,6 @@ IF (DEFINED UNIT_TEST)
 ENDIF (DEFINED UNIT_TEST)
 
 # docs
-
 IF (DEFINED BUILD_DOCS)
 find_package(Doxygen)
 if (DOXYGEN_FOUND)

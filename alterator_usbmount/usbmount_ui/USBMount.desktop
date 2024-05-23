@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Categories=X-Alterator-System
+Icon=sysinfo
+Terminal=false
+Name=USBMount
+X-Alterator-URI=/usbmount
+X-Alterator-Weight=20
+X-Alterator-UI=html
+Name[ru]=USBMount

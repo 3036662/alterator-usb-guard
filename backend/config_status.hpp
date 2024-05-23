@@ -2,7 +2,8 @@
 
 #include "guard_audit.hpp"
 #include "guard_rule.hpp"
-#include "serializible_for_lisp.hpp"
+#include "serializable_for_lisp.hpp"
+#include "systemd_dbus.hpp"
 #include "types.hpp"
 #include <optional>
 #include <set>
@@ -170,7 +171,13 @@ private:
    */
   bool ExtractAuditFilePath(const std::string &line) noexcept;
 
+  bool StartUsbguardDbus(bool start,
+                         dbus_bindings::Systemd &sysd) const noexcept;
+  bool EnableUsbguardDbus(bool enable,
+                          dbus_bindings::Systemd &sysd) const noexcept;
+
   const std::string usb_guard_daemon_name = "usbguard.service";
+  const std::string usb_guard_dbus_daemon_name = "usbguard-dbus.service";
   const std::string unit_dir_path = "/lib/systemd/system";
   const std::string usbguard_default_config_path =
       "/etc/usbguard/usbguard-daemon.conf";

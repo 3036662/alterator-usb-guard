@@ -183,14 +183,37 @@ $(document).ready(function () {
  CatchTableHeaderCheckbok('list_interface_rules');
  CatchTableHeaderCheckbok('list_unsorted_rules');
 
-
+ InitLogs();
 
 }); // .ready
 
+//buttons[i].disabled = false;
+//buttons[i].classList.remove("ui-state-disabled");
 
 // show validation result in tables
 function ValidationResponseCallback(data){
   $(".validator_appended").remove();
+  try{
+     let crossed=document.getElementById('list_hash_rules').tBodies[0].querySelectorAll('tr.crossed-out');
+     crossed.forEach(tr=>{
+        tr.classList.remove('crossed-out');
+     });
+     crossed=document.getElementById('list_unsorted_rules').tBodies[0].querySelectorAll('tr.crossed-out');
+     crossed.forEach(tr=>{
+        tr.classList.remove('crossed-out');
+     });
+     crossed=document.getElementById('list_vidpid_rules').tBodies[0].querySelectorAll('tr.crossed-out');
+     crossed.forEach(tr=>{
+        tr.classList.remove('crossed-out');
+     });
+     crossed=document.getElementById('list_interface_rules').tBodies[0].querySelectorAll('tr.crossed-out');
+     crossed.forEach(tr=>{
+        tr.classList.remove('crossed-out');
+     });
+  }
+  catch (e){
+    console.log(e.message);
+  }
   if ( data==="") return;  
   let response=JSON.parse(data);
   if (response["STATUS"] ==="OK" && response["ACTION"]==="apply"){
@@ -491,8 +514,6 @@ function DisableManualModeButtons(){
   ActivateManualModeButtons(false);
 }
 
-
-
 // check all appended rules if checkbox in table header is checked
 function CatchTableHeaderCheckbok(table_id){
   let checkboxTh = $("#"+table_id+" th input[type='checkbox']:first");
@@ -511,23 +532,30 @@ function CatchTableHeaderCheckbok(table_id){
   }
 }
 
+function HideButtonsByPolicy(policy){
+ if (policy==="block"){
+  document.getElementById('btn_prsnt_dev_block').classList.add('hidden');
+  document.getElementById('btn_prsnt_dev_add').classList.remove('hidden');
+ }else{
+  document.getElementById('btn_prsnt_dev_block').classList.remove('hidden');
+  document.getElementById('btn_prsnt_dev_add').classList.add('hidden');
+ }
+}
+
 // disable block button if already blocked
 // prevent blocking already block (and unblocking already unblocked)
 function CatchDeviceSelection(){ 
- // enable block button
- if ($("#btn_prsnt_dev_block").hasClass("disabled_by_block_rule")){
-  $("#btn_prsnt_dev_block").removeClass("disabled_by_block_rule");
-  $("#btn_prsnt_dev_block").removeClass("ui-state-disabled");
-  document.getElementById('btn_prsnt_dev_block').disabled=false; 
-}
-// enable allow button
- if ($("#btn_prsnt_dev_add").hasClass("disabled_by_allow_rule")){
-  $("#btn_prsnt_dev_add").removeClass("disabled_by_allow_rule");
-  $("#btn_prsnt_dev_add").removeClass("ui-state-disabled");
-  document.getElementById('btn_prsnt_dev_add').disabled=false;
-}
-
-// bind click
+ // disable both buttons  
+ let button_block=document.getElementById('btn_prsnt_dev_block');
+ button_block.classList.add('disabled_by_block_rule');
+ button_block.classList.add('ui-state-disabled');
+ button_block.disabled=true; 
+ // enable allow button
+ let button_allow=document.getElementById('btn_prsnt_dev_add');
+ button_allow.classList.add('disabled_by_allow_rule');
+ button_allow.classList.add('ui-state-disabled');
+ button_allow.disabled=true;
+ // bind click
  $('#devices_list_table tr').bind('click',(function() {
   var status = $(this).find('span[name="label_prsnt_usb_status"]').text();
   if (status==="allow"){
@@ -566,5 +594,130 @@ function UpdateTextArrea(id,data){
   var textareaElement = $('textarea[name="'+id+'"]');
   if (textareaElement.length > 0) {
     textareaElement.val(data);
+  }
+}
+
+// --------- Logs -------------
+
+/**
+ * @brief Disable a button
+ * @param {HtmlElement} button 
+ */
+function DisableButton(button) {
+  if (!button) return;
+  button.disabled = true;
+  button.classList.add('like_btn_disabled');
+  button.classList.remove('like_btn');
+}
+
+
+/**
+ * @brief Enable a button
+ * @param {HtmlElement} button 
+ */
+function EnableButton(button) {
+  if (!button) return;
+  button.disabled = false;
+  button.classList.remove('like_btn_disabled');
+  button.classList.add('like_btn');
+}
+
+function LockLogPagination(){
+  DisableButton(document.getElementById('btn_prev_page'));
+  DisableButton(document.getElementById('btn_next_page'));
+}
+
+function InitLogs(){
+  document.getElementById('show_logs_button').addEventListener('click',e=>{
+      document.getElementById('logs_table').classList.remove('hidden');
+      e.target.classList.add('hidden');
+      document.getElementById('hide_logs_button').classList.remove('hidden');
+  });
+
+  document.getElementById('hide_logs_button').addEventListener('click',e=>{
+      document.getElementById('logs_table').classList.add('hidden');
+      e.target.classList.add('hidden');
+      document.getElementById('show_logs_button').classList.remove('hidden');
+  });
+
+  document.getElementById('btn_prev_page').addEventListener('click',e=>{
+      if (window.log_current_page<window.log_total_pages){
+          ++window.log_current_page;
+          document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
+          LockLogPagination();
+          document.getElementById('hidd_inp_curr_page').dispatchEvent(new Event("page_change"));
+      }        
+  });
+
+  document.getElementById('btn_next_page').addEventListener('click',e=>{
+      if (window.log_current_page>0){
+       --window.log_current_page;
+       document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
+       LockLogPagination();
+       document.getElementById('hidd_inp_curr_page').dispatchEvent(new Event("page_change"));
+      }
+  });
+
+  document.getElementById('log_search_button').addEventListener('click',e=>{
+      window.log_current_page=0;
+      document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
+      let input_val=document.getElementById('log_search_input').value.replace(/[&<>"']/g, "");
+      document.getElementById('log_search_input').value=input_val;
+      document.getElementById('hidd_inp_filter').value=input_val;
+      DisableButton(e.target);
+      LockLogPagination();
+      document.getElementById('hidd_inp_curr_page').dispatchEvent(new Event("page_change"));
+  });
+
+  document.getElementById('log_search_input').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      document.getElementById('log_search_button').dispatchEvent(new Event('click'));
+    }
+  });
+}
+
+function UnEscape(htmlStr) {
+  htmlStr = htmlStr.replace(/&#9;/g , "\t");	 
+  htmlStr = htmlStr.replace(/&#10;/g , "\n");     
+  htmlStr = htmlStr.replace(/&#34;/g , "\"");  
+  htmlStr = htmlStr.replace(/&#39;/g , "\'");   
+  htmlStr = htmlStr.replace(/&#92;/g , "\\");
+  return htmlStr;
+}
+
+
+
+function SetLogData(data){
+  try{
+    let obj_data=JSON.parse(data);
+    // disable all id type is audit , just show a message
+    if (obj_data.audit_type!=="file"){
+      LockLogPagination();
+      DisableButton(document.getElementById('log_search_button'));
+      document.getElementById('log_textarea').textContent=document.getElementById('span_audit_message').textContent;
+      document.getElementById('tr_page_info').classList.add('hidden');
+      document.getElementById('log_search_input').disabled=true;
+      return;
+    }
+    window.log_current_page=obj_data.current_page;
+    window.log_total_pages=obj_data.total_pages;
+    document.getElementById('log_textarea').textContent=UnEscape(obj_data.data.join('\n\n'));
+    document.getElementById('hidd_inp_curr_page').value=obj_data.current_page;
+    document.getElementById('span_curr_page').textContent=" "+(window.log_current_page+1)+" ";
+    document.getElementById('span_total_pages').textContent=" "+(window.log_total_pages+1);
+    if ( window.log_current_page===0){
+      DisableButton(document.getElementById('btn_next_page'));
+    } else if (window.log_current_page>0){
+      EnableButton(document.getElementById('btn_next_page'));
+    }
+    if (window.log_current_page>= window.log_total_pages){
+      DisableButton(document.getElementById('btn_prev_page'));
+    } else {
+      EnableButton(document.getElementById('btn_prev_page'));
+    }
+    EnableButton(document.getElementById('log_search_button'));
+  }
+  catch(e){
+      console.log(e.message);
   }
 }

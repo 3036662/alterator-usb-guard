@@ -1,7 +1,7 @@
 #include "guard_rule.hpp"
+#include "common_utils.hpp"
 #include "guard_utils.hpp"
 #include "log.hpp"
-#include "utils.hpp"
 #include <algorithm>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
@@ -16,9 +16,9 @@
 
 namespace guard {
 
-using guard::utils::Log;
-using ::utils::EscapeQuotes;
-using ::utils::QuoteIfNotQuoted;
+using common_utils::EscapeQuotes;
+using common_utils::Log;
+using common_utils::QuoteIfNotQuoted;
 
 // static
 const std::map<Target, std::string> GuardRule::map_target{
@@ -92,11 +92,13 @@ GuardRule::GuardRule(const std::string &raw_str) {
   // the string. default_predicat - Function is the default behavior of values
   // validating.
   // hash length MUST be > 7 symbols
-  hash_ = utils::ParseToken(
-      tokens, "hash", [](const std::string &val) { return val.size() > 7; });
+  hash_ = utils::ParseToken(tokens, "hash", [](const std::string &val) {
+    return val.size() > 7 && val.size() < 101;
+  });
   parent_hash_ =
-      utils::ParseToken(tokens, "parent-hash",
-                        [](const std::string &val) { return val.size() > 7; });
+      utils::ParseToken(tokens, "parent-hash", [](const std::string &val) {
+        return val.size() > 7 && val.size() < 101;
+      });
   device_name_ = utils::ParseToken(tokens, "name", default_predicat);
   serial_ = utils::ParseToken(tokens, "serial", default_predicat);
   port_ = ParseTokenWithOperator(tokens, "via-port", default_predicat);

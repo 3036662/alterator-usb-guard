@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-26 15:47+0300\n"
-"PO-Revision-Date: 2024-03-26 15:55+0300\n"
+"POT-Creation-Date: 2024-05-07 13:30+0300\n"
+"PO-Revision-Date: 2024-05-07 13:32+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -59,172 +59,182 @@ msgid "Use usb ports control"
 msgstr "Активировать контроль портов"
 
 #: стандартный ввод:12
-msgid "Connnected usb devices:"
-msgstr "Подключенные usb-устройства:"
-
-#: стандартный ввод:13
 msgid "List of devices"
 msgstr "Список устройств"
 
-#: стандартный ввод:14 ввод:39 ввод:47
+#: стандартный ввод:13 ввод:38 ввод:46
 msgid "Port"
 msgstr "Порт"
 
-#: стандартный ввод:15 ввод:44
+#: стандартный ввод:14 ввод:43
 msgid "Vendor"
 msgstr "Вендор"
 
-#: стандартный ввод:16 ввод:46
+#: стандартный ввод:15 ввод:45
 msgid "Product"
 msgstr "Название"
 
-#: стандартный ввод:17
+#: стандартный ввод:16
 msgid "SN"
 msgstr "Серийный номер"
 
-#: стандартный ввод:18 ввод:52
+#: стандартный ввод:17 ввод:51
 msgid "Hash"
 msgstr "Хэш"
 
-#: стандартный ввод:19
+#: стандартный ввод:18
 msgid "Status"
 msgstr "Статус"
 
-#: стандартный ввод:20
+#: стандартный ввод:19
 msgid "Scan plugged-in USB devices"
 msgstr "Сканировать устройства"
 
-#: стандартный ввод:21
+#: стандартный ввод:20
 msgid "Allow device"
 msgstr "Разблокировать"
 
-#: стандартный ввод:22
+#: стандартный ввод:21
 msgid "Block device"
 msgstr "Заблокировать"
 
-#: стандартный ввод:23
+#: стандартный ввод:22
 msgid "Presets"
 msgstr "Предустановки"
 
-#: стандартный ввод:24
+#: стандартный ввод:23
 msgid "White list:"
 msgstr "Белый список:"
 
+#: стандартный ввод:24
+msgid "Block everything except connected devices"
+msgstr "Заблокировать все, кроме подключенных устройств"
+
 #: стандартный ввод:25
-msgid "Block everything except connected devices."
-msgstr "Заблокировать все, кроме подключенных устройств."
+msgid "Block everything except connected and HID/HUB devices"
+msgstr "Заблокировать все, кроме подключенных и HID/HUB устройств"
 
-#: стандартный ввод:26
-msgid "Block everything except connected and HID/DUB devices."
-msgstr "Заблокировать все, кроме подключенных и HID/DUB устройств."
-
-#: стандартный ввод:27 ввод:31
+#: стандартный ввод:26 ввод:30
 msgid "Manual mode"
 msgstr "Ручной режим"
 
-#: стандартный ввод:28
+#: стандартный ввод:27
 msgid "Black list:"
 msgstr "Черный список:"
 
-#: стандартный ввод:29
+#: стандартный ввод:28
 msgid ""
 "Block devices by classes of interface descriptors: 06 Image and 08 Mass "
-"Storage (example)."
+"Storage"
 msgstr ""
 "Блокировать устройства по классам дескриптора интерфейса: 06 Image и 08 Mass "
-"Storage (пример)"
+"Storage"
 
-#: стандартный ввод:30
-msgid ""
-"Block devices by a list of known PIDs and VIDs using Android Debug Bus "
-"(example)."
+#: стандартный ввод:29
+msgid "Block devices by a list of known PIDs and VIDs using Android Debug Bus"
 msgstr ""
 "Блокировать устройства по списку известных  PID:VID, использующих  Аndroid "
-"Debug Bus (пример)"
+"Debug Bus"
 
-#: стандартный ввод:32
+#: стандартный ввод:31
 msgid "Unsorted rules"
 msgstr "Другие правила"
 
-#: стандартный ввод:33
+#: стандартный ввод:32
 msgid "Rule"
 msgstr "Правило"
 
-#: стандартный ввод:34 ввод:40 ввод:48 ввод:54
+#: стандартный ввод:33 ввод:39 ввод:47 ввод:53
 msgid "Action"
 msgstr "Действие"
 
-#: стандартный ввод:35 ввод:41 ввод:49 ввод:56
+#: стандартный ввод:34 ввод:40 ввод:48 ввод:55
 msgid "Add"
 msgstr "Добавить"
 
-#: стандартный ввод:36 ввод:42 ввод:50 ввод:57
+#: стандартный ввод:35 ввод:41 ввод:49 ввод:56
 msgid "Delete"
 msgstr "Удалить"
 
-#: стандартный ввод:37
+#: стандартный ввод:36
 msgid "Masks CC:SS:PP"
 msgstr "Маски CC:SS:PP"
 
-#: стандартный ввод:38 ввод:53
+#: стандартный ввод:37 ввод:52
 msgid "Description"
 msgstr "Описание"
 
-#: стандартный ввод:43
+#: стандартный ввод:42
 msgid "Masks VID:PID"
 msgstr "Маски VID:PID"
 
-#: стандартный ввод:45
+#: стандартный ввод:44
 msgid "PID"
 msgstr "PID"
 
-#: стандартный ввод:51
+#: стандартный ввод:50
 msgid "Mask Hash"
 msgstr "Хэш"
 
-#: стандартный ввод:55
+#: стандартный ввод:54
 msgid "Load from file"
 msgstr "Загрузить из файла"
 
-#: стандартный ввод:58
+#: стандартный ввод:57
 msgid "This file is empty."
 msgstr "Загружен пустой файл."
 
-#: стандартный ввод:59
-msgid "This file is too big. Limit 1 MB."
+#: стандартный ввод:58
+msgid "This file is too big. Limit is 1 MB."
 msgstr "Слишком большой файл. Максимальный размер - 1 Мегабайт."
 
-#: стандартный ввод:60
+#: стандартный ввод:59
 msgid "Error. The file contains rules with conflicting targets."
 msgstr "Ошибка. Файл содержит конфликтующие правила."
 
+#: стандартный ввод:60
+msgid "Save"
+msgstr "Применить"
+
 #: стандартный ввод:61
-msgid "SAVE ALL RULES"
-msgstr "ПРИМЕНИТЬ"
+msgid "Check"
+msgstr "Проверить"
 
 #: стандартный ввод:62
-msgid "CHECK THE RULES"
-msgstr "ПРОВЕРИТЬ"
+msgid "Show log"
+msgstr "Журнал"
 
 #: стандартный ввод:63
-msgid "SHOW LOG"
-msgstr "ЖУРНАЛ"
+msgid "Hide log"
+msgstr "Свернуть"
 
 #: стандартный ввод:64
-msgid "HIDE LOG"
-msgstr "СВЕРНУТЬ"
+msgid "Filter"
+msgstr "Фильтровать"
 
 #: стандартный ввод:65
-msgid "FILTER"
-msgstr "ФИЛЬТРОВАТЬ"
+msgid "◁ Previous"
+msgstr "◁ Назад"
 
 #: стандартный ввод:66
-msgid "PREVIOS"
-msgstr "НАЗАД"
+msgid "Next ▷"
+msgstr "Вперед ▷"
 
 #: стандартный ввод:67
-msgid "NEXT "
-msgstr "ВПЕРЕД "
+msgid ""
+"A Linux audit is used for logging. You can inspect it with ausearch -ts "
+"recent -m USER_DEVICE"
+msgstr ""
+"Запись ведется в Linux Audit. Используйте ausearch -ts recent -m USER_DEVICE "
+"или другие средства просмотра Audit"
+
+#: стандартный ввод:68
+msgid "Page"
+msgstr "Страница"
+
+#: стандартный ввод:69
+msgid "of"
+msgstr "из"
 
 #: ajax.scm:75
 msgid "Autorun is ENABLED"
@@ -242,7 +252,7 @@ msgstr "Процесс  АКТИВЕН"
 msgid "Process is STOPPED"
 msgstr "Процесс  НЕАКТИВЕН"
 
-#: ajax.scm:153
+#: ajax.scm:144
 msgid ""
 "Error while trying to unblock a selected device. You can unblock it by "
 "creating a hash rule or interface rule."
@@ -250,11 +260,11 @@ msgstr ""
 "Ошибка при попытке разблокировать выбранное устройство. Вы можете "
 "разблокировать его, добавив правило по хэшу или интерфейсу."
 
-#: ajax.scm:166
+#: ajax.scm:157
 msgid "Error while trying to block a selected device"
 msgstr "Ошибка при попытке заблокировать выбранное устройство"
 
-#: ajax.scm:179 ajax.scm:190
+#: ajax.scm:170 ajax.scm:181
 msgid ""
 "An error occurred when starting the USB Guard with new rules. We recommend "
 "checking the rules and configuration files for correctness."
@@ -262,25 +272,41 @@ msgstr ""
 "Произошла ошибка при запуске USBGuard с новыми правилами. Мы рекомендуем "
 "проверить правила и файлы конфигурации на корректность."
 
-#: ajax.scm:213
+#: ajax.scm:204
 msgid "An empty csv file. Parsed 0 rules."
 msgstr "Пустой csv-файл. Загружено 0 правил."
 
-#: ajax.scm:214
+#: ajax.scm:205
 msgid "An error occured while parsing csv file"
 msgstr "Произошла ошибка при разборе csv-файла"
-
-#: ajax.scm:260
-msgid ""
-"A Linux audit is used for logging. You can inspect it with ausearch -ts "
-"recent -m USER_DEVICE"
-msgstr ""
-"Запись ведется в Linux Audit. Используйте ausearch -ts recent -m USER_DEVICE "
-"или другие средства просмотра  Audit"
 
 #: стандартный ввод:1
 msgid "USBGuard"
 msgstr "USBGuard  Контроль USB"
+
+#~ msgid "Connnected usb devices:"
+#~ msgstr "Подключенные usb-устройства:"
+
+#~ msgid "SAVE ALL RULES"
+#~ msgstr "ПРИМЕНИТЬ"
+
+#~ msgid "CHECK THE RULES"
+#~ msgstr "ПРОВЕРИТЬ"
+
+#~ msgid "SHOW LOG"
+#~ msgstr "ЖУРНАЛ"
+
+#~ msgid "HIDE LOG"
+#~ msgstr "СВЕРНУТЬ"
+
+#~ msgid "FILTER"
+#~ msgstr "ФИЛЬТРОВАТЬ"
+
+#~ msgid "PREVIOS"
+#~ msgstr "НАЗАД"
+
+#~ msgid "NEXT "
+#~ msgstr "ВПЕРЕД "
 
 #~ msgid "Block only USB Mass Storage, MTP/PTP."
 #~ msgstr "Блокировать только USB накопители и MTP/PTP."

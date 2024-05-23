@@ -13,8 +13,13 @@ public:
 
 template <> class SerializableForLisp<vecPairs> {
   vecPairs vec;
-
 public:
   explicit SerializableForLisp(vecPairs &&vec_) : vec{std::move(vec_)} {};
   vecPairs SerializeForLisp() const { return vec; }
+};
+
+/// @brief Interface for polimorphic classes 
+class ISerializableForLisp{
+public:
+  virtual vecPairs SerializeForLisp() const noexcept=0;
 };

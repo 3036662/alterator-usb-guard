@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html wf="none">
+
+<head>
+  <link type="text/css" rel="stylesheet" href="/design/styles/alt_usb_mount.css" />
+  <script src="/design/scripts/alt_usb_mount.js" />
+</head>
+<body>
+    <table id="daemon_status">
+     <tr> 
+      <td class="td_vertical_center">
+        <label class="switch">
+        <input id="checkbox_daemon_status" type="checkbox"/>
+        <span class="slider round"></span>    
+      </label>    
+      </td>
+      <td class="td_vertical_center" id="run_daemon_label">
+        <span class="hidden" id="lbl_run_daemon"  translate="_">The USBMount service is active</span>
+        <span class="hidden" id="lbl_stop_daemon" translate="_">The USBMount service is inactive</span>
+      </td>
+      <td class="td_vertical_center">
+        <input type="button" name="btn_save_status" class="like_btn" value="SAVE" id="btn_save_status" />
+      </td>
+     </tr>
+    </table>
+    <div class="tip_wrapper hidden" id="id_tip_run_service">
+      <span translate="_">The service is not currently active, but you can turn it on to start using it.</span>
+    </div>
+  <div id="interface_wrap">  
+    <form method="POST">
+    <table id="devices_list_table" class="alterator-listbox single-select" align="center" name="list_prsnt_devices">
+      <caption><span translate="_">List of devices</span></caption>
+      <thead>
+        <tr>
+          <th>N</th>
+          <th><span translate="_">Block</span></th>
+          <th><span translate="_">Filesystem</span></th>
+          <th><span translate="_">VID</span></th>
+          <th><span translate="_">PID</span></th>
+          <th><span translate="_">SN</span></th>
+          <th><span translate="_">Status</span></th>
+          <th><span translate="_">Mount</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="wrap">
+          <td><span class="alterator-label" name="name" /></td>
+          <td><span class="alterator-label" name="lbl_block" /></td>
+          <td><span class="alterator-label" name="lbl_fs" /></td>
+          <td><span class="alterator-label" name="lbl_vid" /></td>
+          <td><span class="alterator-label" name="lbl_pid" /></td>
+          <td><span class="alterator-label" name="lbl_serial" /></td>
+          <td><span class="alterator-label" name="lbl_status" /></td>
+          <td><span class="alterator-label" name="lbl_mount" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <div name="usb_buttons" class="right_buttons">
+      <input type="button" id="btn_prsnt_scan" name="btn_prsnt_scan" class="btn" value="Scan plugged-in USB devices" />
+      <input type="button" value="Create a rule" class="like_btn" id="btn_create_rule"/>
+    </div>
+ </form> 
+<div class="rules_wrap">
+    <table id="rules_list_table" class="rules_list" align="center" name="list_rules">
+      <caption><span translate="_">List of rules</span></caption>
+      <thead>
+        <tr>
+          <th><input type="checkbox" class="list_checkbox" /></th>
+          <th>N</th>
+          <th><span translate="_">VID</span></th>
+          <th><span translate="_">PID</span></th>
+          <th><span translate="_">SN</span></th>
+          <th><span translate="_">User</span></th>
+          <th><span translate="_">Group</span></th>
+        </tr>
+      </thead>
+      <tbody tabindex="0">
+
+      </tbody>
+    </table>
+    <!--  <div class="left_buttons">
+      <input type="button" class="like_btn" value="Delete checked rows" id="delete_rule_btn" />  
+      <input type="button" class="like_btn" value="Reset all" id="reset_all_btn" /> 
+    </div> -->
+    <div class="right_buttons">
+      <input type="button" class="like_btn" value="Edit" id="edit_rule_btn" />
+      <input type="button" class="like_btn" value="Reset row" id="reset_rule_btn" />
+     <!-- <input type="button" class="like_btn" value="Delete current" id="delete_curr_btn"/> -->
+      <input type="button" class="like_btn" value="Delete rule" id="delete_rule_btn" /> 
+      <input type="button" class="like_btn" value="Add" id="add_rule_btn" />
+    </div>
+    <div class="separator"></div>
+    <div class="right_buttons">
+      <input type="button" class="like_btn" value="SAVE" id="btn_save" name="btn_save"/>      
+    </div>
+  </div>
+  <div class="separator"></div>
+  <div  class="validation_warning" id="validation_warning"><span translate="_">Some invalid values were provided,please check the red cells</span></div>
+  <div  class="validation_warning" id="validation_warning_duplicate"><span translate="_">Some duplicate rules were provided,please check the red cells</span></div>
+<form class=".hidden"><input type="hidden" name="new_rules_data" id="hidden_inp_data_to_save"/></form> 
+</div>
+<div class="separator"></div>
+<form id="logs_form" onsubmit="return false;">
+      <input type="button" class="like_btn" id="show_logs_button" name="show_logs_button" value="Show log" />
+      <input type="button" class="like_btn hidden" id="hide_logs_button" name="hide_logs_button" value="Hide log" />
+      <table style="width:100%" name="logs_table" id="logs_table" class="hidden">
+        <tbody>
+          <tr>
+          <td colspan="1" class="td_vertical_center">
+            <input name="log_search_input" id="log_search_input"/>            
+            <input name="log_search_button" id="log_search_button" type="button" class="like_btn" value="Filter"/>
+          </td>            
+          </tr>
+          <tr>
+          <td colspan="2">
+            <textarea  name="log_textarea" id="log_textarea" readonly="readonly"></textarea>
+          </td>
+          </tr>
+          <tr>
+          <td colspan="2" class="cell_center">
+            <input type="button" id="btn_prev_page" name="prev_page" class="like_btn" value="&#9665; Previous" />
+            <input type="button" id="btn_next_page" name="next_page" class="like_btn" value="Next &#9655;" />
+            <input type="hidden"  id="hidd_inp_curr_page" name="current_page" value="0" />
+            <input type="hidden"  id="hidd_inp_filter" name="log_filter" value="" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="log_page_info cell_center"><span translate="_">Page</span><span id="span_curr_page">0</span><span translate="_">of</span><span id="span_total_pages"></span></td>
+        </tr>
+        </tbody>
+      </table>
+    </form>  
+</body>
+
+</html>

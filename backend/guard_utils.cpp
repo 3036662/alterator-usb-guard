@@ -1,12 +1,12 @@
 #include "guard_utils.hpp"
 #include "base64_rfc4648.hpp"
+#include "common_utils.hpp"
 #include "csv_rule.hpp"
 #include "guard_rule.hpp"
 #include "json_rule.hpp"
 #include "log.hpp"
 #include "rapidcsv.h"
 #include "usb_device.hpp"
-#include "utils.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/json.hpp>
@@ -24,6 +24,8 @@
 
 namespace guard::utils {
 
+using common_utils::Log;
+
 std::optional<std::vector<GuardRule>>
 UploadRulesCsv(const std::string &file) noexcept {
   const size_t kColumnsRequired = 2;
@@ -32,7 +34,7 @@ UploadRulesCsv(const std::string &file) noexcept {
         cppcodec::base64_rfc4648::decode<std::string>(file);
     csv_string = cppcodec::base64_rfc4648::decode<std::string>(csv_string);
     // Log::Debug() << "CSV WIDE = " << csv_string;
-    csv_string = ::utils::UnUtf8(csv_string);
+    csv_string = common_utils::UnUtf8(csv_string);
     // Log::Debug() << "CSV (UnUtf8) = " << csv_string;
     std::stringstream sstream(csv_string);
     rapidcsv::Document doc(sstream, rapidcsv::LabelParams(-1, -1),
@@ -187,7 +189,7 @@ std::vector<std::string> FoldUsbInterfacesList(std::string i_type) {
 
 std::unordered_map<std::string, std::string>
 MapVendorCodesToNames(const std::unordered_set<std::string> &vendors) noexcept {
-  using guard::utils::Log;
+  using common_utils::Log;
   std::unordered_map<std::string, std::string> res;
   const std::string path_to_usb_ids = "/usr/share/misc/usb.ids";
   try {
@@ -270,13 +272,17 @@ bool InterfaceValidator(const std::string &val) noexcept {
   }
   if (spl.size() != 3)
     return false;
-  if (spl[0] == "*" && (spl[1] != "*" || spl[2] != "*"))
+  if (spl[0] == "*")
     return false;
   if (spl[1] == "*" && spl[2] != "*")
     return false;
   for (const auto &element : spl) {
-    if (element.size() != 2 && element == "*")
-      return true;
+    if (element.size() != 2) {
+      if (element == "*")
+        continue;
+      else
+        return false;
+    }
     try {
       size_t pos = 0;
       std::stoi(element, &pos, 16);
@@ -518,7 +524,7 @@ std::unordered_map<std::string, std::string> InspectUdevRules(
     // Log::Info() << "Inspecting udev folder " << path;
     // find all files in folder
     std::vector<std::string> files =
-        ::utils::FindAllFilesInDirRecursive({path, ".rules"});
+        common_utils::FindAllFilesInDirRecursive({path, ".rules"});
     // for each file - check if it contains suspicious strings
     for (const std::string &str_path : files) {
       try {

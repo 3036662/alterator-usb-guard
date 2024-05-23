@@ -1,0 +1,156 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-21 14:04+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: стандартный ввод:1
+msgid "The USBMount service is active"
+msgstr ""
+
+#: стандартный ввод:2
+msgid "The USBMount service is inactive"
+msgstr ""
+
+#: стандартный ввод:3 ввод:25
+msgid "SAVE"
+msgstr ""
+
+#: стандартный ввод:4
+msgid ""
+"The service is not currently active, but you can turn it on to start using "
+"it."
+msgstr ""
+
+#: стандартный ввод:5
+msgid "List of devices"
+msgstr ""
+
+#: стандартный ввод:6
+msgid "Block"
+msgstr ""
+
+#: стандартный ввод:7
+msgid "Filesystem"
+msgstr ""
+
+#: стандартный ввод:8 ввод:16
+msgid "VID"
+msgstr ""
+
+#: стандартный ввод:9 ввод:17
+msgid "PID"
+msgstr ""
+
+#: стандартный ввод:10 ввод:18
+msgid "SN"
+msgstr ""
+
+#: стандартный ввод:11
+msgid "Status"
+msgstr ""
+
+#: стандартный ввод:12
+msgid "Mount"
+msgstr ""
+
+#: стандартный ввод:13
+msgid "Scan plugged-in USB devices"
+msgstr ""
+
+#: стандартный ввод:14
+msgid "Create a rule"
+msgstr ""
+
+#: стандартный ввод:15
+msgid "List of rules"
+msgstr ""
+
+#: стандартный ввод:19
+msgid "User"
+msgstr ""
+
+#: стандартный ввод:20
+msgid "Group"
+msgstr ""
+
+#: стандартный ввод:21
+msgid "Edit"
+msgstr ""
+
+#: стандартный ввод:22
+msgid "Reset row"
+msgstr ""
+
+#: стандартный ввод:23
+msgid "Delete rule"
+msgstr ""
+
+#: стандартный ввод:24
+msgid "Add"
+msgstr ""
+
+#: стандартный ввод:26
+msgid "Some invalid values were provided,please check the red cells"
+msgstr ""
+
+#: стандартный ввод:27
+msgid "Some duplicate rules were provided,please check the red cells"
+msgstr ""
+
+#: стандартный ввод:28
+msgid "Show log"
+msgstr ""
+
+#: стандартный ввод:29
+msgid "Hide log"
+msgstr ""
+
+#: стандартный ввод:30
+msgid "Filter"
+msgstr ""
+
+#: стандартный ввод:31
+msgid "◁ Previous"
+msgstr ""
+
+#: стандартный ввод:32
+msgid "Next ▷"
+msgstr ""
+
+#: стандартный ввод:33
+msgid "Page"
+msgstr ""
+
+#: стандартный ввод:34
+msgid "of"
+msgstr ""
+
+#: ajax.scm:30
+msgid "Save rules operation FAILED"
+msgstr ""
+
+#: ajax.scm:44
+msgid "Error starting the service"
+msgstr ""
+
+#: ajax.scm:51
+msgid "Error stop the service"
+msgstr ""
+
+#: стандартный ввод:1
+msgid "USBMount"
+msgstr ""

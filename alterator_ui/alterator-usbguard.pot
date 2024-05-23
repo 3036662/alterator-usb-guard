@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-26 15:47+0300\n"
+"POT-Creation-Date: 2024-05-07 13:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: стандартный ввод:1
@@ -62,167 +62,175 @@ msgid "Use usb ports control"
 msgstr ""
 
 #: стандартный ввод:12
-msgid "Connnected usb devices:"
-msgstr ""
-
-#: стандартный ввод:13
 msgid "List of devices"
 msgstr ""
 
-#: стандартный ввод:14 ввод:39 ввод:47
+#: стандартный ввод:13 ввод:38 ввод:46
 msgid "Port"
 msgstr ""
 
-#: стандартный ввод:15 ввод:44
+#: стандартный ввод:14 ввод:43
 msgid "Vendor"
 msgstr ""
 
-#: стандартный ввод:16 ввод:46
+#: стандартный ввод:15 ввод:45
 msgid "Product"
 msgstr ""
 
-#: стандартный ввод:17
+#: стандартный ввод:16
 msgid "SN"
 msgstr ""
 
-#: стандартный ввод:18 ввод:52
+#: стандартный ввод:17 ввод:51
 msgid "Hash"
 msgstr ""
 
-#: стандартный ввод:19
+#: стандартный ввод:18
 msgid "Status"
 msgstr ""
 
-#: стандартный ввод:20
+#: стандартный ввод:19
 msgid "Scan plugged-in USB devices"
 msgstr ""
 
-#: стандартный ввод:21
+#: стандартный ввод:20
 msgid "Allow device"
 msgstr ""
 
-#: стандартный ввод:22
+#: стандартный ввод:21
 msgid "Block device"
 msgstr ""
 
-#: стандартный ввод:23
+#: стандартный ввод:22
 msgid "Presets"
 msgstr ""
 
-#: стандартный ввод:24
+#: стандартный ввод:23
 msgid "White list:"
 msgstr ""
 
+#: стандартный ввод:24
+msgid "Block everything except connected devices"
+msgstr ""
+
 #: стандартный ввод:25
-msgid "Block everything except connected devices."
+msgid "Block everything except connected and HID/HUB devices"
 msgstr ""
 
-#: стандартный ввод:26
-msgid "Block everything except connected and HID/DUB devices."
-msgstr ""
-
-#: стандартный ввод:27 ввод:31
+#: стандартный ввод:26 ввод:30
 msgid "Manual mode"
 msgstr ""
 
-#: стандартный ввод:28
+#: стандартный ввод:27
 msgid "Black list:"
 msgstr ""
 
-#: стандартный ввод:29
+#: стандартный ввод:28
 msgid ""
 "Block devices by classes of interface descriptors: 06 Image and 08 Mass "
-"Storage (example)."
+"Storage"
 msgstr ""
 
-#: стандартный ввод:30
-msgid ""
-"Block devices by a list of known PIDs and VIDs using Android Debug Bus "
-"(example)."
+#: стандартный ввод:29
+msgid "Block devices by a list of known PIDs and VIDs using Android Debug Bus"
 msgstr ""
 
-#: стандартный ввод:32
+#: стандартный ввод:31
 msgid "Unsorted rules"
 msgstr ""
 
-#: стандартный ввод:33
+#: стандартный ввод:32
 msgid "Rule"
 msgstr ""
 
-#: стандартный ввод:34 ввод:40 ввод:48 ввод:54
+#: стандартный ввод:33 ввод:39 ввод:47 ввод:53
 msgid "Action"
 msgstr ""
 
-#: стандартный ввод:35 ввод:41 ввод:49 ввод:56
+#: стандартный ввод:34 ввод:40 ввод:48 ввод:55
 msgid "Add"
 msgstr ""
 
-#: стандартный ввод:36 ввод:42 ввод:50 ввод:57
+#: стандартный ввод:35 ввод:41 ввод:49 ввод:56
 msgid "Delete"
 msgstr ""
 
-#: стандартный ввод:37
+#: стандартный ввод:36
 msgid "Masks CC:SS:PP"
 msgstr ""
 
-#: стандартный ввод:38 ввод:53
+#: стандартный ввод:37 ввод:52
 msgid "Description"
 msgstr ""
 
-#: стандартный ввод:43
+#: стандартный ввод:42
 msgid "Masks VID:PID"
 msgstr ""
 
-#: стандартный ввод:45
+#: стандартный ввод:44
 msgid "PID"
 msgstr ""
 
-#: стандартный ввод:51
+#: стандартный ввод:50
 msgid "Mask Hash"
 msgstr ""
 
-#: стандартный ввод:55
+#: стандартный ввод:54
 msgid "Load from file"
 msgstr ""
 
-#: стандартный ввод:58
+#: стандартный ввод:57
 msgid "This file is empty."
 msgstr ""
 
-#: стандартный ввод:59
-msgid "This file is too big. Limit 1 MB."
+#: стандартный ввод:58
+msgid "This file is too big. Limit is 1 MB."
 msgstr ""
 
-#: стандартный ввод:60
+#: стандартный ввод:59
 msgid "Error. The file contains rules with conflicting targets."
 msgstr ""
 
+#: стандартный ввод:60
+msgid "Save"
+msgstr ""
+
 #: стандартный ввод:61
-msgid "SAVE ALL RULES"
+msgid "Check"
 msgstr ""
 
 #: стандартный ввод:62
-msgid "CHECK THE RULES"
+msgid "Show log"
 msgstr ""
 
 #: стандартный ввод:63
-msgid "SHOW LOG"
+msgid "Hide log"
 msgstr ""
 
 #: стандартный ввод:64
-msgid "HIDE LOG"
+msgid "Filter"
 msgstr ""
 
 #: стандартный ввод:65
-msgid "FILTER"
+msgid "◁ Previous"
 msgstr ""
 
 #: стандартный ввод:66
-msgid "PREVIOS"
+msgid "Next ▷"
 msgstr ""
 
 #: стандартный ввод:67
-msgid "NEXT "
+msgid ""
+"A Linux audit is used for logging. You can inspect it with ausearch -ts "
+"recent -m USER_DEVICE"
+msgstr ""
+
+#: стандартный ввод:68
+msgid "Page"
+msgstr ""
+
+#: стандартный ввод:69
+msgid "of"
 msgstr ""
 
 #: ajax.scm:75
@@ -241,34 +249,28 @@ msgstr ""
 msgid "Process is STOPPED"
 msgstr ""
 
-#: ajax.scm:153
+#: ajax.scm:144
 msgid ""
 "Error while trying to unblock a selected device. You can unblock it by "
 "creating a hash rule or interface rule."
 msgstr ""
 
-#: ajax.scm:166
+#: ajax.scm:157
 msgid "Error while trying to block a selected device"
 msgstr ""
 
-#: ajax.scm:179 ajax.scm:190
+#: ajax.scm:170 ajax.scm:181
 msgid ""
 "An error occurred when starting the USB Guard with new rules. We recommend "
 "checking the rules and configuration files for correctness."
 msgstr ""
 
-#: ajax.scm:213
+#: ajax.scm:204
 msgid "An empty csv file. Parsed 0 rules."
 msgstr ""
 
-#: ajax.scm:214
+#: ajax.scm:205
 msgid "An error occured while parsing csv file"
-msgstr ""
-
-#: ajax.scm:260
-msgid ""
-"A Linux audit is used for logging. You can inspect it with ausearch -ts "
-"recent -m USER_DEVICE"
 msgstr ""
 
 #: стандартный ввод:1

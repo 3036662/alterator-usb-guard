@@ -1,5 +1,5 @@
 #pragma once
-#include "serializible_for_lisp.hpp"
+#include "serializable_for_lisp.hpp"
 #include <boost/json.hpp>
 #include <boost/json/object.hpp>
 #include <functional>
@@ -75,10 +75,10 @@ public:
    */
   explicit GuardRule(const std::string &raw_str);
 
-  GuardRule &operator=(const GuardRule &) noexcept = default;
-  GuardRule &operator=(GuardRule &&) noexcept = default;
-  GuardRule(GuardRule &&) noexcept = default;
-  GuardRule(const GuardRule &) noexcept = default;
+  // GuardRule &operator=(const GuardRule &) noexcept = delete;
+  // GuardRule &operator=(GuardRule &&) noexcept = delete;
+  // GuardRule(GuardRule &&)  = default;
+  // GuardRule(const GuardRule &)  = default;
 
   /**
    * @brief Build rule string for usbguard

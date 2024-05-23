@@ -1,324 +1,341 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 <html wf="none">
-    <head>
-      <link type="text/css" rel="stylesheet" href="/design/styles/alt_usb_guard.css" />
-      <script src="/design/scripts/alt-usb-guard.js" />
-    </head>
-    <body>
-      <div class="config_check">
-        <form method="POST">
-          <!-- status guard is OK-->
-          <div name="guard_status_ok" class="service_status">
-            <svg>
-              <circle cx="10" cy="10" r="8" fill="green" />
-            </svg>
-            <span translate="_">UsbGuard service ... ACTIVE</span>
-          </div>
-          <!-- status guard is BAD-->
-          <div name="guard_status_bad" class="service_status">
-            <svg>
-              <circle cx="10" cy="10" r="8" fill="red" />
-            </svg>
-            <span translate="_">UsbGuard service ... </span> 
-              <span id="span_usbguard_enabled">
-              <input id="usbguard_enabled" class="no_border" name="usbguard_enabled" readonly="readonly" type="hidden" />
-              </span> 
-              <span id="span_usbguard_active">
-              <input id="usbguard_active" class="no_border" name="usbguard_active" readonly="readonly" type="hidden"/>
-              </span>
-           
-          </div>
-          <!-- warnigs file permissions -->
-          <div  class="service_status" name="warning_file_permissions">
-            <svg>
-              <circle cx="10" cy="10" r="8" fill="red" />
-            </svg>
-            <span translate="_"> Wrong file permissions for UsbGuard config files (required 0600).</span>
-          </div>
-          <!-- status udev is OK-->
-          <div name="udev_status_ok" class="service_status">
-            <svg>
-              <circle cx="10" cy="10" r="8" fill="green" />
-            </svg>
-            <span translate="_">Udev rules ... OK</span>
-          </div>
-           <!-- status udev is not OK-->
-          <div name="udev_status_warnig" class="service_status">
-            <svg>
-              <circle cx="10" cy="10" r="8" fill="yellow" />
-            </svg>
-            <span translate="_">Udev rules ... WARNING</span>
-          </div>
-          <div class="config_check_header">
-            <p><span translate="_">Users are allowed to change rules:</span> 
-              <input class="no_border" name="usbguard_users" readonly="readonly"  />
-            </p>
-            <p><span translate="_">Groups are allowed to change rules: </span>
-              <input class="no_border" name="usbguard_groups" readonly="readonly"  />
-            </p> 
-          </div>
-          <!-- warnigs for udev-->
-          <div class="config_check_header" name="udev_config_warnings">
-            <span class="warning">Warning!</span>
-            <p><span translate="_">Suspicious files were found in udev config folders.</span></p> 
-            <p><span translate="_">It may cause undefined behavior.</span></p>
-            <p><span translate="_">Please double-check before configuring.</span></p>
-          </div>
-          <table class="alterator-listbox" align="center" name="suspicious_udev_files">
-            <thead>
-              <tr>
-                <th>Filename</th>
-              </tr>
-            </thead>
-            <tbody>
-              <td><span class="alterator-label" name="name" /></td>
-            </tbody>
-          </table>
-          <!-- checkbox  Use usb ports control-->
-          <div>
-            <input type="hidden" id="checkbox_use_control_hidden" name="checkbox_use_control_hidden" /> 
-            <input type="checkbox" id="checkbox_use_control" name="checkbox_use_control" />
-            <label for="checkbox_use_control"><span translate="_">Use usb ports control</span></label> 
-          </div>
-        </form>
+
+<head>
+  <link type="text/css" rel="stylesheet" href="/design/styles/alt_usb_guard.css" />
+  <script src="/design/scripts/alt-usb-guard.js" />
+</head>
+
+<body>
+  <div class="config_check">
+    <form method="POST">
+      <!-- status guard is OK-->
+      <div name="guard_status_ok" class="service_status">
+        <svg>
+          <circle cx="10" cy="10" r="8" fill="green" />
+        </svg>
+        <span translate="_">UsbGuard service ... ACTIVE</span>
       </div>
-      <hr />
-      <!-- Devices list -->
-      <form method="POST">
-        <table id="devices_list_table" class="alterator-listbox single-select" align="center" name="list_prsnt_devices">
-          <p><span translate="_">Connnected usb devices:</span></p>
-          <caption><span translate="_">List of devices</span></caption>  
-          <thead>
-              <tr>
-                <th>N</th>
-                <th><span translate="_">Port</span></th>
-                <th>CC:SS:PP</th>
-                <th>VID</th>
-                <th><span translate="_">Vendor</span></th>
-                <th>PID</th>
-                <th><span translate="_">Product</span></th>
-                <th><span translate="_">SN</span></th>
-                <th><span translate="_">Hash</span></th>
-                <th><span translate="_">Status</span></th>
-                <!-- <th><span translate="_">Connect type</span></th> -->
-               </tr>
-          </thead>
-          <tbody>              
-                  <tr class="wrap">
-                    <td><span class="alterator-label" name="name" /></td>
-                    <td><span class="alterator-label" name="label_prsnt_usb_port" /></td>
-                    <td><span class="alterator-label" name="label_prsnt_usb_class" /></td>
-                    <td><span class="alterator-label" name="label_prsnt_usb_vid" /></td>
-                    <td><span class="alterator-label" name="label_prsnt_usb_vendor" /></td>
-                    <td><span class="alterator-label" name="label_prsnt_usb_pid" /></td>
-                    <td><span class="alterator-label" name="label_prsnt_usb_name" /></td>
-                    <td><span class="alterator-label" name="label_prsnt_usb_serial" /></td>
-                    <td><span class="alterator-label" name="label_prsnt_usb_hash" /></td>
-                    <td><span class="alterator-label" name="label_prsnt_usb_status" /></td>
-                   <!-- <td><span class="alterator-label" name="label_prsnt_usb_connection" /></td>-->
-                  </tr>
-          </tbody>
-        </table>
-        <div name="usb_buttons" class="right_buttons">
-                  <input type="button" name="btn_prsnt_scan" class="btn" value="Scan plugged-in USB devices" />&nbsp;&nbsp;
-                  <input type="button" id="btn_prsnt_dev_add" name="btn_prsnt_dev_add" class="btn" value="Allow device" />
-                  <input type="button" id="btn_prsnt_dev_block" name="btn_prsnt_dev_block" class="btn" value="Block device" />
-        </div>
-      </form>
-      
-      
-      <!-- Radio buttons -->
+      <!-- status guard is BAD-->
+      <div name="guard_status_bad" class="service_status">
+        <svg>
+          <circle cx="10" cy="10" r="8" fill="red" />
+        </svg>
+        <span translate="_">UsbGuard service ... </span>
+        <span id="span_usbguard_enabled">
+          <input id="usbguard_enabled" class="no_border" name="usbguard_enabled" readonly="readonly" type="hidden" />
+        </span>
+        <span id="span_usbguard_active">
+          <input id="usbguard_active" class="no_border" name="usbguard_active" readonly="readonly" type="hidden" />
+        </span>
 
-
-
-      
-      <form name="form_presets" id="form_presets">
-        <fieldset>
-          <legend><span translate="_">Presets</span></legend>
-
-          <p><span translate="_">White list:</span></p>
-          <p><input type="radio" id="preset1" name="presets" value="put_connected_to_white_list" />
-          <label for="preset1"><span translate="_">Block everything except connected devices.</span></label></p>
-
-          <p><input type="radio" id="preset2" name="presets" value="put_connected_to_white_list_plus_HID" />
-          <label for="preset2"><span translate="_">Block everything except connected and HID/DUB devices.</span></label></p>
-
-          <p><input type="radio" id="preset_manual_white" name="presets" value="radio_white_list" />
-          <label for="preset_manual_white"><span translate="_">Manual mode</span></label></p> 
-          <hr/>
-          <p><span translate="_">Black list:</span></p>
-          <p><input type="radio" id="preset3" name="presets" value="put_disks_and_mtp_to_black" />
-          <label for="preset3"><span translate="_">Block devices by classes of interface descriptors: 06 Image and 08 Mass Storage (example).</span></label></p>
-
-          <p><input type="radio" id="preset4" name="presets" value="block_and_reject_android" />
-          <label for="preset4"><span translate="_">Block devices by a list of known PIDs and VIDs using Android Debug Bus (example).</span></label></p>
-
-          <p><input type="radio" id="preset_manual_black" name="presets" value="radio_black_list" />
-          <label for="preset_manual_black"><span translate="_">Manual mode</span></label></p>
-
-          <input type="hidden" name="presets_input_hidden" id="presets_input_hidden" />
-          <input type="hidden" name="hidden_list_type" id="hidden_list_type"/>
-         </fieldset>  
-      </form>
-
-
-
-      <!-- Rules non-strict(non sorted) -->
-      <form name="form_list_unsorted_rules" id="form_list_unsorted_rules" class="form_rules" method="POST" onsubmit="return false;">
-        <table class="alterator-listbox multi-select" align="center" name="list_unsorted_rules" id="list_unsorted_rules">
-          <caption><span translate="_">Unsorted rules</span></caption>
-          <thead>
-            <tr>
-              <th>N</th>
-              <th><span translate="_">Rule</span></th>
-              <th><span translate="_">Action</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="wrap">
-              <td><span class="alterator-label" name="name" /></td>
-              <td><span class="alterator-label" name="lbl_rule_raw" /></td>
-              <td><span class="alterator-label" name="lbl_rule_target" /></td>
-            </tr>
-          </tbody>
-        </table>
-        <div name="list_interface_rules_buttons" class="right_buttons">
-          <input type="button" name="" class="btn manual_mode_button" value="Add" id="add_to_rules_unsorted" translate="_" />
-          <input type="button" name="" class="btn manual_mode_button" id="delete_rules_from_unsorted_level" value="Delete" translate="_"/>
-        </div>
-      </form>
-
-      <!-- Rules by interface-->
-      <form name="form_list_interface_rules" id="form_list_interface_rules" class="form_rules" method="POST" onsubmit="return false;">
-        <table class="alterator-listbox multi-select" align="center" name="list_interface_rules" id="list_interface_rules">
-          <caption><span translate="_">Masks CC:SS:PP</span></caption>
-          <thead>
-            <tr>
-              <th>N</th>
-              <th>CC:SS:PP</th>
-              <th><span translate="_">Description</span></th>
-              <th><span translate="_">Port</span></th>
-              <th><span translate="_">Action</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="wrap">
-              <td><span class="alterator-label" name="name" /></td>
-              <td><span class="alterator-label" name="lbl_rule_interface" /></td>
-              <td><span class="alterator-label" name="lbl_rule_desc" /></td>
-              <td><span class="alterator-label" name="lbl_rule_port" /></td>
-              <td><span class="alterator-label" name="lbl_rule_target" /></td>
-            </tr>
-          </tbody>
-        </table>
-        <div name="list_interface_rules_buttons" class="right_buttons">
-          <input type="button" name="" class="btn manual_mode_button" value="Add" id="add_to_rules_interfase" translate="_" />
-          <input type="button" name="" class="btn manual_mode_button" id="delete_rules_from_interface_level" value="Delete" translate="_" />
-        </div>
-      </form>
-
-      <!-- VID/PID Rules -->
-      <form name="form_list_vidpid_rules" id="form_list_vidpid_rules" class="form_rules" method="POST" onsubmit="return false;">
-        <table class="alterator-listbox multi-select" align="center" name="list_vidpid_rules" id="list_vidpid_rules">
-          <caption><span translate="_">Masks VID:PID</span></caption>
-          <thead>
-            <tr>
-              <th>N</th>
-              <th>VID</th>
-              <th><span translate="_">Vendor</span></th>
-              <th><span translate="_">PID</span></th>
-              <th><span translate="_">Product</span></th>
-              <th><span translate="_">Port</span></th>
-              <th><span translate="_">Action</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="wrap">
-              <td><span class="alterator-label" name="name" /></td>
-              <td><span class="alterator-label" name="lbl_rule_vid" /></td>
-              <td><span class="alterator-label" name="lbl_rule_vendor" /></td>
-              <td><span class="alterator-label" name="lbl_rule_pid" /></td>
-              <td><span class="alterator-label" name="lbl_rule_product" /></td>
-              <td><span class="alterator-label" name="lbl_rule_port" /></td>
-              <td><span class="alterator-label" name="lbl_rule_target" /></td>
-            </tr>
-          </tbody>
-        </table>
-        <div name="list_vidpid_rules_buttons" class="right_buttons">
-          <input type="button" name="" class="btn manual_mode_button" value="Add" id="add_to_rules_vidpid" translate="_" />
-          <input type="button" name="" class="btn manual_mode_button" id = "delete_rules_from_vid_pid_level" value="Delete" translate="_" />
-        </div>
-      </form>
-
-      <!-- Rules by hash-->
-      <form name="form_list_hash_rules" id="form_list_hash_rules" class="form_rules" method="POST" onsubmit="return false;">
-        <table class="alterator-listbox multi-select" align="center" name="list_hash_rules" id="list_hash_rules">
-          <caption><span translate="_">Mask Hash</span></caption>
-          <thead>
-            <tr>
-              <th>N</th>
-              <th><span translate="_">Hash</span></th>
-              <th><span translate="_">Description</span></th>
-              <th><span translate="_">Action</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="wrap">
-              <td><span class="alterator-label" name="name" /></td>
-              <td><span class="alterator-label" name="lbl_rule_hash" /></td>
-              <td><span class="alterator-label" name="lbl_rule_desc" /></td>
-              <td><span class="alterator-label" name="lbl_rule_target" /></td>
-            </tr>
-          </tbody>
-        </table>
-        <div name="list_hash_rules_buttons" class="right_buttons">
-          <input type="button" name="load_file_button" id="load_file_button" class="btn manual_mode_button" value="Load from file" translate="_"/>
-          <input type="file" name="file_input" id="file_input" class="manual_mode_button" accept=".csv" translate="_" />
-          <input type="hidden" name="hidden_file_uplod_response" id = "hidden_file_uplod_response"/>  
-          <input type="button" name="" class="btn manual_mode_button" value="Add" id="add_to_rules_hash" translate="_"/>
-          <input type="button" name="" class="btn manual_mode_button" value="Delete" id="delete_rules_from_hash_level" translate="_"/>
-          <span  id="alert_empty_file" name="alert_empty_file" style="display:none" translate="_">This file is empty.</span>
-          <span  id="alert_huge_file" name="alert_huge_file"  style="display:none" translate="_">This file is too big. Limit 1 MB.</span>
-          <span  id="alert_conflicts_in_file" name="alert_conflicts_in_file"  style="display:none" translate="_">Error. The file contains rules with conflicting targets.</span>
-        </div>
-      </form>
-    <div id="module_footer">  
-      <hr />
-        <form onsubmit="return false;">
-          <input type="hidden" name="hidden_manual_changes_data" id = "hidden_manual_changes_data"/>
-          <input type="hidden" name="hidden_manual_changes_response" id = "hidden_manual_changes_response"/>
-          <input class="right_buttons btn" type="button" name="save_rules" id="save_rules_button" value="SAVE ALL RULES" translate="_" />
-          <input class="right_buttons btn" type="button" name="validate_rules" id="validate_rules_button" value="CHECK THE RULES" translate="_" />            
-        </form>
-    </div>
-    <form id="logs_form" onsubmit="return false;">
-      <input type="button" class="btn" id="show_logs_button" name="show_logs_button" value="SHOW LOG" />
-      <input type="button" class="btn" id="hide_logs_button" name="hide_logs_button" value="HIDE LOG" />
-      <table style="width:100%" name="logs_table">
+      </div>
+      <!-- warnigs file permissions -->
+      <div class="service_status" name="warning_file_permissions">
+        <svg>
+          <circle cx="10" cy="10" r="8" fill="red" />
+        </svg>
+        <span translate="_"> Wrong file permissions for UsbGuard config files (required 0600).</span>
+      </div>
+      <!-- status udev is OK-->
+      <div name="udev_status_ok" class="service_status">
+        <svg>
+          <circle cx="10" cy="10" r="8" fill="green" />
+        </svg>
+        <span translate="_">Udev rules ... OK</span>
+      </div>
+      <!-- status udev is not OK-->
+      <div name="udev_status_warnig" class="service_status">
+        <svg>
+          <circle cx="10" cy="10" r="8" fill="yellow" />
+        </svg>
+        <span translate="_">Udev rules ... WARNING</span>
+      </div>
+      <div class="config_check_header">
+        <p><span translate="_">Users are allowed to change rules:</span>
+          <input class="no_border" name="usbguard_users" readonly="readonly" />
+        </p>
+        <p><span translate="_">Groups are allowed to change rules: </span>
+          <input class="no_border" name="usbguard_groups" readonly="readonly" />
+        </p>
+      </div>
+      <!-- warnigs for udev-->
+      <div class="config_check_header" name="udev_config_warnings">
+        <span class="warning">Warning!</span>
+        <p><span translate="_">Suspicious files were found in udev config folders.</span></p>
+        <p><span translate="_">It may cause undefined behavior.</span></p>
+        <p><span translate="_">Please double-check before configuring.</span></p>
+      </div>
+      <table class="alterator-listbox" align="center" name="suspicious_udev_files">
+        <thead>
+          <tr>
+            <th>Filename</th>
+          </tr>
+        </thead>
         <tbody>
-          <tr>
-          <td colspan="2">
-            <input name="log_search_input" id="log_search_input" />
-            <input name="log_search_button" type="button" class="btn" value="FILTER"/>
-          </td>
-          </tr>
-          <tr>
-          <td colspan="2">
-            <textarea  name="log_textarea" id="log_textarea" readonly="readonly">
-            </textarea>
-          </td>
-          </tr>
-          <tr>
-          <td colspan="2" class="cell_center">
-            <input type="button" name="prev_page" class="btn" value="PREVIOS" />
-            <input type="button" name="next_page" class="btn" value="NEXT " />
-            <input type="hidden"  name="current_page" value="0" />
-            <input type="hidden" name="audit_type" value="" />
-          </td>
-        </tr>
+          <td><span class="alterator-label" name="name" /></td>
         </tbody>
       </table>
-    </form>  
+      <!-- checkbox  Use usb ports control-->
+      <div>
+        <input type="hidden" id="checkbox_use_control_hidden" name="checkbox_use_control_hidden" />
+        <input type="checkbox" id="checkbox_use_control" name="checkbox_use_control" />
+        <label for="checkbox_use_control"><span translate="_">Use usb ports control</span></label>
+      </div>
+    </form>
+  </div>
+  <hr />
+  <!-- Devices list -->
+  <form method="POST">
+    <table id="devices_list_table" class="alterator-listbox single-select" align="center" name="list_prsnt_devices">
+      <caption><span translate="_">List of devices</span></caption>
+      <thead>
+        <tr>
+          <th>N</th>
+          <th><span translate="_">Port</span></th>
+          <th>CC:SS:PP</th>
+          <th>VID</th>
+          <th><span translate="_">Vendor</span></th>
+          <th>PID</th>
+          <th><span translate="_">Product</span></th>
+          <th><span translate="_">SN</span></th>
+          <th><span translate="_">Hash</span></th>
+          <th><span translate="_">Status</span></th>
+          <!-- <th><span translate="_">Connect type</span></th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="wrap">
+          <td><span class="alterator-label" name="name" /></td>
+          <td><span class="alterator-label" name="label_prsnt_usb_port" /></td>
+          <td><span class="alterator-label" name="label_prsnt_usb_class" /></td>
+          <td><span class="alterator-label" name="label_prsnt_usb_vid" /></td>
+          <td><span class="alterator-label" name="label_prsnt_usb_vendor" /></td>
+          <td><span class="alterator-label" name="label_prsnt_usb_pid" /></td>
+          <td><span class="alterator-label" name="label_prsnt_usb_name" /></td>
+          <td><span class="alterator-label" name="label_prsnt_usb_serial" /></td>
+          <td><span class="alterator-label" name="label_prsnt_usb_hash" /></td>
+          <td><span class="alterator-label" name="label_prsnt_usb_status" /></td>
+          <!-- <td><span class="alterator-label" name="label_prsnt_usb_connection" /></td>-->
+        </tr>
+      </tbody>
+    </table>
+    <div name="usb_buttons" class="right_buttons">
+      <input type="button" name="btn_prsnt_scan" class="btn" value="Scan plugged-in USB devices" />&nbsp;&nbsp;
+      <input type="button" id="btn_prsnt_dev_add" name="btn_prsnt_dev_add" class="btn" value="Allow device" />
+      <input type="button" id="btn_prsnt_dev_block" name="btn_prsnt_dev_block" class="btn" value="Block device" />
+    </div>
+  </form>
+  <!-- Radio buttons -->
+  <form name="form_presets" id="form_presets">
+    <fieldset>
+      <legend><span translate="_">Presets</span></legend>
 
-    </body>
+      <p><span translate="_">White list:</span></p>
+      <p><input type="radio" id="preset1" name="presets" value="put_connected_to_white_list" />
+        <label for="preset1"><span translate="_">Block everything except connected devices</span></label>
+      </p>
+
+      <p><input type="radio" id="preset2" name="presets" value="put_connected_to_white_list_plus_HID" />
+        <label for="preset2"><span translate="_">Block everything except connected and HID/HUB devices</span></label>
+      </p>
+
+      <p><input type="radio" id="preset_manual_white" name="presets" value="radio_white_list" />
+        <label for="preset_manual_white"><span translate="_">Manual mode</span></label>
+      </p>
+      <hr />
+      <p><span translate="_">Black list:</span></p>
+      <p><input type="radio" id="preset3" name="presets" value="put_disks_and_mtp_to_black" />
+        <label for="preset3"><span translate="_">Block devices by classes of interface descriptors: 06 Image and 08 Mass Storage</span></label>
+      </p>
+      <p><input type="radio" id="preset4" name="presets" value="block_and_reject_android" />
+        <label for="preset4"><span translate="_">Block devices by a list of known PIDs and VIDs using Android Debug Bus</span></label>
+      </p>
+      <p><input type="radio" id="preset_manual_black" name="presets" value="radio_black_list" />
+        <label for="preset_manual_black"><span translate="_">Manual mode</span></label>
+      </p>
+      <input type="hidden" name="presets_input_hidden" id="presets_input_hidden" />
+      <input type="hidden" name="hidden_list_type" id="hidden_list_type" />
+    </fieldset>
+  </form>
+
+  <!-- Rules non-strict(non sorted) -->
+  <form name="form_list_unsorted_rules" id="form_list_unsorted_rules" class="form_rules" method="POST"
+    onsubmit="return false;">
+    <table class="alterator-listbox multi-select" align="center" name="list_unsorted_rules" id="list_unsorted_rules">
+      <caption><span translate="_">Unsorted rules</span></caption>
+      <thead>
+        <tr>
+          <th>N</th>
+          <th><span translate="_">Rule</span></th>
+          <th><span translate="_">Action</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="wrap">
+          <td><span class="alterator-label" name="name" /></td>
+          <td><span class="alterator-label" name="lbl_rule_raw" /></td>
+          <td><span class="alterator-label" name="lbl_rule_target" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <div name="list_interface_rules_buttons" class="right_buttons">
+      <input type="button" name="" class="btn manual_mode_button" value="Add" id="add_to_rules_unsorted"
+        translate="_" />
+      <input type="button" name="" class="btn manual_mode_button" id="delete_rules_from_unsorted_level" value="Delete"
+        translate="_" />
+    </div>
+  </form>
+
+  <!-- Rules by interface-->
+  <form name="form_list_interface_rules" id="form_list_interface_rules" class="form_rules" method="POST"
+    onsubmit="return false;">
+    <table class="alterator-listbox multi-select" align="center" name="list_interface_rules" id="list_interface_rules">
+      <caption><span translate="_">Masks CC:SS:PP</span></caption>
+      <thead>
+        <tr>
+          <th>N</th>
+          <th>CC:SS:PP</th>
+          <th><span translate="_">Description</span></th>
+          <th><span translate="_">Port</span></th>
+          <th><span translate="_">Action</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="wrap">
+          <td><span class="alterator-label" name="name" /></td>
+          <td><span class="alterator-label" name="lbl_rule_interface" /></td>
+          <td><span class="alterator-label" name="lbl_rule_desc" /></td>
+          <td><span class="alterator-label" name="lbl_rule_port" /></td>
+          <td><span class="alterator-label" name="lbl_rule_target" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <div name="list_interface_rules_buttons" class="right_buttons">
+      <input type="button" name="" class="btn manual_mode_button" value="Add" id="add_to_rules_interfase"
+        translate="_" />
+      <input type="button" name="" class="btn manual_mode_button" id="delete_rules_from_interface_level" value="Delete"
+        translate="_" />
+    </div>
+  </form>
+
+  <!-- VID/PID Rules -->
+  <form name="form_list_vidpid_rules" id="form_list_vidpid_rules" class="form_rules" method="POST"
+    onsubmit="return false;">
+    <table class="alterator-listbox multi-select" align="center" name="list_vidpid_rules" id="list_vidpid_rules">
+      <caption><span translate="_">Masks VID:PID</span></caption>
+      <thead>
+        <tr>
+          <th>N</th>
+          <th>VID</th>
+          <th><span translate="_">Vendor</span></th>
+          <th><span translate="_">PID</span></th>
+          <th><span translate="_">Product</span></th>
+          <th><span translate="_">Port</span></th>
+          <th><span translate="_">Action</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="wrap">
+          <td><span class="alterator-label" name="name" /></td>
+          <td><span class="alterator-label" name="lbl_rule_vid" /></td>
+          <td><span class="alterator-label" name="lbl_rule_vendor" /></td>
+          <td><span class="alterator-label" name="lbl_rule_pid" /></td>
+          <td><span class="alterator-label" name="lbl_rule_product" /></td>
+          <td><span class="alterator-label" name="lbl_rule_port" /></td>
+          <td><span class="alterator-label" name="lbl_rule_target" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <div name="list_vidpid_rules_buttons" class="right_buttons">
+      <input type="button" name="" class="btn manual_mode_button" value="Add" id="add_to_rules_vidpid" translate="_" />
+      <input type="button" name="" class="btn manual_mode_button" id="delete_rules_from_vid_pid_level" value="Delete"
+        translate="_" />
+    </div>
+  </form>
+
+  <!-- Rules by hash-->
+  <form name="form_list_hash_rules" id="form_list_hash_rules" class="form_rules" method="POST" onsubmit="return false;">
+    <table class="alterator-listbox multi-select" align="center" name="list_hash_rules" id="list_hash_rules">
+      <caption><span translate="_">Mask Hash</span></caption>
+      <thead>
+        <tr>
+          <th>N</th>
+          <th><span translate="_">Hash</span></th>
+          <th><span translate="_">Description</span></th>
+          <th><span translate="_">Action</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="wrap">
+          <td><span class="alterator-label" name="name" /></td>
+          <td><span class="alterator-label" name="lbl_rule_hash" /></td>
+          <td><span class="alterator-label" name="lbl_rule_desc" /></td>
+          <td><span class="alterator-label" name="lbl_rule_target" /></td>
+        </tr>
+      </tbody>
+    </table>
+    <div name="list_hash_rules_buttons" class="right_buttons">
+      <input type="button" name="load_file_button" id="load_file_button" class="btn manual_mode_button"
+        value="Load from file" translate="_" />
+      <input type="file" name="file_input" id="file_input" class="manual_mode_button" accept=".csv" translate="_" />
+      <input type="hidden" name="hidden_file_uplod_response" id="hidden_file_uplod_response" />
+      <input type="button" name="" class="btn manual_mode_button" value="Add" id="add_to_rules_hash" translate="_" />
+      <input type="button" name="" class="btn manual_mode_button" value="Delete" id="delete_rules_from_hash_level"
+        translate="_" />
+      <span id="alert_empty_file" name="alert_empty_file" style="display:none" translate="_">This file is empty.</span>
+      <span id="alert_huge_file" name="alert_huge_file" style="display:none" translate="_">This file is too big. Limit is 1 MB.</span>
+      <span id="alert_conflicts_in_file" name="alert_conflicts_in_file" style="display:none" translate="_">Error. The file contains rules with conflicting targets.</span>
+    </div>
+  </form>
+  <div id="module_footer">
+    <hr />
+    <form onsubmit="return false;">
+      <input type="hidden" name="hidden_manual_changes_data" id="hidden_manual_changes_data" />
+      <input type="hidden" name="hidden_manual_changes_response" id="hidden_manual_changes_response" />
+      <input class="right_buttons btn" type="button" name="save_rules" id="save_rules_button" value="Save"
+        translate="_" />
+      <input class="right_buttons btn" type="button" name="validate_rules" id="validate_rules_button"
+        value="Check" translate="_" />
+    </form>
+  </div>
+  <div class="separator"></div>
+  <form id="logs_form" onsubmit="return false;">
+    <input type="button" class="like_btn" id="show_logs_button" name="show_logs_button" value="Show log" />
+    <input type="button" class="like_btn hidden" id="hide_logs_button" name="hide_logs_button" value="Hide log" />
+    <table style="width:100%" name="logs_table" id="logs_table" class="hidden">
+      <tbody>
+        <tr>
+          <td colspan="1" class="td_vertical_center">
+            <input name="log_search_input" id="log_search_input" />
+            <input name="log_search_button" id="log_search_button" type="button" class="like_btn" value="Filter" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <textarea name="log_textarea" id="log_textarea" readonly="readonly"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="cell_center">
+            <input type="button" id="btn_prev_page" name="prev_page" class="like_btn" value="&#9665; Previous" />
+            <input type="button" id="btn_next_page" name="next_page" class="like_btn" value="Next &#9655;" />
+            <input type="hidden" id="hidd_inp_curr_page" name="current_page" value="0" />
+            <input type="hidden" id="hidd_inp_filter" name="log_filter" value="" />
+            <input type="hidden" id="audit_type" name="audit_type" value="" />
+            <span class="hidden" id="span_audit_message" name="audit message" translate="_">A Linux audit is used for logging. You can inspect it with ausearch -ts recent -m USER_DEVICE</span>
+          </td>
+        </tr>
+        <tr id="tr_page_info">
+          <td colspan="2" class="log_page_info cell_center"><span translate="_">Page</span><span
+              id="span_curr_page">0</span><span translate="_">of</span><span id="span_total_pages"></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+
+
+</body>
+
 </html>
