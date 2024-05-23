@@ -514,7 +514,6 @@ function DisableManualModeButtons(){
   ActivateManualModeButtons(false);
 }
 
-
 // check all appended rules if checkbox in table header is checked
 function CatchTableHeaderCheckbok(table_id){
   let checkboxTh = $("#"+table_id+" th input[type='checkbox']:first");
