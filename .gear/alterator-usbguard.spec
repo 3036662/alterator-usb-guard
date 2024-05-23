@@ -1,7 +1,7 @@
 %define _altdata_dir %_datadir/alterator
 
 Name: alterator-usbguard
-Version: 0.1
+Version: 0.1.2
 Release: alt1
 Summary: alterator module to control usb devices
 Group: System/Configuration/Other
@@ -15,7 +15,7 @@ Source2: %name-%version-thirdparty-rapidcsv.tar
 Requires: usbids usbguard alterator
 BuildPreReq: gcc-c++ cmake ninja-build rpm-macros-cmake rpm-build-licenses 
 
-BuildRequires: usbguard-devel libusbguard1 boost-devel-headers  libsdbus-cpp-devel libsystemd-devel 
+BuildRequires: usbguard-devel libusbguard1 boost-devel-headers  libsdbus-cpp-devel libsystemd-devel gettext-tools
 
 
 %description
@@ -25,7 +25,7 @@ Alterator Module to control USB devices via USBGuard.
 %setup -a0 -a1 -a2  
 
 %build
-%cmake -DCMAKE_BUILD_TYPE:STRING=Release -G Ninja
+%cmake -DCMAKE_BUILD_TYPE:STRING=Release -DUSBGUARD=1 -G Ninja
 %cmake_build
 
 %install
@@ -37,9 +37,21 @@ Alterator Module to control USB devices via USBGuard.
 %_altdata_dir/design/styles/alt_usb_guard.css
 %_altdata_dir/ui/usbguard/ajax.scm
 %_altdata_dir/ui/usbguard/index.html
+%_altdata_dir/help/ru_RU/usbguard.html
 %_usr/lib/alterator/backend3/usbguard
 %_sysconfdir/usbguard/android_vidpid.json
+%lang(ru)  %_datadir/locale/ru/LC_MESSAGES/alterator-usbguard.mo
+
 
 %changelog
+* Fri May 17 2024 Oleg Proskurin <proskur@altlinux.org> 0.1.2-alt1
+- Fix usb interface rule validation
+
+* Mon May 13 2024 Ilya Kurdyukov <ilyakurdyukov@altlinux.org> 0.1.1-alt2
+- e2k build fix
+
+* Tue May 07 2024 Oleg Proskurin <proskur@altlinux.org> 0.1.1-alt1
+- New version
+
 * Mon Mar 04 2024 Oleg Proskurin <proskur@altlinux.org> 0.1-alt1
 - Initial build
