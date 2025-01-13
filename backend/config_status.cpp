@@ -142,7 +142,9 @@ ConfigStatus::ExtractConfigFileName(const std::string &line) const noexcept {
 bool ConfigStatus::ExtractRuleFilePath(const std::string &line) noexcept {
   if (boost::starts_with(line, "RuleFile=")) {
     size_t pos = line.find('=');
-    if (pos != std::string::npos && ++pos < line.size()) {
+    if (pos == std::string::npos){ return false;}
+    ++pos;
+    if (pos < line.size()) {
       std::string path_to_rules(line, pos);
       boost::trim(path_to_rules);
       // Log::Info() << "Find path to rules file " << path_to_rules;
@@ -165,7 +167,9 @@ bool ConfigStatus::ExtractRuleFilePath(const std::string &line) noexcept {
 bool ConfigStatus::ExtractUsers(const std::string &line) noexcept {
   if (boost::starts_with(line, "IPCAllowedUsers=")) {
     size_t pos = line.find('=');
-    if (pos != std::string::npos && ++pos < line.size()) {
+    if (pos== std::string::npos) {return false;}
+    ++pos;
+    if (pos < line.size()) {
       std::string users_string(line, pos);
       users_string = boost::trim_copy(users_string);
       // Log::Info() << "Found users in conf file " << line;
@@ -192,7 +196,9 @@ bool ConfigStatus::ExtractUsers(const std::string &line) noexcept {
 bool ConfigStatus::CheckUserFiles(const std::string &line) noexcept {
   if (boost::starts_with(line, "IPCAccessControlFiles=")) {
     size_t pos = line.find('=');
-    if (pos != std::string::npos && ++pos < line.size()) {
+    if (pos == std::string::npos){ return false;}
+    ++pos;
+    if (pos < line.size()) {
       std::string path_to_folder(line, pos);
       boost::trim(path_to_folder);
       //  Log::Info() << "Found users control folder " << line;
@@ -220,7 +226,9 @@ bool ConfigStatus::CheckUserFiles(const std::string &line) noexcept {
 bool ConfigStatus::ExtractGroups(const std::string &line) noexcept {
   if (boost::starts_with(line, "IPCAllowedGroups=")) {
     size_t pos = line.find('=');
-    if (pos != std::string::npos && ++pos < line.size()) {
+    if (pos == std::string::npos){return false;}
+    ++pos;
+    if (pos < line.size()) {
       std::vector<std::string> splitted_string;
       std::string groups_string(line, pos);
       try {
@@ -244,7 +252,9 @@ bool ConfigStatus::ExtractGroups(const std::string &line) noexcept {
 bool ConfigStatus::ExtractPolicy(const std::string &line) noexcept {
   if (boost::starts_with(line, "ImplicitPolicyTarget=")) {
     size_t pos = line.find('=');
-    if (pos != std::string::npos && ++pos < line.size()) {
+    if (pos == std::string::npos){return false;}
+    ++pos;
+    if (pos < line.size()) {
       std::string implicit_target(line, pos);
       boost::trim(implicit_target);
       if (!implicit_target.empty()) {
@@ -260,7 +270,9 @@ bool ConfigStatus::ExtractPolicy(const std::string &line) noexcept {
 bool ConfigStatus::ExtractAuditBackend(const std::string &line) noexcept {
   if (boost::starts_with(line, "AuditBackend=")) {
     size_t pos = line.find('=');
-    if (pos != std::string::npos && ++pos < line.size()) {
+    if (pos == std::string::npos){return false;}
+    ++pos;
+    if (pos < line.size()) {
       std::string audit_backend(line, pos);
       boost::trim(audit_backend);
       if (!audit_backend.empty()) {
@@ -285,7 +297,9 @@ bool ConfigStatus::ExtractAuditBackend(const std::string &line) noexcept {
 bool ConfigStatus::ExtractAuditFilePath(const std::string &line) noexcept {
   if (boost::starts_with(line, "AuditFilePath=")) {
     size_t pos = line.find('=');
-    if (pos != std::string::npos && ++pos < line.size()) {
+    if (pos == std::string::npos){return false;}
+    ++pos;
+    if (pos < line.size()) {  
       std::string audit_file(line, pos);
       boost::trim(audit_file);
       if (!audit_file.empty()) {
@@ -655,7 +669,8 @@ bool ConfigStatus::ChangeImplicitPolicy(bool block) noexcept {
     boost::trim(line);
     if (boost::starts_with(line, "ImplicitPolicyTarget=")) {
       size_t pos = line.find('=');
-      if (pos != std::string::npos && ++pos < line.size()) {
+      if (pos !=std::string::npos){++pos;}
+      if (pos !=std::string::npos  && pos < line.size()) {
         line.erase(pos, line.size() - pos);
         line += new_target;
       }
