@@ -278,10 +278,10 @@ bool InterfaceValidator(const std::string &val) noexcept {
     return false;
   for (const auto &element : spl) {
     if (element.size() != 2) {
-      if (element == "*")
+      if (element == "*") {
         continue;
-      else
-        return false;
+      }
+      return false;
     }
     try {
       size_t pos = 0;
