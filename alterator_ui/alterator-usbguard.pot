@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-07 13:30+0300\n"
+"POT-Creation-Date: 2025-01-14 17:55+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,28 +208,32 @@ msgid "Hide log"
 msgstr ""
 
 #: стандартный ввод:64
-msgid "Filter"
+msgid "Clear"
 msgstr ""
 
 #: стандартный ввод:65
-msgid "◁ Previous"
+msgid "Filter"
 msgstr ""
 
 #: стандартный ввод:66
-msgid "Next ▷"
+msgid "◁ Previous"
 msgstr ""
 
 #: стандартный ввод:67
+msgid "Next ▷"
+msgstr ""
+
+#: стандартный ввод:68
 msgid ""
 "A Linux audit is used for logging. You can inspect it with ausearch -ts "
 "recent -m USER_DEVICE"
 msgstr ""
 
-#: стандартный ввод:68
+#: стандартный ввод:69
 msgid "Page"
 msgstr ""
 
-#: стандартный ввод:69
+#: стандартный ввод:70
 msgid "of"
 msgstr ""
 

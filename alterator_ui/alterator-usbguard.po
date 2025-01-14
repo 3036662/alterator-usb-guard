@@ -2,15 +2,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-07 13:30+0300\n"
-"PO-Revision-Date: 2024-05-07 13:32+0300\n"
+"POT-Creation-Date: 2025-01-14 17:55+0300\n"
+"PO-Revision-Date: 2025-01-14 17:56+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-Basepath: .\n"
 
 #: стандартный ввод:1
@@ -209,18 +209,22 @@ msgid "Hide log"
 msgstr "Свернуть"
 
 #: стандартный ввод:64
+msgid "Clear"
+msgstr "Очистить"
+
+#: стандартный ввод:65
 msgid "Filter"
 msgstr "Фильтровать"
 
-#: стандартный ввод:65
+#: стандартный ввод:66
 msgid "◁ Previous"
 msgstr "◁ Назад"
 
-#: стандартный ввод:66
+#: стандартный ввод:67
 msgid "Next ▷"
 msgstr "Вперед ▷"
 
-#: стандартный ввод:67
+#: стандартный ввод:68
 msgid ""
 "A Linux audit is used for logging. You can inspect it with ausearch -ts "
 "recent -m USER_DEVICE"
@@ -228,11 +232,11 @@ msgstr ""
 "Запись ведется в Linux Audit. Используйте ausearch -ts recent -m USER_DEVICE "
 "или другие средства просмотра Audit"
 
-#: стандартный ввод:68
+#: стандартный ввод:69
 msgid "Page"
 msgstr "Страница"
 
-#: стандартный ввод:69
+#: стандартный ввод:70
 msgid "of"
 msgstr "из"
 

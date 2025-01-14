@@ -691,7 +691,19 @@ function InitLogs(){
       DisableButton(e.target);
       LockLogPagination();
       document.getElementById('hidd_inp_curr_page').dispatchEvent(new Event("page_change"));
+      if (input_val.length>0){
+        document.getElementById('clear_filter_button').classList.remove("hidden");
+      } else{
+        document.getElementById('clear_filter_button').classList.add("hidden");
+      }
   });
+
+  // clear log_search_input on click
+  document.getElementById('clear_filter_button').addEventListener('click', e=>{
+    document.getElementById('log_search_input').value=""
+    document.getElementById('log_search_button').dispatchEvent(new Event('click'));
+  });
+
 
   document.getElementById('log_search_input').addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
