@@ -137,9 +137,7 @@
 
 .like_btn{
     font-weight: bold;
-    color: #FFFFFF;
-    background-color: #455a85;
-    border: 1px solid #1b2575;
+    border: 1px solid; 
     margin: 2px;
     cursor: pointer;
     font-size: 9pt;

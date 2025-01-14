@@ -174,7 +174,7 @@ $(document).ready(function () {
         };
       reader.readAsBinaryString(file);
     }
-  } 
+  }
  });
 
  // bind appended checkboxes to checkbox in headers of tables
@@ -184,11 +184,35 @@ $(document).ready(function () {
  CatchTableHeaderCheckbok('list_unsorted_rules');
 
  InitLogs();
+ // copy colors from alterator-brandings
+ CloneColors();
 
 }); // .ready
 
 //buttons[i].disabled = false;
 //buttons[i].classList.remove("ui-state-disabled");
+
+/**
+ *  Clone colors from .btn class and aplly .like_btn class
+ */
+function CloneColors(){
+  const sourceElement = document.getElementById('main').querySelector('.btn');
+  if (sourceElement===null) { return; }   
+  const sourceStyles = window.getComputedStyle(sourceElement);
+  //console.warn ( JSON.stringify(sourceStyles))
+  const target_btn_color = sourceStyles.getPropertyValue("color");
+  const target_btn_bg_color = sourceStyles.getPropertyValue("background-color");
+  const target_btn_border_color = sourceStyles.getPropertyValue("border-bottom-color");
+  // apply to all custom buttons
+  const likeButtons = document.querySelectorAll('.like_btn');
+  likeButtons.forEach(button => {
+    button.style.color = target_btn_color;
+    button.style.backgroundColor=target_btn_bg_color;
+    button.style.borderColor = target_btn_border_color;
+  }); 
+}
+
+
 
 // show validation result in tables
 function ValidationResponseCallback(data){
