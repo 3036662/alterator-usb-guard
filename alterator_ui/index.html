@@ -325,8 +325,14 @@
             <input type="hidden" id="hidd_inp_filter" name="log_filter" value="" />
             <input type="hidden" id="audit_type" name="audit_type" value="" />
             <span class="hidden" id="span_audit_message" name="audit message" translate="_">A Linux audit is used for logging. You can inspect it with ausearch -ts recent -m USER_DEVICE</span>
-          </td>
+          </td>      
         </tr>
+        <!-- Pagination -->
+        <tr>
+          <td  colspan="2" class="cell_center" id="pagination_content">
+          </td>            
+        </tr>
+      
         <tr id="tr_page_info">
           <td colspan="2" class="log_page_info cell_center"><span translate="_">Page</span><span
               id="span_curr_page">0</span><span translate="_">of</span><span id="span_total_pages"></span></td>

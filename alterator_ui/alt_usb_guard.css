@@ -76,7 +76,7 @@
 }
 
 #module_footer{
-    margin-top: 50px;
+    margin-top: 66px;
     height: 40px;
 }
 
@@ -197,6 +197,30 @@
 color: gray;
 font-size: 8pt;
 }
+
+.pagination_list{
+  list-style-type: none;
+}
+
+.pagination_list li{
+  display: inline;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.pag_jump_ten{
+    cursor: pointer;
+}
+
+.pag_clickable_num{
+    cursor: pointer;
+}
+
+.pag_curr_page{
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 
 #load_file_button{
     float: left;
