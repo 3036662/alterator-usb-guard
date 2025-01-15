@@ -664,7 +664,7 @@ function InitLogs(){
       document.getElementById('show_logs_button').classList.remove('hidden');
   });
 
-  document.getElementById('btn_prev_page').addEventListener('click',e=>{
+  document.getElementById('btn_next_page').addEventListener('click',e=>{
       if (window.log_current_page<window.log_total_pages){
           ++window.log_current_page;
           document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
@@ -673,7 +673,7 @@ function InitLogs(){
       }        
   });
 
-  document.getElementById('btn_next_page').addEventListener('click',e=>{
+  document.getElementById('btn_prev_page').addEventListener('click',e=>{
       if (window.log_current_page>0){
        --window.log_current_page;
        document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
@@ -742,18 +742,93 @@ function SetLogData(data){
     document.getElementById('span_curr_page').textContent=" "+(window.log_current_page+1)+" ";
     document.getElementById('span_total_pages').textContent=" "+(window.log_total_pages+1);
     if ( window.log_current_page===0){
-      DisableButton(document.getElementById('btn_next_page'));
+      DisableButton(document.getElementById('btn_prev_page'));
     } else if (window.log_current_page>0){
-      EnableButton(document.getElementById('btn_next_page'));
+      EnableButton(document.getElementById('btn_prev_page'));
     }
     if (window.log_current_page>= window.log_total_pages){
-      DisableButton(document.getElementById('btn_prev_page'));
+      DisableButton(document.getElementById('btn_next_page'));
     } else {
-      EnableButton(document.getElementById('btn_prev_page'));
+      EnableButton(document.getElementById('btn_next_page'));
     }
     EnableButton(document.getElementById('log_search_button'));
   }
   catch(e){
       console.log(e.message);
   }
+  CreatePaginationContent();
+}
+
+function JumpToPage(page_number){
+  if (page_number<1) {return;}
+  page_number--;
+  if (page_number>window.log_total_pages) {return;}
+  window.log_current_page=page_number;
+  document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
+  LockLogPagination();
+  document.getElementById('hidd_inp_curr_page').dispatchEvent(new Event("page_change"));
+}
+
+
+/**
+ *  Create pagination links with page numbers
+ */
+function CreatePaginationContent(){
+   const  curr_page = window.log_current_page+1;
+   const total_pages = window.log_total_pages;
+   let start = 0; // range lower bound
+   let end = 0; // range upper bound
+   if (curr_page < 7){
+    start = 1;
+    end = total_pages < 10 ? total_pages : 10;
+   } else {
+    start = curr_page - 5;
+    end = curr_page + 5;
+    if (end > total_pages){ end = total_pages+1; }    
+   }  
+   if (end<=start) {
+    document.getElementById("pagination_content").innerHTML="";
+    return;
+  }
+   let html_content="<ul id='log_paginagtion_list' class='pagination_list'>";
+   html_content=html_content.concat("<li id='jump_dec_ten' class='pag_jump_ten'><<</li>");
+   for (let i=start; i<=end; i++){
+    if (i!=curr_page){
+      html_content=html_content.concat("<li class='pag_clickable_num'>",i,"</li>");
+    } else { 
+      // underline the current page
+      html_content=html_content.concat("<li class='pag_curr_page'>",i,"</li>");
+    }  
+   }
+   html_content=html_content.concat("<li id='jump_inc_ten' class='pag_jump_ten'>>></li>");
+   html_content=html_content.concat("</ul>")
+   let pag_element=document.getElementById("pagination_content");
+   if (pag_element===null) { return; }
+   pag_element.innerHTML=html_content;
+   // bind jump +- 10 pages
+   document.getElementById("jump_dec_ten").addEventListener('click',e=>{
+          const curr=window.log_current_page+1;
+          if (curr>=10){
+            JumpToPage(curr-9);
+          } else {
+            JumpToPage(1);
+          }
+   });
+   document.getElementById("jump_inc_ten").addEventListener('click',e=>{
+    const curr=window.log_current_page+1;
+    const total_pages=window.log_total_pages;
+    if (curr+10<total_pages){
+      JumpToPage(curr+10);
+    } else {
+      JumpToPage(total_pages+1);
+    }
+   });
+   // bind jump to particular page
+   let clickable_pages=document.querySelectorAll('.pag_clickable_num');
+   clickable_pages.forEach(element => {
+      element.addEventListener('click',e=>{
+          ///console.log("Page clicked " + element.innerText);
+          JumpToPage(element.innerText);
+      });
+   }); 
 }
