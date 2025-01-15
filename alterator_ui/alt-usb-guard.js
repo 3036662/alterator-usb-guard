@@ -651,6 +651,7 @@ function LockLogPagination(){
   DisableButton(document.getElementById('btn_next_page'));
 }
 
+// bind log events
 function InitLogs(){
   document.getElementById('show_logs_button').addEventListener('click',e=>{
       document.getElementById('logs_table').classList.remove('hidden');
@@ -710,6 +711,30 @@ function InitLogs(){
       document.getElementById('log_search_button').dispatchEvent(new Event('click'));
     }
   });
+
+  // page number direct input
+  var page_numb_el = document.getElementById('input_curr_page');
+  if (page_numb_el!==null){
+      page_numb_el.addEventListener('keydown', e =>{
+        if (e.key === "Enter"){
+          DirectPageNumberInput(e.target);
+        }
+      });
+      page_numb_el.addEventListener('blur', e=>{
+        DirectPageNumberInput(e.target);
+      });
+  }
+}
+
+function DirectPageNumberInput(target_el){
+  let new_val= target_el.value.replace(/[^1-9]/g,'');        
+  if (new_val < 1 || new_val > window.log_total_pages+1){
+    new_val=window.log_current_page+1;
+  }
+  target_el.value=new_val;        
+  if( new_val != window.log_current_page+1){
+      JumpToPage(new_val);
+  }          
 }
 
 function UnEscape(htmlStr) {
@@ -739,7 +764,7 @@ function SetLogData(data){
     window.log_total_pages=obj_data.total_pages;
     document.getElementById('log_textarea').textContent=UnEscape(obj_data.data.join('\n\n'));
     document.getElementById('hidd_inp_curr_page').value=obj_data.current_page;
-    document.getElementById('span_curr_page').textContent=" "+(window.log_current_page+1)+" ";
+    document.getElementById('input_curr_page').value=window.log_current_page+1;
     document.getElementById('span_total_pages').textContent=" "+(window.log_total_pages+1);
     if ( window.log_current_page===0){
       DisableButton(document.getElementById('btn_prev_page'));
