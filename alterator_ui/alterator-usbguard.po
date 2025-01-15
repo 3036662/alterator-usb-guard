@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-14 17:55+0300\n"
-"PO-Revision-Date: 2025-01-14 17:56+0300\n"
+"POT-Creation-Date: 2025-01-15 15:45+0300\n"
+"PO-Revision-Date: 2025-01-15 15:46+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -239,6 +239,10 @@ msgstr "Страница"
 #: стандартный ввод:70
 msgid "of"
 msgstr "из"
+
+#: стандартный ввод:71
+msgid "Number of entries per page (1 to 100) "
+msgstr "Количество записей на одну страницу (от 1 до 100) "
 
 #: ajax.scm:75
 msgid "Autorun is ENABLED"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-14 17:55+0300\n"
+"POT-Creation-Date: 2025-01-15 15:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -235,6 +235,10 @@ msgstr ""
 
 #: стандартный ввод:70
 msgid "of"
+msgstr ""
+
+#: стандартный ввод:71
+msgid "Number of entries per page (1 to 100) "
 msgstr ""
 
 #: ajax.scm:75

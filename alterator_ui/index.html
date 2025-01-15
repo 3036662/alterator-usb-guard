@@ -322,6 +322,7 @@
             <input type="button" id="btn_prev_page" name="prev_page" class="like_btn" value="&#9665; Previous" />
             <input type="button" id="btn_next_page" name="next_page" class="like_btn" value="Next &#9655;" />
             <input type="hidden" id="hidd_inp_curr_page" name="current_page" value="0" />
+            <input type="hidden" id="hidd_per_page" name="per_page" value="5" />
             <input type="hidden" id="hidd_inp_filter" name="log_filter" value="" />
             <input type="hidden" id="audit_type" name="audit_type" value="" />
             <span class="hidden" id="span_audit_message" name="audit message" translate="_">A Linux audit is used for logging. You can inspect it with ausearch -ts recent -m USER_DEVICE</span>
@@ -334,8 +335,18 @@
         </tr>
       
         <tr id="tr_page_info">
-          <td colspan="2" class="log_page_info cell_center"><span translate="_">Page</span><span
-              id="span_curr_page">0</span><span translate="_">of</span><span id="span_total_pages"></span></td>
+          <td colspan="2" class="log_page_info cell_center">
+              <span translate="_">Page</span>
+              <input id="input_curr_page" type="text" value="1" size="4" maxlength="100" />
+              <span translate="_">of</span>
+              <span id="span_total_pages"></span>              
+          </td>          
+        </tr>
+        <tr>
+          <td colspan="2" class="cell_center">
+            <span translate="_">Number of entries per page (1 to 100) </span>
+            <input id="input_entries_per_page" type="text" value="5" size="2" maxlength="100" />
+          </td>  
         </tr>
       </tbody>
     </table>
