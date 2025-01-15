@@ -724,11 +724,39 @@ function InitLogs(){
         DirectPageNumberInput(e.target);
       });
   }
+
+  // update hidden hidd_per_page value 
+  var per_page_el = document.getElementById('input_entries_per_page');
+  if (per_page_el!==null){
+    per_page_el.addEventListener('keydown', e =>{
+      if (e.key === "Enter"){
+        PerPageInput(e.target);
+      }
+    });
+    per_page_el.addEventListener('blur', e=>{
+      PerPageInput(e.target);
+    });
+  }
+}
+
+function PerPageInput(target_el){
+  let new_val= target_el.value.replace(/[^0-9]/g,'');        
+  target_el.value=new_val;
+  let hidden_el=document.getElementById('hidd_per_page');
+  if (new_val.length==0  || new_val<1 || new_val > 100 ){
+    new_val=hidden_el.value;
+    target_el.value=new_val;
+    return;
+  }
+  if (new_val!==hidden_el.value){
+    hidden_el.value=new_val;
+    JumpToPage(1);
+  }
 }
 
 function DirectPageNumberInput(target_el){
-  let new_val= target_el.value.replace(/[^1-9]/g,'');        
-  if (new_val < 1 || new_val > window.log_total_pages+1){
+  let new_val= target_el.value.replace(/[^0-9]/g,'');          
+  if (new_val.length==0 || new_val < 1 || new_val > window.log_total_pages+1){
     new_val=window.log_current_page+1;
   }
   target_el.value=new_val;        
@@ -805,7 +833,7 @@ function CreatePaginationContent(){
    let end = 0; // range upper bound
    if (curr_page < 7){
     start = 1;
-    end = total_pages < 10 ? total_pages : 10;
+    end = total_pages < 10 ? total_pages+1 : 10;
    } else {
     start = curr_page - 5;
     end = curr_page + 5;

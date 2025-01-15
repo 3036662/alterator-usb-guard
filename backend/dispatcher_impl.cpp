@@ -73,11 +73,16 @@ bool DispatcherImpl::ReadUsbGuardLogs(const LispMessage &msg) const noexcept {
   try {
     uint page_number =
         common_utils::StrToUint(msg.params.at("page")).value_or(0);
+    uint per_page = 5;
+    if (msg.params.count("per_page") > 0) {
+      std::cerr << "per page value" << msg.params.at("per_page") << "\n";
+      per_page = common_utils::StrToUint(msg.params.at("per_page")).value_or(5);
+    }
     std::string filter = msg.params.at("filter");
     // common_utils::LogReader reader("/var/log/alt-usb-automount/log.txt");
     auto audit = guard_.GetConfigStatus().GetAudit();
     if (audit.has_value()) {
-      auto res = audit->GetByPage({filter}, page_number, 5);
+      auto res = audit->GetByPage({filter}, page_number, per_page);
       boost::json::object json_result;
       json_result["total_pages"] = res.pages_number;
       json_result["current_page"] = res.curr_page;

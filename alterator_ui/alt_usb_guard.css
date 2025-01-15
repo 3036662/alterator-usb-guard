@@ -226,6 +226,9 @@ font-size: 8pt;
   margin: 10px;
 }
 
+#input_entries_per_page{
+    margin-left: 5px;
+}
 
 #load_file_button{
     float: left;
