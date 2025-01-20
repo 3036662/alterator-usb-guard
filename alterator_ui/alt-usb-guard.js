@@ -666,7 +666,7 @@ function InitLogs(){
   });
 
   document.getElementById('btn_next_page').addEventListener('click',e=>{
-      if (window.log_current_page<window.log_total_pages){
+      if (window.log_current_page+1<window.log_total_pages){
           ++window.log_current_page;
           document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
           LockLogPagination();
@@ -756,7 +756,7 @@ function PerPageInput(target_el){
 
 function DirectPageNumberInput(target_el){
   let new_val= target_el.value.replace(/[^0-9]/g,'');          
-  if (new_val.length==0 || new_val < 1 || new_val > window.log_total_pages+1){
+  if (new_val.length==0 || new_val < 1 || new_val > window.log_total_pages){
     new_val=window.log_current_page+1;
   }
   target_el.value=new_val;        
@@ -793,13 +793,13 @@ function SetLogData(data){
     document.getElementById('log_textarea').textContent=UnEscape(obj_data.data.join('\n\n'));
     document.getElementById('hidd_inp_curr_page').value=obj_data.current_page;
     document.getElementById('input_curr_page').value=window.log_current_page+1;
-    document.getElementById('span_total_pages').textContent=" "+(window.log_total_pages+1);
+    document.getElementById('span_total_pages').textContent=" "+(window.log_total_pages);
     if ( window.log_current_page===0){
       DisableButton(document.getElementById('btn_prev_page'));
     } else if (window.log_current_page>0){
       EnableButton(document.getElementById('btn_prev_page'));
     }
-    if (window.log_current_page>= window.log_total_pages){
+    if (window.log_current_page+1>= window.log_total_pages){
       DisableButton(document.getElementById('btn_next_page'));
     } else {
       EnableButton(document.getElementById('btn_next_page'));
@@ -815,7 +815,7 @@ function SetLogData(data){
 function JumpToPage(page_number){
   if (page_number<1) {return;}
   page_number--;
-  if (page_number>window.log_total_pages) {return;}
+  if (page_number>=window.log_total_pages) {return;}
   window.log_current_page=page_number;
   document.getElementById('hidd_inp_curr_page').value=window.log_current_page;
   LockLogPagination();
@@ -833,11 +833,11 @@ function CreatePaginationContent(){
    let end = 0; // range upper bound
    if (curr_page < 7){
     start = 1;
-    end = total_pages < 10 ? total_pages+1 : 10;
+    end = total_pages < 10 ? total_pages : 10;
    } else {
     start = curr_page - 5;
     end = curr_page + 5;
-    if (end > total_pages){ end = total_pages+1; }    
+    if (end > total_pages){ end = total_pages; }    
    }  
    if (end<=start) {
     document.getElementById("pagination_content").innerHTML="";
@@ -861,8 +861,8 @@ function CreatePaginationContent(){
    // bind jump +- 10 pages
    document.getElementById("jump_dec_ten").addEventListener('click',e=>{
           const curr=window.log_current_page+1;
-          if (curr>=10){
-            JumpToPage(curr-9);
+          if (curr>10){
+            JumpToPage(curr-10);
           } else {
             JumpToPage(1);
           }
@@ -873,7 +873,7 @@ function CreatePaginationContent(){
     if (curr+10<total_pages){
       JumpToPage(curr+10);
     } else {
-      JumpToPage(total_pages+1);
+      JumpToPage(total_pages);
     }
    });
    // bind jump to particular page

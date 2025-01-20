@@ -64,8 +64,11 @@ PageData LogReader::GetByPage(const vecstring &filters, uint page_number,
   data.pages_number=0;
   try {
     std::vector<std::string> all_lines = GetFromFile(filters);
-    if (pages_size>0)
-      data.pages_number=static_cast<uint>(all_lines.size()/pages_size);
+    if (pages_size>0){
+      const uint num_lines=static_cast<uint>(all_lines.size());
+      data.pages_number=num_lines/pages_size;
+      if (data.pages_number*pages_size<num_lines){ ++data.pages_number;}
+    }
     int lines_size = static_cast<int>(all_lines.size());
     int index_last = lines_size - static_cast<int>(page_number * pages_size);
     int index_first =
