@@ -1,11 +1,7 @@
 %define _altdata_dir %_datadir/alterator
 
 Name: alterator-usbguard
-<<<<<<< HEAD
-Version: 0.1.2
-=======
 Version: 0.2.2
->>>>>>> cbdd621d (translate the module title (RU))
 Release: alt1
 Summary: alterator module to control usb devices
 Group: System/Configuration/Other

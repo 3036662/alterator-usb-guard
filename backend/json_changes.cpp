@@ -259,7 +259,7 @@ void JsonChanges::AddAllowHid() {
     Log::Error() << ex.what();
     throw;
   }
-};
+}
 
 void JsonChanges::ProcessAllowConnected() {
   if (!active_devices_.has_value()) {
