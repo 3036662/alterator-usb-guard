@@ -1,6 +1,3 @@
-[submodule "thirdparty/cppcodec"]
-	path = thirdparty/cppcodec
-	url = https://github.com/tplgy/cppcodec.git
 [submodule "thirdparty/rapidcsv"]
 	path = thirdparty/rapidcsv
 	url = https://github.com/d99kris/rapidcsv.git
