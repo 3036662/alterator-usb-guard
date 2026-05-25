@@ -4,12 +4,13 @@
  * @brief Usb-related free-standing functions
  */
 
-#include "guard_rule.hpp"
 #include <optional>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+
+#include "guard_rule.hpp"
 
 namespace guard::utils {
 
@@ -17,14 +18,14 @@ namespace guard::utils {
  * @brief Upload CSV rules from file, uploaded by user
  * @param file  file content
  */
-std::optional<std::vector<GuardRule>>
-UploadRulesCsv(const std::string &file) noexcept;
+std::optional<std::vector<GuardRule>> UploadRulesCsv(
+    const std::string &file) noexcept;
 
 /**
  * @brief Build a json response for rules uploaded from csv
  */
-std::optional<std::string>
-BuildJsonArrayOfUpploaded(const std::vector<GuardRule> &vec_rules) noexcept;
+std::optional<std::string> BuildJsonArrayOfUpploaded(
+    const std::vector<GuardRule> &vec_rules) noexcept;
 
 ///@brief fold list of interface { 03:01:02 03:01:01 } to [03:*:*]
 ///@param i_type string with list of interfaces from usbguard
@@ -35,8 +36,8 @@ std::vector<std::string> FoldUsbInterfacesList(std::string i_type);
  * @param vendors set of vendor IDs
  * @return std::map<std::string,std::string> Vendor ID : Vendor Name
  */
-std::unordered_map<std::string, std::string>
-MapVendorCodesToNames(const std::unordered_set<std::string> &vendors) noexcept;
+std::unordered_map<std::string, std::string> MapVendorCodesToNames(
+    const std::unordered_set<std::string> &vendors) noexcept;
 
 /*----------------- GuardRule utility functions ----------------- */
 
@@ -67,9 +68,9 @@ void WrapBracesWithSpaces(std::string &raw_str) noexcept;
  * value
  * @return std::optional<std::string> value for parameter
  */
-std::optional<std::string>
-ParseToken(std::vector<std::string> &splitted, const std::string &name,
-           const std::function<bool(const std::string &)> &predicat);
+std::optional<std::string> ParseToken(
+    std::vector<std::string> &splitted, const std::string &name,
+    const std::function<bool(const std::string &)> &predicat);
 
 /**
  * @brief Parses a condition parameter
@@ -79,10 +80,10 @@ ParseToken(std::vector<std::string> &splitted, const std::string &name,
  * @param it_end  An iterator, pointing to the end of token sequence.
  * @return A string value of parameter.
  */
-std::string
-ParseConditionParameter(std::vector<std::string>::const_iterator it_start,
-                        std::vector<std::string>::const_iterator it_end,
-                        bool must_have_params = false);
+std::string ParseConditionParameter(
+    std::vector<std::string>::const_iterator it_start,
+    std::vector<std::string>::const_iterator it_end,
+    bool must_have_params = false);
 /**
  * @brief Parses array {val1 val2 ...}
  *
@@ -92,11 +93,11 @@ ParseConditionParameter(std::vector<std::string>::const_iterator it_start,
  * @param res_array Array where values must be appended
  * @return An iterator to the end of an array aka "}" token
  */
-std::vector<std::string>::const_iterator
-ParseCurlyBracesArray(std::vector<std::string>::const_iterator it_range_begin,
-                      std::vector<std::string>::const_iterator it_end,
-                      const std::function<bool(const std::string &)> &predicat,
-                      std::vector<std::string> &res_array);
+std::vector<std::string>::const_iterator ParseCurlyBracesArray(
+    std::vector<std::string>::const_iterator it_range_begin,
+    std::vector<std::string>::const_iterator it_end,
+    const std::function<bool(const std::string &)> &predicat,
+    std::vector<std::string> &res_array);
 
 /**
  * @brief Checks if a condition is allowed to have parameters.
@@ -135,4 +136,4 @@ std::unordered_map<std::string, std::string> InspectUdevRules(
 #endif
     ) noexcept;
 
-} // namespace guard::utils
+}  // namespace guard::utils

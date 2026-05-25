@@ -34,11 +34,12 @@ endif()
 
 
 include_directories(usbguard PUBLIC ${USBGUARD_INCLUDE_DIRS})
-target_include_directories(usbguard PUBLIC  ${CMAKE_SOURCE_DIR}/thirdparty/cppcodec/cppcodec)
+#target_include_directories(usbguard PUBLIC  ${CMAKE_SOURCE_DIR}/thirdparty/cppcodec/cppcodec)
 target_include_directories(usbguard PUBLIC  ${CMAKE_SOURCE_DIR}/thirdparty/rapidcsv/src)
 target_include_directories(usbguard PUBLIC  ${CMAKE_SOURCE_DIR}/alterator_bindings)
 target_include_directories(usbguard PRIVATE ${CMAKE_SOURCE_DIR}/common)
 
+target_include_directories(usbguard PRIVATE ${CPPCODEC_INCLUDE_DIRS})
 
 target_link_libraries(usbguard PRIVATE boost_json)
 target_link_libraries(usbguard PRIVATE systemd_dbus)

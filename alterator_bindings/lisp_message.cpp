@@ -8,10 +8,10 @@ LispMessage::LispMessage(
     : action(act.val), objects(obj.val), params(prms) {}
 
 std::ostream &operator<<(std::ostream &ostream, const LispMessage &mes) {
-  ostream << "Action: " << mes.action << "\n"
-          << "Objects: " << mes.objects << "\n";
-  for (auto it = mes.params.cbegin(); it != mes.params.end(); ++it) {
-    ostream << it->first << " : " << it->second << "\n";
-  }
-  return ostream;
+    ostream << "Action: " << mes.action << "\n"
+            << "Objects: " << mes.objects << "\n";
+    for (auto it = mes.params.cbegin(); it != mes.params.end(); ++it) {
+        ostream << it->first << " : " << it->second << "\n";
+    }
+    return ostream;
 }

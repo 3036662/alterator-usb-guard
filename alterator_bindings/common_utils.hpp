@@ -1,6 +1,4 @@
 #pragma once
-#include "serializable_for_lisp.hpp"
-#include "types.hpp"
 #include <boost/algorithm/string.hpp>
 #include <chrono>
 #include <cstdint>
@@ -8,6 +6,9 @@
 #include <string>
 #include <utility>
 #include <vector>
+
+#include "serializable_for_lisp.hpp"
+#include "types.hpp"
 
 namespace common_utils {
 
@@ -50,27 +51,27 @@ std::vector<std::string> FindAllFilesInDirRecursive(
  */
 template <typename T>
 std::string ToLisp(const SerializableForLisp<T> &obj) noexcept {
-  std::string res;
-  vecPairs vec{obj.SerializeForLisp()};
-  res += "(";
-  // ignore firs name, use only value
-  auto iter = vec.cbegin();
-  if (iter != vec.cend()) {
-    res += WrapWithQuotes(iter->second);
-    res += " ";
-    ++iter;
-  }
-  // use name:value
-  while (iter != vec.cend()) {
-    res += WrapWithQuotes(iter->first);
-    res += " ";
-    res += WrapWithQuotes(iter->second);
-    res += " ";
-    ++iter;
-  }
-  res += ")";
-  // std::cerr << "result string: " <<std::endl <<res << std::endl;
-  return res;
+    std::string res;
+    vecPairs vec{obj.SerializeForLisp()};
+    res += "(";
+    // ignore firs name, use only value
+    auto iter = vec.cbegin();
+    if (iter != vec.cend()) {
+        res += WrapWithQuotes(iter->second);
+        res += " ";
+        ++iter;
+    }
+    // use name:value
+    while (iter != vec.cend()) {
+        res += WrapWithQuotes(iter->first);
+        res += " ";
+        res += WrapWithQuotes(iter->second);
+        res += " ";
+        ++iter;
+    }
+    res += ")";
+    // std::cerr << "result string: " <<std::endl <<res << std::endl;
+    return res;
 }
 
 /**
@@ -80,18 +81,18 @@ std::string ToLisp(const SerializableForLisp<T> &obj) noexcept {
  */
 template <typename T>
 std::string ToLispAssoc(const SerializableForLisp<T> &obj) noexcept {
-  std::string res;
-  vecPairs vec{obj.SerializeForLisp()};
-  res += '(';
-  for (const auto &pair : vec) {
+    std::string res;
+    vecPairs vec{obj.SerializeForLisp()};
     res += '(';
-    res += pair.first;
-    res += ' ';
-    res += WrapWithQuotes(pair.second);
+    for (const auto &pair : vec) {
+        res += '(';
+        res += pair.first;
+        res += ' ';
+        res += WrapWithQuotes(pair.second);
+        res += ')';
+    }
     res += ')';
-  }
-  res += ')';
-  return res;
+    return res;
 }
 
 /**
@@ -110,7 +111,7 @@ std::string EscapeQuotes(const std::string &str) noexcept;
 
 std::string EscapeAll(const std::string &str) noexcept;
 
-std::string HtmlEscape(const std::string& str) noexcept;
+std::string HtmlEscape(const std::string &str) noexcept;
 
 /**
  * @brief Utility function for timing
@@ -119,7 +120,7 @@ template <class result_t = std::chrono::milliseconds,
           class clock_t = std::chrono::steady_clock,
           class duration_t = std::chrono::milliseconds>
 auto since(std::chrono::time_point<clock_t, duration_t> const &start) {
-  return std::chrono::duration_cast<result_t>(clock_t::now() - start);
+    return std::chrono::duration_cast<result_t>(clock_t::now() - start);
 }
 
-} // namespace common_utils
+}  // namespace common_utils
