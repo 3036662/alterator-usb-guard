@@ -38,7 +38,7 @@ void MessageReader::Loop() const noexcept {
             msg_in_progress = false;
             if (!action.val.empty() && !objects.val.empty()) {
                 LispMessage request_message(action, objects, params);
-                dispatcher_.Dispatch(request_message);
+                std::ignore = dispatcher_.Dispatch(request_message);
             }
             params.clear();
             action.val.clear();

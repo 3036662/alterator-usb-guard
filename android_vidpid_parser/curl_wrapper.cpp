@@ -1,7 +1,7 @@
 #include "curl_wrapper.hpp"
 
 // curl init
-CurlWrapper::CurlWrapper() : readBuffer{}, curl{nullptr} {
+CurlWrapper::CurlWrapper() : curl{nullptr} {
     try {
         readBuffer.reserve(CURL_MAX_WRITE_SIZE *
                            2);  // string buffer for curl response
@@ -25,19 +25,19 @@ CurlWrapper::CurlWrapper() : readBuffer{}, curl{nullptr} {
 CurlWrapper::~CurlWrapper() { curl_easy_cleanup(curl); }
 
 // callback for CURL
-size_t CurlWrapper::writeCallback(void* contents, size_t sz, size_t nmemb,
+size_t CurlWrapper::writeCallback(void* contents, size_t size, size_t nmemb,
                                   void* userp) {
     //((std::string*)userp)->append((char*)contents, sz * nmemb);
     try {
         static_cast<std::string*>(userp)->append(static_cast<char*>(contents),
-                                                 sz * nmemb);
+                                                 size * nmemb);
     } catch (std::bad_alloc& ba) {
         std::cerr << "Error allocating memory for HTTP response."
                      "bad_alloc caught: "
                   << ba.what() << '\n';
         return 0;
     }
-    return sz * nmemb;
+    return size * nmemb;
 }
 
 // get Response string for branch

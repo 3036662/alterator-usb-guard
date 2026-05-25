@@ -84,23 +84,20 @@ class ConfigStatus : public SerializableForLisp<ConfigStatus> {
 
     // getters and setters
 
-    inline bool guard_daemon_active() const noexcept {
-        return guard_daemon_active_;
-    }
+    bool guard_daemon_active() const noexcept { return guard_daemon_active_; }
 
-    inline bool guard_daemon_enabled() const noexcept {
-        return guard_daemon_enabled_;
-    }
+    bool guard_daemon_enabled() const noexcept { return guard_daemon_enabled_; }
 
-    inline void guard_daemon_active(bool status) noexcept {
+    void guard_daemon_active(bool status) noexcept {
         guard_daemon_active_ = status;
     }
-    inline std::unordered_map<std::string, std::string> udev_warnings()
+
+    std::unordered_map<std::string, std::string> udev_warnings()
         const noexcept {
         return udev_warnings_;
     }
 
-    inline Target implicit_policy() const noexcept {
+    Target implicit_policy() const noexcept {
         return implicit_policy_target_ == "block" ? Target::block
                                                   : Target::allow;
     }

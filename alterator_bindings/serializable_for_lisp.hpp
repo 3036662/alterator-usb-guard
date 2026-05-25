@@ -21,8 +21,9 @@ class SerializableForLisp<vecPairs> {
     vecPairs SerializeForLisp() const { return vec; }
 };
 
-/// @brief Interface for polimorphic classes
+/// @brief Interface for polymorphic classes
 class ISerializableForLisp {
    public:
     virtual vecPairs SerializeForLisp() const noexcept = 0;
+    virtual ~ISerializableForLisp() = default;
 };

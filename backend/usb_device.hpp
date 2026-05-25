@@ -39,21 +39,17 @@ class UsbDevice : public SerializableForLisp<UsbDevice> {
 
     /**
      * @brief Serialize data to vector of pairs
-     * html_name : value for displaing in frontend
+     * html_name : value for displaying in frontend
      * @return Vector of string pairs, suitable for alterator
      * frontend
      */
     vecPairs SerializeForLisp() const;
 
-    inline const std::string &vid() const noexcept { return vid_; };
-    inline const std::string &vendor_name() const noexcept {
-        return vendor_name_;
-    }
-    inline void vendor_name(const std::string &str) noexcept {
-        vendor_name_ = str;
-    }
-    inline const std::string &name() const noexcept { return name_; }
-    inline const std::string &hash() const noexcept { return hash_; }
+    const std::string &vid() const noexcept { return vid_; };
+    const std::string &vendor_name() const noexcept { return vendor_name_; }
+    void vendor_name(const std::string &str) noexcept { vendor_name_ = str; }
+    const std::string &name() const noexcept { return name_; }
+    const std::string &hash() const noexcept { return hash_; }
 
    private:
     uint number;
@@ -86,12 +82,10 @@ class UsbType {
     UsbType(UsbType &&) noexcept = default;
     UsbType &operator=(UsbType &&) noexcept = default;
 
-    inline const unsigned char &base() const noexcept { return base_; };
-    inline const std::string &base_str() const noexcept { return base_str_; };
-    inline const std::string &sub_str() const noexcept { return sub_str_; };
-    inline const std::string &protocol_str() const noexcept {
-        return protocol_str_;
-    };
+    const unsigned char &base() const noexcept { return base_; };
+    const std::string &base_str() const noexcept { return base_str_; };
+    const std::string &sub_str() const noexcept { return sub_str_; };
+    const std::string &protocol_str() const noexcept { return protocol_str_; };
 
    private:
     unsigned char base_ = 0;

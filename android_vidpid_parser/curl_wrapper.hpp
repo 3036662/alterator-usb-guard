@@ -16,7 +16,7 @@ class CurlWrapper {
     const std::string& perfomReq(const std::string& url);
 
     // callback for curl
-    static size_t writeCallback(void* contents, size_t sz, size_t nmemb,
+    static size_t writeCallback(void* contents, size_t size, size_t nmemb,
                                 void* userp);
 
    private:

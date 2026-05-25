@@ -19,12 +19,12 @@ class JsonChanges {
    public:
     explicit JsonChanges(const std::string &msg);
 
-    inline bool ActiveDeviceListNeeded() const noexcept {
+    bool ActiveDeviceListNeeded() const noexcept {
         return preset_mode_ == "put_connected_to_white_list" ||
                preset_mode_ == "put_connected_to_white_list_plus_HID";
     }
 
-    inline void active_devices(std::vector<UsbDevice> &&devices) {
+    void active_devices(std::vector<UsbDevice> &&devices) {
         active_devices_ = std::move(devices);
     }
 
@@ -52,13 +52,13 @@ class JsonChanges {
      * @brief Delete rules by indexes rules_to_delete_
      * @details puts delete rules indexes to rules_deleted_
      * pushes the rest of old rules to new_rules
-     * @throws std::logic_error if error pasing old rules
+     * @throws std::logic_error if error passing old rules
      */
     void DeleteRules();
 
     /**
      * @brief put all old rules to rules_to_delete_ (for presets)
-     * @throws std::logic_error if error pasing old rules
+     * @throws std::logic_error if error passing old rules
      */
     void DeleteAllOldRules();
 
@@ -81,7 +81,7 @@ class JsonChanges {
     void AddBlockUsbStorages();
 
     /**
-     * @brief Add androide devicese to rules_to_add_ with "block"
+     * @brief Add android devices to rules_to_add_ with "block"
      *
      */
     void AddBlockAndroid();
@@ -94,7 +94,7 @@ class JsonChanges {
     std::vector<uint> rules_to_delete_;
     std::vector<uint> rules_deleted_;
     std::vector<GuardRule> rules_to_add_;
-    std::vector<GuardRule> added_by_preset_;  // just for displaing to user
+    std::vector<GuardRule> added_by_preset_;  // just for displaying to user
     ConfigStatus config_;
     boost::json::object obj_result_;
     std::optional<std::vector<UsbDevice>> active_devices_;

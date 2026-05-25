@@ -461,7 +461,7 @@ RuleConditions ConvertToConditionWithParam(RuleConditions cond) noexcept {
     if (cond == RuleConditions::rule_evaluated)
         return RuleConditions::rule_evaluated_past;
     if (cond == RuleConditions::random)
-        return RuleConditions::random_with_propability;
+        return RuleConditions::random_with_probability;
     return cond;
 }
 

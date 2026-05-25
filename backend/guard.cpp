@@ -136,7 +136,7 @@ std::optional<std::string> Guard::ProcessJsonRulesChanges(
                     << "[ProcessJson] Starting usbguard with allow policy to "
                        "get list of devices";
                 config.ChangeImplicitPolicy(false);
-                config.TryToRun(true);
+                std::ignore = config.TryToRun(true);
                 ConnectToUsbGuard();
                 if (!HealthStatus()) {
                     throw std::runtime_error("Can't launch usbguard");
@@ -146,9 +146,10 @@ std::optional<std::string> Guard::ProcessJsonRulesChanges(
             // after recieving devices, restore initial status
             Log::Debug()
                 << "[ProcessJson] Recovering the initial policy and status";
-            config.ChangeImplicitPolicy(initial_policy == Target::block);
-            config.ChangeDaemonStatus(initial_active_status,
-                                      initial_enable_status);
+            std::ignore =
+                config.ChangeImplicitPolicy(initial_policy == Target::block);
+            std::ignore = config.ChangeDaemonStatus(initial_active_status,
+                                                    initial_enable_status);
         }
         return js_changes.Process(apply_changes);
     } catch (const std::exception &ex) {

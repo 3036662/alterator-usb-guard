@@ -36,7 +36,7 @@ const std::map<RuleConditions, std::string> GuardRule::map_conditions{
     {RuleConditions::rule_evaluated, "rule-evaluated"},
     {RuleConditions::rule_evaluated_past, "rule-evaluated("},
     {RuleConditions::random, "random"},
-    {RuleConditions::random_with_propability, "random("},
+    {RuleConditions::random_with_probability, "random("},
     {RuleConditions::always_true, "true"},
     {RuleConditions::always_false, "false"},
     {RuleConditions::no_condition, ""}};
@@ -66,7 +66,7 @@ GuardRule::GuardRule(const std::string &raw_str) {
     target_ = it_target->first;
     tokens.erase(tokens.begin());
     // Conditions may or may not exist in the string.
-    // Parse conditions first beacuse the "allow-matched()" condition contains
+    // Parse conditions first because the "allow-matched()" condition contains
     // nested rule
     cond_ = ParseConditions(tokens);
     // id (vid:pid)
@@ -90,7 +90,7 @@ GuardRule::GuardRule(const std::string &raw_str) {
                    !boost::ends_with(val, "\\\"");
         };
     // Hash, device_name, serial, port, and with_interface may or may not exist
-    // in the string. default_predicat - Function is the default behavior of
+    // in the string. default_predicate - Function is the default behavior of
     // values validating. hash length MUST be > 7 symbols
     hash_ = utils::ParseToken(tokens, "hash", [](const std::string &val) {
         return val.size() > 7 && val.size() < 101;
@@ -124,16 +124,16 @@ GuardRule::GuardRule(const std::string &raw_str) {
     // Log::Debug() << BuildString();
 }
 
-void GuardRule::FinalValidator(std::vector<std::string> &splitted) const {
+void GuardRule::FinalValidator(std::vector<std::string> &split) const {
     // check
-    for (std::string &str : splitted) boost::trim(str);
+    for (std::string &str : split) boost::trim(str);
     const auto it_end =
-        std::remove_if(splitted.begin(), splitted.end(),
+        std::remove_if(split.begin(), split.end(),
                        [](const std::string &str) { return str.empty(); });
-    splitted.erase(it_end, splitted.end());
-    if (!splitted.empty()) {
+    split.erase(it_end, split.end());
+    if (!split.empty()) {
         Log::Error() << "Not all token were parsed in the rule";
-        for (const auto &tok : splitted) {
+        for (const auto &tok : split) {
             Log::Error err;
             err << "token" << tok << " ";
         }
@@ -150,7 +150,7 @@ void GuardRule::FinalValidator(std::vector<std::string> &splitted) const {
 }
 
 void GuardRule::DetermineStrictnessLevel() noexcept {
-    // Determine the stricness level
+    // Determine the strictness level
     // conditions,parent-hash and port are not used for hashing
     // if rule contains a port or a condition - this is a "raw" rule
     if (hash_ && !cond_ && !port_)
@@ -165,18 +165,17 @@ void GuardRule::DetermineStrictnessLevel() noexcept {
 
 std::optional<std::pair<RuleOperator, std::vector<std::string>>>
 GuardRule::ParseTokenWithOperator(
-    std::vector<std::string> &splitted, const std::string &name,
-    const std::function<bool(const std::string &)> &predicat) {
+    std::vector<std::string> &split, const std::string &name,
+    const std::function<bool(const std::string &)> &predicate) {
     std::logic_error ex_common("Cant parse rule string");
     std::optional<std::pair<RuleOperator, std::vector<std::string>>> res;
     // find token
-    if (const auto it_name =
-            std::find(splitted.cbegin(), splitted.cend(), name);
-        it_name != splitted.cend()) {
+    if (const auto it_name = std::find(split.cbegin(), split.cend(), name);
+        it_name != split.cend()) {
         auto it_param = it_name;
         ++it_param;
         // if a value exists -> check may be it is an operator
-        if (it_param == splitted.cend()) {
+        if (it_param == split.cend()) {
             Log::Error() << "Parsing error. No values for param " << name
                          << " found.";
             throw ex_common;
@@ -192,7 +191,7 @@ GuardRule::ParseTokenWithOperator(
         //  If no operator is found, parse as usual param - value
         if (!have_operator) {
             const std::optional<std::string> tmp_value =
-                utils::ParseToken(splitted, name, predicat);
+                utils::ParseToken(split, name, predicate);
             if (tmp_value.has_value()) {
                 res = {RuleOperator::no_operator, {}};
                 res->second.push_back(*tmp_value);
@@ -203,8 +202,8 @@ GuardRule::ParseTokenWithOperator(
             res = {it_operator->first,
                    {}};  // Create a pair with an empty vector.
             auto it_range_end = utils::ParseCurlyBracesArray(
-                it_param, splitted.cend(), predicat, res->second);
-            splitted.erase(it_name, ++it_range_end);
+                it_param, split.cend(), predicate, res->second);
+            split.erase(it_name, ++it_range_end);
         }
     }
     return res;
@@ -390,18 +389,17 @@ StrictnessLevel GuardRule::StrToStrictnessLevel(
 }
 
 std::optional<std::pair<RuleOperator, std::vector<RuleWithBool>>>
-GuardRule::ParseConditions(std::vector<std::string> &splitted) {
+GuardRule::ParseConditions(std::vector<std::string> &split) {
     std::logic_error ex_common("Cant parse conditions");
     std::optional<std::pair<RuleOperator, std::vector<RuleWithBool>>> res;
     // Check if there are any conditions - look for "if"
-    const auto it_if_operator =
-        std::find(splitted.cbegin(), splitted.cend(), "if");
-    if (it_if_operator == splitted.cend()) return std::nullopt;
+    const auto it_if_operator = std::find(split.cbegin(), split.cend(), "if");
+    if (it_if_operator == split.cend()) return std::nullopt;
     // Check if there is any operator
     bool have_operator{false};
     auto it_param1 = it_if_operator;
     ++it_param1;
-    if (it_param1 == splitted.cend()) {
+    if (it_param1 == split.cend()) {
         Log::Error() << "No value was found for condition";
         throw ex_common;
     }
@@ -414,26 +412,26 @@ GuardRule::ParseConditions(std::vector<std::string> &splitted) {
     // No operator was found
     if (!have_operator) {
         std::vector<RuleWithBool> tmp;
-        tmp.push_back(ParseOneCondition(it_param1, splitted.cend()));
+        tmp.push_back(ParseOneCondition(it_param1, split.cend()));
         res = {RuleOperator::no_operator, std::move(tmp)};
         ++it_param1;
-        if (it_param1 != splitted.cend()) {
+        if (it_param1 != split.cend()) {
             throw std::logic_error("Some text was found after a condition");
         }
-        splitted.erase(it_if_operator, it_param1);
+        split.erase(it_if_operator, it_param1);
     } else {
         RuleOperator rule_operator = it_operator->first;  // goes to the result
         auto range_begin = it_param1;
         ++range_begin;
-        if (range_begin == splitted.cend() || *range_begin != "{") {
+        if (range_begin == split.cend() || *range_begin != "{") {
             throw std::logic_error("{ expected");
         }
         ++range_begin;
-        if (range_begin == splitted.cend()) {
+        if (range_begin == split.cend()) {
             throw ex_common;
         }
-        auto range_end = std::find(range_begin, splitted.cend(), "}");
-        if (range_end == splitted.cend() || range_begin >= range_end) {
+        auto range_end = std::find(range_begin, split.cend(), "}");
+        if (range_end == split.cend() || range_begin >= range_end) {
             throw std::logic_error("} expected");
         }
         if (std::distance(range_begin, range_end) == 1) {
@@ -447,11 +445,11 @@ GuardRule::ParseConditions(std::vector<std::string> &splitted) {
             if (it == range_end) break;
         }
         ++range_end;
-        if (range_end != splitted.cend()) {
+        if (range_end != split.cend()) {
             throw std::logic_error(
                 "Some text was found after conditions array");
         }
-        splitted.erase(it_if_operator, range_end);
+        split.erase(it_if_operator, range_end);
         res = {rule_operator, std::move(tmp)};
     }
     return res;

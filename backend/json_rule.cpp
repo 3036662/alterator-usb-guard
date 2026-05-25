@@ -108,7 +108,6 @@ void JsonRule::ParseOneField(const boost::json::object *ptr_field) {
         // for a raw rule
         if (field == "raw_rule") {
             raw_ = std::move(value);
-            continue;
         }
     }
 }

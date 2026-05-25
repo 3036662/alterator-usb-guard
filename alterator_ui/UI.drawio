@@ -484,7 +484,7 @@
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-160" value="Action:&lt;br&gt;White: Allow&lt;br&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Black:&amp;nbsp; Block, Reject&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=13;fontFamily=Helvetica;fontColor=default;" parent="1" vertex="1">
           <mxGeometry x="809" y="336.5" width="129" height="59" as="geometry" />
         </mxCell>
-        <mxCell id="3SDEc3MKjUo-QjRz-hxS-167" value="Привязка мотирования USB дисков к UID/GID" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;strokeColor=#6c8ebf;fontSize=13;fillColor=#dae8fc;" parent="1" vertex="1">
+        <mxCell id="3SDEc3MKjUo-QjRz-hxS-167" value="Привязка монтирования USB дисков к UID/GID" style="shape=table;startSize=30;container=1;collapsible=0;childLayout=tableLayout;strokeColor=#6c8ebf;fontSize=13;fillColor=#dae8fc;" parent="1" vertex="1">
           <mxGeometry x="22.5" y="1455" width="790" height="90" as="geometry" />
         </mxCell>
         <mxCell id="3SDEc3MKjUo-QjRz-hxS-168" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=13;" parent="3SDEc3MKjUo-QjRz-hxS-167" vertex="1">

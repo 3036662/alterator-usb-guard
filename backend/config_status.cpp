@@ -507,7 +507,7 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
                        "UsbGuard will be disabled";
                 ChangeImplicitPolicy(false);
                 // TryToRun(false);
-                ChangeDaemonStatus(false, false);
+                std::ignore = ChangeDaemonStatus(false, false);
             }
             return false;
         }
