@@ -86,8 +86,8 @@ std::string ConfigStatus::GetDaemonConfigPath() const noexcept {
     try {
         // open unit (.service file)
         if (std::filesystem::exists(full_path_to_unit)) {
-            std::ifstream file_unit(full_path_to_unit);
-            if (file_unit.is_open()) {
+            if (std::ifstream file_unit(full_path_to_unit);
+                file_unit.is_open()) {
                 std::string line;
                 // find ExecStart string
                 while (getline(file_unit, line)) {
@@ -379,10 +379,11 @@ void ConfigStatus::ParseDaemonConfig() noexcept {
 void ConfigStatus::CheckConfigFilesPermissions() noexcept {
     namespace fs = std::filesystem;
     try {
-        fs::path config_path(daemon_config_file_path_);
-        if (fs::exists(config_path)) {
-            fs::perms conf_perm = fs::status(config_path).permissions();
-            if (conf_perm == (fs::perms::owner_write | fs::perms::owner_read)) {
+        if (const fs::path config_path(daemon_config_file_path_);
+            fs::exists(config_path)) {
+            if (const fs::perms conf_perm =
+                    fs::status(config_path).permissions();
+                conf_perm == (fs::perms::owner_write | fs::perms::owner_read)) {
                 config_file_permissions_OK_ = true;
             } else {
                 config_file_permissions_OK_ = false;
@@ -623,15 +624,15 @@ bool ConfigStatus::ChangeDaemonStatus(bool active,
     // if we need to stop the service
     if (*init_state && !active) {
         Log::Info() << "[ChangeDaemonStatus] Stopping the service";
-        auto res = sysd.StopUnit(usb_guard_daemon_name);
-        if (!res || !*res) {
+        if (const auto res = sysd.StopUnit(usb_guard_daemon_name);
+            !res || !*res) {
             Log::Error() << "[ChangeDaemonStatus] Can't stop the USBGuard";
             return false;
         }
     } else if (!*init_state && active) {
         Log::Info() << "Starting the service";
-        auto res = sysd.StartUnit(usb_guard_daemon_name);
-        if (!res || !*res) {
+        if (const auto res = sysd.StartUnit(usb_guard_daemon_name);
+            !res || !*res) {
             Log::Error() << "[ChangeDaemonStatus] Can't start the USBGuard";
             return false;
         }
@@ -640,8 +641,8 @@ bool ConfigStatus::ChangeDaemonStatus(bool active,
     // if now the daemon is enabled and we need to disable it
     if (*enabled_state && !enabled) {
         Log::Info() << "[ChangeDaemonStatus] Disabling the service";
-        auto res = sysd.DisableUnit(usb_guard_daemon_name);
-        if (!res || !*res) {
+        if (const auto res = sysd.DisableUnit(usb_guard_daemon_name);
+            !res || !*res) {
             Log::Error() << "Can't disable the USBGuard";
             return false;
         }

@@ -133,8 +133,8 @@ void GuardRule::FinalValidator(std::vector<std::string> &splitted) const {
     splitted.erase(it_end, splitted.end());
     if (!splitted.empty()) {
         Log::Error() << "Not all token were parsed in the rule";
-        Log::Error err;
         for (const auto &tok : splitted) {
+            Log::Error err;
             err << "token" << tok << " ";
         }
         throw std::logic_error("Not all tokens were parsed");
@@ -170,8 +170,9 @@ GuardRule::ParseTokenWithOperator(
     std::logic_error ex_common("Cant parse rule string");
     std::optional<std::pair<RuleOperator, std::vector<std::string>>> res;
     // find token
-    auto it_name = std::find(splitted.cbegin(), splitted.cend(), name);
-    if (it_name != splitted.cend()) {
+    if (const auto it_name =
+            std::find(splitted.cbegin(), splitted.cend(), name);
+        it_name != splitted.cend()) {
         auto it_param = it_name;
         ++it_param;
         // if a value exists -> check may be it is an operator

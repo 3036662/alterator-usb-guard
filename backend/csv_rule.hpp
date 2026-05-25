@@ -7,7 +7,7 @@ namespace guard::utils::csv {
 
 class CsvRule {
    public:
-    explicit CsvRule(rapidcsv::Document &doc, size_t index);
+    explicit CsvRule(const rapidcsv::Document &doc, size_t index);
     std::string BuildString() const noexcept;
 
    private:

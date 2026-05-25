@@ -31,7 +31,7 @@ JsonChanges::JsonChanges(const std::string &msg)
         }
     } catch (const std::exception &ex) {
         Log::Error() << ex.what();
-        throw ex;
+        throw;
     }
     ExtractDaemonTargetState();
     ExtractTargetPolicy();
@@ -305,8 +305,8 @@ void JsonChanges::ProcessManualMode() {
         p_jobj_->at("deleted_rules").is_array()) {
         for (const auto &element : p_jobj_->at("deleted_rules").as_array()) {
             if (!element.is_string()) continue;
-            auto id_rule = StrToUint(element.as_string().c_str());
-            if (id_rule.has_value()) {
+            if (auto id_rule = StrToUint(element.as_string().c_str());
+                id_rule.has_value()) {
                 rules_to_delete_.push_back(*id_rule);
             } else {
                 throw std::runtime_error(
@@ -368,8 +368,8 @@ void JsonChanges::ProcessJsonAppended() {
     boost::json::array json_arr_OK;
     boost::json::array json_arr_BAD;
     for (const auto &rule : *ptr_json_array_rules) {
-        const boost::json::object *ptr_json_rule = rule.if_object();
-        if (ptr_json_rule != nullptr && ptr_json_rule->contains("tr_id")) {
+        if (const boost::json::object *ptr_json_rule = rule.if_object();
+            ptr_json_rule != nullptr && ptr_json_rule->contains("tr_id")) {
             const boost::json::string *tr_id =
                 ptr_json_rule->at("tr_id").if_string();
             // try to build a rule

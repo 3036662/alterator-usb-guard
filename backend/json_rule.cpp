@@ -19,15 +19,16 @@ JsonRule::JsonRule(const boost::json::object *ptr_obj) {
         ptr_obj->at("fields_arr").if_array()->empty()) {
         throw std::logic_error("Can't find any fields for a rule");
     }
-    const json::array *ptr_fields = ptr_obj->at("fields_arr").if_array();
 
     // for each field in array
-    for (const auto &field_value : *ptr_fields) {
+    for (const json::array *ptr_fields = ptr_obj->at("fields_arr").if_array();
+         const auto &field_value : *ptr_fields) {
         if (!field_value.is_object()) {
             throw std::logic_error("Error parsing rule fields");
         }
-        const json::object *ptr_field = field_value.if_object();
-        if (ptr_field != nullptr) ParseOneField(ptr_field);
+        if (const json::object *ptr_field = field_value.if_object();
+            ptr_field != nullptr)
+            ParseOneField(ptr_field);
     }
 }
 

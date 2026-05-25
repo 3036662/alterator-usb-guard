@@ -31,7 +31,6 @@ using common_utils::Log;
 
 std::optional<std::vector<GuardRule>> UploadRulesCsv(
     const std::string &file) noexcept {
-    const size_t kColumnsRequired = 2;
     try {
         std::string csv_string =
             cppcodec::base64_rfc4648::decode<std::string>(file);
@@ -42,7 +41,8 @@ std::optional<std::vector<GuardRule>> UploadRulesCsv(
         std::stringstream sstream(csv_string);
         rapidcsv::Document doc(sstream, rapidcsv::LabelParams(-1, -1),
                                rapidcsv::SeparatorParams(','));
-        if (doc.GetRowCount() == 0 || doc.GetColumnCount() < kColumnsRequired) {
+        if (constexpr size_t kColumnsRequired = 2;
+            doc.GetRowCount() == 0 || doc.GetColumnCount() < kColumnsRequired) {
             Log::Error() << "Bad csv file";
             return std::nullopt;
         }
@@ -203,8 +203,8 @@ std::unordered_map<std::string, std::string> MapVendorCodesToNames(
     const std::string path_to_usb_ids = "/usr/share/misc/usb.ids";
     try {
         if (std::filesystem::exists(path_to_usb_ids)) {
-            std::ifstream filestream(path_to_usb_ids);
-            if (filestream.is_open()) {
+            if (std::ifstream filestream(path_to_usb_ids);
+                filestream.is_open()) {
                 std::string line;
                 while (getline(filestream, line)) {
                     // not interested in strings starting with tab
@@ -212,10 +212,10 @@ std::unordered_map<std::string, std::string> MapVendorCodesToNames(
                         line.clear();
                         continue;
                     }
-                    auto range = boost::find_first(line, "  ");
-                    if (static_cast<bool>(range)) {
-                        std::string vendor_id(line.begin(), range.begin());
-                        if (vendors.count(vendor_id) != 0) {
+                    if (auto range = boost::find_first(line, "  ");
+                        static_cast<bool>(range)) {
+                        if (std::string vendor_id(line.begin(), range.begin());
+                            vendors.count(vendor_id) != 0) {
                             std::string vendor_name(range.end(), line.end());
                             res.emplace(std::move(vendor_id),
                                         std::move(vendor_name));
@@ -355,8 +355,9 @@ std::optional<std::string> ParseToken(
     std::vector<std::string> &splitted, const std::string &name,
     const std::function<bool(const std::string &)> &predicat) {
     std::optional<std::string> res;
-    auto it_name = std::find(splitted.cbegin(), splitted.cend(), name);
-    if (it_name != splitted.cend()) {
+    if (const auto it_name =
+            std::find(splitted.cbegin(), splitted.cend(), name);
+        it_name != splitted.cend()) {
         auto it_name_param = it_name;
         ++it_name_param;
         if (it_name_param != splitted.cend() && predicat(*it_name_param)) {
@@ -375,8 +376,8 @@ std::string ParseConditionParameter(
     std::vector<std::string>::const_iterator it_end, bool must_have_params) {
     std::logic_error ex_common("Can't parse parameters for condition");
     // Parse parameters.
-    auto it_open_round_brace = it_start;
-    if (*it_open_round_brace != "(") {
+    if (const auto it_open_round_brace = it_start;
+        *it_open_round_brace != "(") {
         if (must_have_params) {
             throw std::logic_error("( expected");
         }
@@ -394,8 +395,8 @@ std::string ParseConditionParameter(
     if (it_start == it_end) {
         throw ex_common;
     }
-    auto it_close_round_brace = it_start;
-    if (*it_close_round_brace != ")") {
+    if (const auto it_close_round_brace = it_start;
+        *it_close_round_brace != ")") {
         throw ex_common;
     }
     boost::trim(res);
@@ -467,8 +468,7 @@ RuleConditions ConvertToConditionWithParam(RuleConditions cond) noexcept {
 /*------------------ ConfigStatus free-standing util functions ------------*/
 
 bool IsSuspiciousUdevFile(const std::string &str_path) {
-    std::ifstream file_udev_rule(str_path);
-    if (file_udev_rule.is_open()) {
+    if (std::ifstream file_udev_rule(str_path); file_udev_rule.is_open()) {
         std::string tmp_str;
         // bool found_usb{false};
         bool found_authorize{false};

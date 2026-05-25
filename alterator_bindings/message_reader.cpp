@@ -63,8 +63,7 @@ void MessageReader::Loop() const noexcept {
             continue;
         }
         // find parameters
-        size_t pos = line.find(':');
-        if (pos != std::string::npos) {
+        if (const size_t pos = line.find(':'); pos != std::string::npos) {
             params.emplace(line.substr(0, pos),  // param
                            line.substr(pos + 1)  // value
             );

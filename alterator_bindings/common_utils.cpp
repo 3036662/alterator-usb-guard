@@ -18,12 +18,11 @@ std::string UnUtf8(const std::string &str) noexcept {
     std::string res;
     std::runtime_error ex_bad_string("Invalid characters in string");
     try {
-        const uint kMaxIter = 1'000'000;
         uint iter_counter = 0;
         size_t ind = 0;
         while (ind < str.size()) {
             ++iter_counter;
-            if (iter_counter > kMaxIter)
+            if (constexpr uint kMaxIter = 1'000'000; iter_counter > kMaxIter)
                 throw std::runtime_error(
                     "Maximal number of iterations was reached");
             // 1 byte char - skip quotes
@@ -104,13 +103,12 @@ std::vector<std::string> FindAllFilesInDirRecursive(
     const std::pair<std::string, std::string> &path_ext) noexcept {
     // TODO think about enabling symlinks support
     namespace fs = std::filesystem;
-    const int max_depth = 30;
     std::vector<std::string> res;
-    fs::path fs_path(path_ext.first);
-    if (fs::exists(fs_path)) {
+    if (const fs::path fs_path(path_ext.first); fs::exists(fs_path)) {
         for (auto it_entry = fs::recursive_directory_iterator(fs_path);
              it_entry != fs::recursive_directory_iterator(); ++it_entry) {
-            if (it_entry.depth() > max_depth) break;
+            if (constexpr int max_depth = 30; it_entry.depth() > max_depth)
+                break;
             if (it_entry->is_regular_file() &&
                 it_entry->path().extension().string() == path_ext.second) {
                 res.emplace_back(it_entry->path().string());

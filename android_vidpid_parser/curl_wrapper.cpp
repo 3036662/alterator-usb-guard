@@ -12,7 +12,7 @@ CurlWrapper::CurlWrapper() : readBuffer{}, curl{nullptr} {
         throw;
     }
     curl = curl_easy_init();
-    if (curl == NULL) {
+    if (curl == nullptr) {
         std::cerr << "Fatal error found with CURL initialisation" << std::endl;
         throw "Error with cUrl initialization";
     }
@@ -46,8 +46,7 @@ const std::string& CurlWrapper::perfomReq(const std::string& url) {
     // std::string req_url=curl_easy_escape(curl,url.c_str(),url.size());
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     std::cerr << "Making request to " << url << std::endl;
-    CURLcode res = curl_easy_perform(curl);
-    if (res != CURLE_OK) {
+    if (const CURLcode res = curl_easy_perform(curl); res != CURLE_OK) {
         std::cerr << "cUrl request to server failed: \n"
                   << curl_easy_strerror(res) << std::endl;
         readBuffer.clear();

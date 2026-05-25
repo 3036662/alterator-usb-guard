@@ -18,7 +18,7 @@ class MessageReader {
      * @brief Construct a new Message Reader object
      * @param Function bool(*)(const LispMessage&) as dispatcher implementation
      */
-    MessageReader(DispatchFunc) noexcept;
+    explicit MessageReader(DispatchFunc) noexcept;
 
     /// @brief Main loop - reades messages and sens them to dispatcher
     void Loop() const noexcept;
