@@ -73,7 +73,7 @@ bool DispatcherImpl::ReadUsbGuardLogs(const LispMessage &msg) const noexcept {
     }
     std::cout << kMessBeg;
     try {
-        uint page_number =
+        const uint page_number =
             common_utils::StrToUint(msg.params.at("page")).value_or(0);
         uint per_page = 5;
         if (msg.params.count("per_page") > 0) {
@@ -116,7 +116,7 @@ bool DispatcherImpl::ReadUsbGuardLogs(const LispMessage &msg) const noexcept {
 }
 
 bool DispatcherImpl::UploadRulesFile(const LispMessage &msg) noexcept {
-    auto start = std::chrono::steady_clock::now();
+    const auto start = std::chrono::steady_clock::now();
     Log::Debug() << "Uploading file started";
     if (msg.params.count("upload_rules") == 0 ||
         msg.params.at("upload_rules").empty()) {
@@ -127,11 +127,11 @@ bool DispatcherImpl::UploadRulesFile(const LispMessage &msg) noexcept {
         Log::Warning() << "Empty rules file";
         return true;
     }
-    std::optional<std::vector<guard::GuardRule>> vec_rules =
+    const std::optional<std::vector<guard::GuardRule>> vec_rules =
         utils::UploadRulesCsv(msg.params.at("upload_rules"));
     Log::Debug() << "Rules parsed";
     if (vec_rules.has_value() && !vec_rules->empty()) {
-        std::optional<std::string> js_arr =
+        const std::optional<std::string> js_arr =
             guard::utils::BuildJsonArrayOfUpploaded(
                 vec_rules.value_or(std::vector<guard::GuardRule>()));
         // Log::Debug() << js_arr.value_or("no json arr");
@@ -163,7 +163,7 @@ bool DispatcherImpl::UploadRulesFile(const LispMessage &msg) noexcept {
 
 bool DispatcherImpl::SaveChangeRules(const LispMessage &msg,
                                      bool apply_rules) const noexcept {
-    auto start = std::chrono::steady_clock::now();
+    const auto start = std::chrono::steady_clock::now();
     // Log::Debug() << "Time measurement has started";
     if (msg.params.count("changes_json") == 0 ||
         msg.params.find("changes_json")->second.empty()) {
@@ -191,9 +191,9 @@ bool DispatcherImpl::SaveChangeRules(const LispMessage &msg,
 }
 
 bool DispatcherImpl::ListUsbGuardRules(const LispMessage &msg) const noexcept {
-    guard::StrictnessLevel level =
+    const guard::StrictnessLevel level =
         guard::GuardRule::StrToStrictnessLevel(msg.params.at("level"));
-    auto start = std::chrono::steady_clock::now();
+    const auto start = std::chrono::steady_clock::now();
     // Log::Debug() << "Time measurement has started";
     std::vector<guard::GuardRule> vec_rules =
         guard_.GetConfigStatus().ParseGuardRulesFile().first;
@@ -205,7 +205,7 @@ bool DispatcherImpl::ListUsbGuardRules(const LispMessage &msg) const noexcept {
         for (const auto &rule : vec_rules) {
             if (rule.vid().has_value()) vendors.insert(rule.vid().value_or(""));
         }
-        auto vendors_names = guard::utils::MapVendorCodesToNames(vendors);
+        const auto vendors_names = guard::utils::MapVendorCodesToNames(vendors);
         for (auto &rule : vec_rules) {
             if (rule.vid().has_value() &&
                 vendors_names.count(rule.vid().value_or("")) > 0) {
@@ -225,7 +225,8 @@ bool DispatcherImpl::ListUsbGuardRules(const LispMessage &msg) const noexcept {
 
 bool DispatcherImpl::ListUsbDevices() const noexcept {
     // Log::Debug() << "Time measurement has started";
-    std::vector<guard::UsbDevice> vec_usb = guard_.ListCurrentUsbDevices();
+    const std::vector<guard::UsbDevice> vec_usb =
+        guard_.ListCurrentUsbDevices();
     std::cout << kMessBeg;
     for (const auto &usb : vec_usb) {
         std::cout << ToLisp(usb);

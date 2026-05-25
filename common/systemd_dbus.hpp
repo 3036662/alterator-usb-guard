@@ -52,7 +52,7 @@ class Systemd {
      * @return Unique ptr to IProxy object
      * */
     std::unique_ptr<sdbus::IProxy> CreateProxyToSystemd(
-        const std::string &path);
+        const std::string &path) const;
 
     const std::string kDestinationName = "org.freedesktop.systemd1";
     const std::string kObjectPath = "/org/freedesktop/systemd1";

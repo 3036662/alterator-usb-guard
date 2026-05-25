@@ -30,7 +30,7 @@ int main(int argc, const char *argv[]) {
     int counter = 0;
     int counter_pid = 0;
     while (!it_all_vendords.empty()) {
-        auto first = it_all_vendords.begin()->begin();
+        const auto first = it_all_vendords.begin()->begin();
         it_all_vendords.pop_front();
         std::string::iterator second;
         if (!it_all_vendords.empty())
@@ -39,9 +39,9 @@ int main(int argc, const char *argv[]) {
             second = buffer.end();
         // std::cerr<<"Distance = "<< std::distance(first,second)<<std::endl;
         std::string token_vid(first, second);
-        size_t vid_start = token_vid.find('\"');
-        size_t vid_second = token_vid.find('\"', vid_start + 1);
-        std::string vid =
+        const size_t vid_start = token_vid.find('\"');
+        const size_t vid_second = token_vid.find('\"', vid_start + 1);
+        const std::string vid =
             token_vid.substr(vid_start + 1, vid_second - vid_start - 1);
         // std::cerr << "========================="<<std::endl;
         // std::cerr << "VID = "<<vid<<std::endl;
@@ -56,7 +56,7 @@ int main(int argc, const char *argv[]) {
             result.emplace_back(std::move(obj));
         }
         while (!it_all_pids.empty()) {
-            auto pid_first = it_all_pids.begin()->begin();
+            const auto pid_first = it_all_pids.begin()->begin();
             it_all_pids.pop_front();
             std::string::iterator pid_second;
             if (!it_all_pids.empty())
@@ -65,8 +65,8 @@ int main(int argc, const char *argv[]) {
                 pid_second = token_vid.end();
             std::string token_pid(pid_first, pid_second);
             // std::cerr << token_pid<<std::endl;
-            size_t pos_start = token_pid.find('\"');
-            size_t pos_second = token_pid.find('\"', pos_start + 1);
+            const size_t pos_start = token_pid.find('\"');
+            const size_t pos_second = token_pid.find('\"', pos_start + 1);
             std::string pid =
                 token_pid.substr(pos_start + 1, pos_second - pos_start - 1);
             // skip ill-formed PIDs

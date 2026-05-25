@@ -165,13 +165,13 @@ std::vector<std::string> FoldUsbInterfacesList(std::string i_type) {
             set.emplace(usb_type.base());
         }
         // if a key is not unique, create a mask.
-        auto it_unique_end =
+        const auto it_unique_end =
             std::unique(vec_usb_types.begin(), vec_usb_types.end(),
                         [](const UsbType &first, const UsbType &second) {
                             return first.base() == second.base();
                         });
         for (auto it = vec_usb_types.begin(); it != it_unique_end; ++it) {
-            size_t numb = set.count(it->base());
+            const size_t numb = set.count(it->base());
             std::string tmp = it->base_str();
             if (numb == 1) {
                 tmp += ':';
@@ -335,7 +335,7 @@ void WrapBracesWithSpaces(std::string &raw_str) noexcept {
     // if symbol is a part of a quouted string - dont wrap
     bool dont_wrap{raw_str[0] == '\"'};
     for (auto it = raw_str.begin(); it != raw_str.end(); ++it) {
-        bool wrap =
+        const bool wrap =
             *it == '{' || *it == '}' || *it == '!' || *it == '(' || *it == ')';
         if (!dont_wrap && wrap) {
             tmp.push_back(' ');
@@ -414,7 +414,7 @@ std::vector<std::string>::const_iterator ParseCurlyBracesArray(
         // Log::Error() << "Error parsing values for " << name << " param.";
         throw ex_common;
     }
-    auto it_range_end = std::find(it_range_begin, it_end, "}");
+    const auto it_range_end = std::find(it_range_begin, it_end, "}");
     if (it_range_end == it_end) {
         Log::Error() << "A closing \"}\" expectend for sequence.";
         throw ex_common;

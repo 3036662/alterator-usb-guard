@@ -50,7 +50,7 @@ UsbType::UsbType(const std::string &str) {
             throw ex_common;
         }
     }
-    int limit = std::numeric_limits<unsigned char>::max();
+    constexpr int limit = std::numeric_limits<unsigned char>::max();
     int val = stoi(splitted[0], nullptr, 16);
     if (val >= 0 && val <= limit) {
         base_ = static_cast<unsigned char>(val);

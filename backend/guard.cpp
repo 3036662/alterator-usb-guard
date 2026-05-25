@@ -34,7 +34,7 @@ bool Guard::HealthStatus() const noexcept {
     return ptr_ipc_ && ptr_ipc_->isConnected();
 }
 
-std::vector<UsbDevice> Guard::ListCurrentUsbDevices() noexcept {
+std::vector<UsbDevice> Guard::ListCurrentUsbDevices() const noexcept {
     std::vector<UsbDevice> res;
     if (!HealthStatus()) return res;
     // health is ok -> get all devices
@@ -84,11 +84,12 @@ std::vector<UsbDevice> Guard::ListCurrentUsbDevices() noexcept {
 }
 
 bool Guard::AllowOrBlockDevice(const std::string &device_id, bool allow,
-                               bool permanent) noexcept {
+                               bool permanent) const noexcept {
     if (device_id.empty() || !HealthStatus()) return false;
-    std::optional<uint32_t> id_numeric = common_utils::StrToUint(device_id);
+    const std::optional<uint32_t> id_numeric =
+        common_utils::StrToUint(device_id);
     if (!id_numeric) return false;
-    usbguard::Rule::Target policy =
+    const usbguard::Rule::Target policy =
         allow ? usbguard::Rule::Target::Allow : usbguard::Rule::Target::Block;
     try {
         ptr_ipc_->applyDevicePolicy(*id_numeric, policy, permanent);
@@ -122,9 +123,9 @@ std::optional<std::string> Guard::ProcessJsonRulesChanges(
     const std::string &msg, bool apply_changes) noexcept {
     try {
         ConfigStatus config = GetConfigStatus();
-        bool initial_active_status = config.guard_daemon_active();
-        bool initial_enable_status = config.guard_daemon_enabled();
-        Target initial_policy = config.implicit_policy();
+        const bool initial_active_status = config.guard_daemon_active();
+        const bool initial_enable_status = config.guard_daemon_enabled();
+        const Target initial_policy = config.implicit_policy();
         guard::json::JsonChanges js_changes(msg);
         // give a list of active devices if needed
         if (js_changes.ActiveDeviceListNeeded()) {

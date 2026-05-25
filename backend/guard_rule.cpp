@@ -57,7 +57,7 @@ GuardRule::GuardRule(const std::string &raw_str) {
     if (tokens.empty()) throw ex_common;
     // Map strings to values/
     // The target is mandatory.
-    auto it_target = std::find_if(
+    const auto it_target = std::find_if(
         map_target.cbegin(), map_target.cend(),
         [&tokens](const auto &element) { return element.second == tokens[0]; });
     if (it_target == map_target.cend()) {
@@ -83,8 +83,8 @@ GuardRule::GuardRule(const std::string &raw_str) {
         pid_ = str_id->substr(separator + 1);
         if (vid_->empty() || pid_->empty()) throw ex_common;
     }
-    // The default predicat for validation
-    std::function<bool(const std::string &)> default_predicat =
+    // The default predicate for validation
+    const std::function<bool(const std::string &)> default_predicate =
         [](const std::string &val) {
             return !IsReservedWord(val) && !boost::starts_with(val, "\\\"") &&
                    !boost::ends_with(val, "\\\"");
@@ -99,9 +99,9 @@ GuardRule::GuardRule(const std::string &raw_str) {
         utils::ParseToken(tokens, "parent-hash", [](const std::string &val) {
             return val.size() > 7 && val.size() < 101;
         });
-    device_name_ = utils::ParseToken(tokens, "name", default_predicat);
-    serial_ = utils::ParseToken(tokens, "serial", default_predicat);
-    port_ = ParseTokenWithOperator(tokens, "via-port", default_predicat);
+    device_name_ = utils::ParseToken(tokens, "name", default_predicate);
+    serial_ = utils::ParseToken(tokens, "serial", default_predicate);
+    port_ = ParseTokenWithOperator(tokens, "via-port", default_predicate);
 
     // if a rules contains  with-interface { i1, i2 } array - insert the
     // "equals" operator
@@ -116,7 +116,7 @@ GuardRule::GuardRule(const std::string &raw_str) {
     with_interface_ = ParseTokenWithOperator(tokens, "with-interface",
                                              utils::InterfaceValidator);
     conn_type_ =
-        utils::ParseToken(tokens, "with-connect-type", default_predicat);
+        utils::ParseToken(tokens, "with-connect-type", default_predicate);
 
     DetermineStrictnessLevel();
     FinalValidator(tokens);
@@ -127,7 +127,7 @@ GuardRule::GuardRule(const std::string &raw_str) {
 void GuardRule::FinalValidator(std::vector<std::string> &splitted) const {
     // check
     for (std::string &str : splitted) boost::trim(str);
-    auto it_end =
+    const auto it_end =
         std::remove_if(splitted.begin(), splitted.end(),
                        [](const std::string &str) { return str.empty(); });
     splitted.erase(it_end, splitted.end());
@@ -181,7 +181,7 @@ GuardRule::ParseTokenWithOperator(
             throw ex_common;
         }
         // check if first param is an operator
-        auto it_operator = std::find_if(
+        const auto it_operator = std::find_if(
             map_operator.cbegin(), map_operator.cend(),
             [&it_param](const std::pair<RuleOperator, std::string> &val) {
                 return val.second == *it_param;
@@ -190,7 +190,7 @@ GuardRule::ParseTokenWithOperator(
         have_operator = it_operator != map_operator.cend();
         //  If no operator is found, parse as usual param - value
         if (!have_operator) {
-            std::optional<std::string> tmp_value =
+            const std::optional<std::string> tmp_value =
                 utils::ParseToken(splitted, name, predicat);
             if (tmp_value.has_value()) {
                 res = {RuleOperator::no_operator, {}};
@@ -393,7 +393,8 @@ GuardRule::ParseConditions(std::vector<std::string> &splitted) {
     std::logic_error ex_common("Cant parse conditions");
     std::optional<std::pair<RuleOperator, std::vector<RuleWithBool>>> res;
     // Check if there are any conditions - look for "if"
-    auto it_if_operator = std::find(splitted.cbegin(), splitted.cend(), "if");
+    const auto it_if_operator =
+        std::find(splitted.cbegin(), splitted.cend(), "if");
     if (it_if_operator == splitted.cend()) return std::nullopt;
     // Check if there is any operator
     bool have_operator{false};
@@ -403,7 +404,7 @@ GuardRule::ParseConditions(std::vector<std::string> &splitted) {
         Log::Error() << "No value was found for condition";
         throw ex_common;
     }
-    auto it_operator = std::find_if(
+    const auto it_operator = std::find_if(
         map_operator.cbegin(), map_operator.cend(),
         [&it_param1](const std::pair<RuleOperator, std::string> &val) {
             return val.second == *it_param1;
@@ -458,15 +459,14 @@ GuardRule::ParseConditions(std::vector<std::string> &splitted) {
 RuleWithBool GuardRule::ParseOneCondition(
     std::vector<std::string>::const_iterator &it_range_beg,
     std::vector<std::string>::const_iterator it_range_end) {
-    RuleWithBool res;
     // Check for exclamation point
-    bool exclamation_point = *it_range_beg == "!";  // goes to result
+    const bool exclamation_point = *it_range_beg == "!";  // goes to result
     if (exclamation_point) {
         ++it_range_beg;
     }
     if (it_range_beg == it_range_end)
         throw std::logic_error("Cant parse conditions");
-    auto it_condition =
+    const auto it_condition =
         std::find_if(map_conditions.cbegin(), map_conditions.cend(),
                      [&it_range_beg](const auto &pair) {
                          if (it_range_beg->size() < 2) {
@@ -478,8 +478,8 @@ RuleWithBool GuardRule::ParseOneCondition(
         throw std::logic_error("Cant parse this condition - " + *it_range_beg);
     RuleConditions condition = it_condition->first;  // goes to result
     // Check if condition may have parameters
-    bool may_have_params = utils::CanConditionHaveParams(condition);
-    bool must_have_params = utils::MustConditionHaveParams(condition);
+    const bool may_have_params = utils::CanConditionHaveParams(condition);
+    const bool must_have_params = utils::MustConditionHaveParams(condition);
     // The condition, exclamation and may_have parameters are known
     ++it_range_beg;
     RuleWithOptionalParam rule_with_param{condition, std::nullopt};
@@ -504,7 +504,7 @@ RuleWithBool GuardRule::ParseOneCondition(
     }
     // move iterator back if no params were parsed
     if (!rule_with_param.second.has_value()) --it_range_beg;
-    res = {!exclamation_point, std::move(rule_with_param)};
+    RuleWithBool res = {!exclamation_point, std::move(rule_with_param)};
     return res;
 }
 

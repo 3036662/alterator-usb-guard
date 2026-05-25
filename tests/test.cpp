@@ -124,8 +124,8 @@ void Test::Run2() {
 }
 
 void Test::Run3() {
-    guard::ConfigStatus cs;
-    std::string res = cs.GetDaemonConfigPath();
+    const guard::ConfigStatus cs;
+    const std::string res = cs.GetDaemonConfigPath();
     Log::Test() << "Config path is " << res;
     assert(std::filesystem::exists(res));
     Log::Test() << "TEST3 ... OK";
@@ -185,7 +185,7 @@ void Test::Run6() {
     for (const std::string& group : cs.ipc_allowed_groups_) {
         Log::Test() << group;
     }
-    std::set<std::string> expected{"wheel"};
+    const std::set<std::string> expected{"wheel"};
     assert(cs.ipc_allowed_groups_ == expected);
     Log::Test() << "TEST6 ... OK";
 }
@@ -250,43 +250,44 @@ void Test::Run8() {
 void Test::Run9() {
     guard::GuardRule parser("allow id *:*");
     {
-        std::vector<std::string> expected{"a", "b"};
+        const std::vector<std::string> expected{"a", "b"};
         assert(SplitRawRule("a b") == expected);
     }
 
     {
-        std::vector<std::string> expected{"a", "b"};
+        const std::vector<std::string> expected{"a", "b"};
         assert(SplitRawRule("a b ") == expected);
     }
 
     {
-        std::vector<std::string> expected{"a", "b"};
+        const std::vector<std::string> expected{"a", "b"};
         assert(SplitRawRule("a    b ") == expected);
     }
 
     {
-        std::vector<std::string> expected{"a", "b"};
+        const std::vector<std::string> expected{"a", "b"};
         assert(SplitRawRule("      a    b ") == expected);
     }
 
     {
-        std::vector<std::string> expected{"\"a b\"", "c"};
+        const std::vector<std::string> expected{"\"a b\"", "c"};
         assert(SplitRawRule("      \"a b\"    c ") == expected);
     }
 
     {
-        std::vector<std::string> expected{"\"a b\"", "\"c d e\"", "fff", "ggg"};
+        const std::vector<std::string> expected{"\"a b\"", "\"c d e\"", "fff",
+                                                "ggg"};
         assert(SplitRawRule("      \"a b\"    \"c d e\" fff     ggg ") ==
                expected);
     }
 
     {
-        std::vector<std::string> expected{};
+        const std::vector<std::string> expected{};
         assert(SplitRawRule("   ") == expected);
     }
 
     {
-        std::vector<std::string> expected{"\"\"", "\" \""};
+        const std::vector<std::string> expected{"\"\"", "\" \""};
         assert(SplitRawRule(" \"\"    \" \" ") == expected);
     }
     Log::Test() << "TEST9 ...OK";
@@ -858,7 +859,7 @@ void Test::Run13(){
   dbus_bindings::Systemd sd;
 
   Log::Test() << "TEST13 Test usbguard start stop and restart";
-  auto init_state=sd.IsUnitActive("usbguard.service");
+  const auto init_state=sd.IsUnitActive("usbguard.service");
   assert (init_state.has_value());
   Log::Test() << "Start service ...";
   // start if stopped
@@ -867,7 +868,7 @@ void Test::Run13(){
       throw std::logic_error("can't start usbguard");
     }
     {
-    auto val=sd.IsUnitActive("usbguard.service");
+    const auto val=sd.IsUnitActive("usbguard.service");
     assert (val.has_value() && val.value());
     }
   }
@@ -876,7 +877,7 @@ void Test::Run13(){
   // stop
   Log::Test() <<"Stop service ...";
   {
-    auto val=sd.StopUnit("usbguard.service");
+    const auto val=sd.StopUnit("usbguard.service");
     assert (val.has_value() && val.value());
   }
   Log::Test() <<"OK";
@@ -885,7 +886,7 @@ void Test::Run13(){
   // start
   Log::Test() << "Start service ...";
   {
-    auto val=sd.StartUnit("usbguard.service");
+    const auto val=sd.StartUnit("usbguard.service");
     assert (val.has_value() && val.value());
   }
   Log::Test() <<"OK";
@@ -894,7 +895,7 @@ void Test::Run13(){
   // restart
    Log::Test() << "Restart service ...";
   {
-    auto val=sd.IsUnitActive("usbguard.service");
+    const auto val=sd.IsUnitActive("usbguard.service");
     assert (val.has_value() && val.value());
   }
   Log::Test() <<"OK";
@@ -1310,8 +1311,8 @@ void Test::Run15(){
 
   {
     guard::Guard guard;
-    std::string json ="{\"policy_type\":\"radio_white_list\", \"preset_mode\":\"manual_mode\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"true\"}"; 
-    auto res=guard.ProcessJsonRulesChanges(json,true);
+    const std::string json ="{\"policy_type\":\"radio_white_list\", \"preset_mode\":\"manual_mode\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"true\"}";
+    const auto res=guard.ProcessJsonRulesChanges(json,true);
     assert(res.has_value());
     Log::Debug() << "res= "<<*res;
     assert(boost::contains(*res,"\"STATUS\":\"OK\""));
@@ -1321,13 +1322,13 @@ void Test::Run15(){
   {
     //stop daemon
     guard::Guard guard;
-    std::string json ="{\"policy_type\":\"radio_white_list\",\"preset_mode\":\"manual_mode\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"false\"}"; 
-    auto res=guard.ProcessJsonRulesChanges(json,true);
+    const std::string json ="{\"policy_type\":\"radio_white_list\",\"preset_mode\":\"manual_mode\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"false\"}";
+    const auto res=guard.ProcessJsonRulesChanges(json,true);
     assert(res.has_value());
     Log::Debug() << "res= "<<*res;
     assert(*res =="{\"rules_OK\":[],\"rules_BAD\":[],\"rules_DELETED\":[],\"STATUS\":\"OK\",\"rules_PRESET\":{},\"ACTION\":\"apply\"}" );
 
-    guard::ConfigStatus cs;
+    const guard::ConfigStatus cs;
     assert(!cs.guard_daemon_active_);
     assert(!cs.guard_daemon_enabled_);
   }
@@ -1336,13 +1337,13 @@ void Test::Run15(){
   {
     // run daemon
     guard::Guard guard;
-    std::string json ="{\"policy_type\":\"radio_white_list\",\"preset_mode\":\"manual_mode\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"true\"}"; 
-    auto res=guard.ProcessJsonRulesChanges(json,true);
+    const std::string json ="{\"policy_type\":\"radio_white_list\",\"preset_mode\":\"manual_mode\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"true\"}";
+    const auto res=guard.ProcessJsonRulesChanges(json,true);
     assert(res.has_value());
     Log::Debug() << "res= "<<*res;
     assert(*res =="{\"rules_OK\":[],\"rules_BAD\":[],\"rules_DELETED\":[],\"STATUS\":\"OK\",\"rules_PRESET\":{},\"ACTION\":\"apply\"}" );
 
-    guard::ConfigStatus cs;
+    const guard::ConfigStatus cs;
     assert(cs.guard_daemon_active_);
     assert(cs.guard_daemon_enabled_);
   }
@@ -1353,7 +1354,7 @@ void Test::Run15(){
 void Test::Run16(){
   Log::Test() << "Test changing implicit policy";
   guard::ConfigStatus cs;
-  auto init_policy=cs.implicit_policy_target_;
+  const auto init_policy=cs.implicit_policy_target_;
 
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
@@ -1381,8 +1382,8 @@ void Test::Run17(){
 Log::Info() <<"Sleep ...";
 {
   guard::Guard guard;
-  std::string json ="{\"policy_type\":\"radio_white_list\",\"preset_mode\":\"put_connected_to_white_list\",\"deleted_rules\":[],\"appended_rules\":[],\"run_daemon\":\"true\"}";
-  auto result=guard.ProcessJsonRulesChanges(json,true);
+  const std::string json ="{\"policy_type\":\"radio_white_list\",\"preset_mode\":\"put_connected_to_white_list\",\"deleted_rules\":[],\"appended_rules\":[],\"run_daemon\":\"true\"}";
+  const auto result=guard.ProcessJsonRulesChanges(json,true);
   assert (result);
   Log::Test() <<*result;
   assert (boost::contains(*result,"\"STATUS\":\"OK\""));
@@ -1394,8 +1395,8 @@ Log::Info() <<"Sleep ...";
 //std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 {
   guard::Guard guard;
-  std::string json ="{\"policy_type\":\"radio_white_list\",\"preset_mode\":\"put_connected_to_white_list\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"false\"}";
-  auto result=guard.ProcessJsonRulesChanges(json,true);
+  const std::string json ="{\"policy_type\":\"radio_white_list\",\"preset_mode\":\"put_connected_to_white_list\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"false\"}";
+  const auto result=guard.ProcessJsonRulesChanges(json,true);
   assert (result);
   assert (boost::contains(*result,"\"STATUS\":\"OK\""));
   assert (!guard.GetConfigStatus().guard_daemon_active_);
@@ -1405,8 +1406,8 @@ Log::Info() <<"Sleep ...";
 //std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 {
   guard::Guard guard;
-  std::string json ="{\"policy_type\":\"radio_black_list\",\"preset_mode\":\"manual_mode\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"false\"}";
-  auto result=guard.ProcessJsonRulesChanges(json,true);
+  const std::string json ="{\"policy_type\":\"radio_black_list\",\"preset_mode\":\"manual_mode\",\"deleted_rules\":null,\"appended_rules\":[],\"run_daemon\":\"false\"}";
+  const auto result=guard.ProcessJsonRulesChanges(json,true);
   assert (result);
   Log::Test() <<*result;
   assert (boost::contains(*result,"\"STATUS\":\"OK\""));

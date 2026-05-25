@@ -10,7 +10,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
     auto dispatcher_func = [&impl](const LispMessage &msg) {
         return impl.Dispatch(msg);
     };
-    MessageReader reader(dispatcher_func);
+    const MessageReader reader(dispatcher_func);
     reader.Loop();
     return 0;
 }

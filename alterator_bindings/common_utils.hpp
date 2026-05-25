@@ -52,7 +52,7 @@ std::vector<std::string> FindAllFilesInDirRecursive(
 template <typename T>
 std::string ToLisp(const SerializableForLisp<T> &obj) noexcept {
     std::string res;
-    vecPairs vec{obj.SerializeForLisp()};
+    const vecPairs vec{obj.SerializeForLisp()};
     res += "(";
     // ignore firs name, use only value
     auto iter = vec.cbegin();
@@ -82,7 +82,7 @@ std::string ToLisp(const SerializableForLisp<T> &obj) noexcept {
 template <typename T>
 std::string ToLispAssoc(const SerializableForLisp<T> &obj) noexcept {
     std::string res;
-    vecPairs vec{obj.SerializeForLisp()};
+    const vecPairs vec{obj.SerializeForLisp()};
     res += '(';
     for (const auto &pair : vec) {
         res += '(';

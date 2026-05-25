@@ -10,7 +10,7 @@ namespace guard::utils::csv {
 
 CsvRule::CsvRule(rapidcsv::Document &doc, size_t index) {
     std::vector<std::string> row = doc.GetRow<std::string>(index);
-    size_t n_cols = row.size();
+    const size_t n_cols = row.size();
     if (row.size() < 2) throw std::logic_error("Empty csv row");
     target_ = std::move(row[0]);
     if (target_.empty()) throw std::logic_error("Empty rule target");

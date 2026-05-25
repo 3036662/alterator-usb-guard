@@ -23,7 +23,7 @@ class Guard {
 
     /// @brief List current usb devices
     /// @return vector<UsbDevices>
-    std::vector<UsbDevice> ListCurrentUsbDevices() noexcept;
+    std::vector<UsbDevice> ListCurrentUsbDevices() const noexcept;
 
     /**
      * @brief Allow or block device
@@ -32,7 +32,7 @@ class Guard {
      * @param[in] permanent  true(default) - create permanent UsbGuard rule
      */
     bool AllowOrBlockDevice(const std::string &device_id, bool allow = false,
-                            bool permanent = true) noexcept;
+                            bool permanent = true) const noexcept;
     /**
      * @brief check configuration of UsbGuard daemon
      * @return ConfigStatus object

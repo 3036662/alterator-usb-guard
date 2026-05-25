@@ -64,8 +64,10 @@ vecPairs ConfigStatus::SerializeForLisp() const {
 
 void ConfigStatus::CheckDaemon() noexcept {
     dbus_bindings::Systemd systemd;
-    std::optional<bool> enabled = systemd.IsUnitEnabled(usb_guard_daemon_name);
-    std::optional<bool> active = systemd.IsUnitActive(usb_guard_daemon_name);
+    const std::optional<bool> enabled =
+        systemd.IsUnitEnabled(usb_guard_daemon_name);
+    const std::optional<bool> active =
+        systemd.IsUnitActive(usb_guard_daemon_name);
     if (enabled.has_value())
         guard_daemon_enabled_ = enabled.value_or(false);
     else
@@ -390,7 +392,7 @@ void ConfigStatus::CheckConfigFilesPermissions() noexcept {
             }
         }
         if (fs::exists(daemon_rules_file_path)) {
-            fs::perms conf_perm =
+            const fs::perms conf_perm =
                 fs::status(daemon_rules_file_path).permissions();
             if (conf_perm == (fs::perms::owner_write | fs::perms::owner_read)) {
                 rules_file_permissions_OK_ = true;
@@ -525,13 +527,13 @@ bool ConfigStatus::OverwriteRulesFile(const std::string &new_content,
 bool ConfigStatus::TryToRun(bool run_daemon) const noexcept {
     dbus_bindings::Systemd sysd;
     // check if unit is active
-    auto init_state = sysd.IsUnitActive(usb_guard_daemon_name);
+    const auto init_state = sysd.IsUnitActive(usb_guard_daemon_name);
     if (!init_state.has_value()) return false;
     Log::Info() << "[TryToRun] Usbguard is "
                 << (init_state.value_or("") ? "active" : "inactive");
     // if stopped - try to start and exit
     if (!init_state.value_or(false)) {
-        auto result = sysd.StartUnit(usb_guard_daemon_name);
+        const auto result = sysd.StartUnit(usb_guard_daemon_name);
         Log::Info() << "[TryToRun] Test run - "
                     << ((result.has_value() && *result) ? "OK" : "FAIL");
         if (!run_daemon) {
@@ -546,11 +548,11 @@ bool ConfigStatus::TryToRun(bool run_daemon) const noexcept {
     // auto result = sysd.RestartUnit(usb_guard_daemon_name);
     // The restart method is commented out because it can cause a systemd
     // timeout. Using stop and start.
-    auto result_stop = sysd.StopUnit(usb_guard_daemon_name);
-    if (!result_stop.value_or(false)) {
+    if (const auto result_stop = sysd.StopUnit(usb_guard_daemon_name);
+        !result_stop.value_or(false)) {
         Log::Error() << "[TryToRun] Can't stop service while trying to restart";
     }
-    auto result = sysd.StartUnit(usb_guard_daemon_name);
+    const auto result = sysd.StartUnit(usb_guard_daemon_name);
     Log::Info() << "[TryToRun] Restart - "
                 << (result.value_or(false) ? "OK" : "FAIL");
     if (init_state.has_value() && !init_state.value_or(false) && !run_daemon) {
@@ -607,11 +609,11 @@ bool ConfigStatus::EnableUsbguardDbus(
 bool ConfigStatus::ChangeDaemonStatus(bool active,
                                       bool enabled) const noexcept {
     dbus_bindings::Systemd sysd;
-    auto init_state = sysd.IsUnitActive(usb_guard_daemon_name);
+    const auto init_state = sysd.IsUnitActive(usb_guard_daemon_name);
     if (!init_state.has_value()) return false;
     Log::Info() << "[ChangeDaemonStatus] Usbguard is "
                 << (*init_state ? "active" : "inactive");
-    auto enabled_state = sysd.IsUnitEnabled(usb_guard_daemon_name);
+    const auto enabled_state = sysd.IsUnitEnabled(usb_guard_daemon_name);
     if (!enabled_state) {
         Log::Error() << "Can't define if USBGuard enabled or disabled";
         return false;
@@ -645,7 +647,7 @@ bool ConfigStatus::ChangeDaemonStatus(bool active,
         }
         EnableUsbguardDbus(false, sysd);
     } else if (!*enabled_state && enabled) {
-        auto res = sysd.EnableUnit(usb_guard_daemon_name);
+        const auto res = sysd.EnableUnit(usb_guard_daemon_name);
         Log::Info() << "Enabling the service";
         if (!res || !*res) {
             Log::Error() << "[ChangeDaemonStatus] Can't enable the USBGuard";

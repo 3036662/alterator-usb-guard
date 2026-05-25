@@ -153,11 +153,11 @@ std::string EscapeAll(const std::string &str) noexcept {
 
 std::string HtmlEscape(const std::string &str) noexcept {
     std::string res;
-    std::unordered_map<char, std::string> escape_map{{'\t', "&#9;"},
-                                                     {'\n', "&#10;"},
-                                                     {'\"', "&#34;"},
-                                                     {'\\', "&#92;"},
-                                                     {'\'', "&#39;"}};
+    const std::unordered_map<char, std::string> escape_map{{'\t', "&#9;"},
+                                                           {'\n', "&#10;"},
+                                                           {'\"', "&#34;"},
+                                                           {'\\', "&#92;"},
+                                                           {'\'', "&#39;"}};
     for (auto it = str.cbegin(); it < str.cend(); ++it) {
         if (escape_map.count(*it) == 0) {
             res.push_back(*it);

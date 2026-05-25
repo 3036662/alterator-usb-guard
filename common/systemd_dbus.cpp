@@ -19,7 +19,7 @@ std::optional<bool> Systemd::IsUnitEnabled(
     if (!Health()) return std::nullopt;
     std::string result;
     try {
-        auto proxy = CreateProxyToSystemd(kObjectPath);
+        const auto proxy = CreateProxyToSystemd(kObjectPath);
         const sdbus::InterfaceName interf_name{kSystemdInterfaceManager};
         const sdbus::MethodName method_name_obj{"GetUnitFileState"};
         auto method = proxy->createMethodCall(interf_name, method_name_obj);
@@ -40,7 +40,7 @@ std::optional<bool> Systemd::IsUnitActive(
     std::string result;
     try {
         // get unit dbus path
-        auto proxy = CreateProxyToSystemd(kObjectPath);
+        const auto proxy = CreateProxyToSystemd(kObjectPath);
         const sdbus::InterfaceName interf_name{kSystemdInterfaceManager};
         const sdbus::MethodName method_name_obj{"LoadUnit"};
         auto method = proxy->createMethodCall(interf_name, method_name_obj);
@@ -51,8 +51,8 @@ std::optional<bool> Systemd::IsUnitActive(
 
         // get unit Active State
         // proxy to unit interface dbus
-        auto proxy_unit = CreateProxyToSystemd(unit_path);
-        auto active_state = proxy_unit->getProperty("ActiveState")
+        const auto proxy_unit = CreateProxyToSystemd(unit_path);
+        const auto active_state = proxy_unit->getProperty("ActiveState")
                                 .onInterface(kSystemdInterfaceUnit);
         result = active_state.get<std::string>();
     } catch (const sdbus::Error &ex) {
@@ -67,7 +67,7 @@ std::optional<bool> Systemd::StartUnit(const std::string &unit_name) noexcept {
     if (!Health()) return std::nullopt;
     try {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        auto proxy = CreateProxyToSystemd(kObjectPath);
+        const auto proxy = CreateProxyToSystemd(kObjectPath);
         const sdbus::InterfaceName interf_name{kSystemdInterfaceManager};
         const sdbus::MethodName method_name_obj{"StartUnit"};
         auto method = proxy->createMethodCall(interf_name, method_name_obj);
@@ -96,8 +96,8 @@ std::optional<bool> Systemd::EnableUnit(const std::string &unit_name) noexcept {
 
     try {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        std::vector<std::string> arr_unit_names{unit_name};
-        auto proxy = CreateProxyToSystemd(kObjectPath);
+        const std::vector<std::string> arr_unit_names{unit_name};
+        const auto proxy = CreateProxyToSystemd(kObjectPath);
         const sdbus::InterfaceName interf_name{kSystemdInterfaceManager};
         const sdbus::MethodName method_name_obj{"EnableUnitFiles"};
         auto method = proxy->createMethodCall(interf_name, method_name_obj);
@@ -126,8 +126,8 @@ std::optional<bool> Systemd::DisableUnit(
     if (!Health()) return std::nullopt;
     try {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        std::vector<std::string> arr_unit_names{unit_name};
-        auto proxy = CreateProxyToSystemd(kObjectPath);
+        const std::vector<std::string> arr_unit_names{unit_name};
+        const auto proxy = CreateProxyToSystemd(kObjectPath);
         const sdbus::InterfaceName interf_name{kSystemdInterfaceManager};
         const sdbus::MethodName method_name_obj{"DisableUnitFiles"};
         auto method = proxy->createMethodCall(interf_name, method_name_obj);
@@ -156,7 +156,7 @@ std::optional<bool> Systemd::RestartUnit(
 
     try {
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        auto proxy = CreateProxyToSystemd(kObjectPath);
+        const auto proxy = CreateProxyToSystemd(kObjectPath);
         const sdbus::InterfaceName interf_name{kSystemdInterfaceManager};
         const sdbus::MethodName method_name_obj{"RestartUnit"};
         auto method = proxy->createMethodCall(interf_name, method_name_obj);
@@ -188,7 +188,7 @@ std::optional<bool> Systemd::StopUnit(const std::string &unit_name) noexcept {
         if (isActive && !isActive.value()) {
             return true;
         }
-        auto proxy = CreateProxyToSystemd(kObjectPath);
+        const auto proxy = CreateProxyToSystemd(kObjectPath);
         const sdbus::InterfaceName interf_name{kSystemdInterfaceManager};
         const sdbus::MethodName method_name_obj{"StopUnit"};
         auto method = proxy->createMethodCall(interf_name, method_name_obj);
@@ -227,7 +227,7 @@ bool Systemd::Health() noexcept {
 }
 
 std::unique_ptr<sdbus::IProxy> Systemd::CreateProxyToSystemd(
-    const std::string &path) {
+    const std::string &path) const {
     return sdbus::createProxy(*connection_,
                               sdbus::ServiceName{kDestinationName},
                               sdbus::ObjectPath{path});

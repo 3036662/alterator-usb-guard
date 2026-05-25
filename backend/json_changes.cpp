@@ -337,8 +337,8 @@ void JsonChanges::DeleteRules() {
         throw std::logic_error(
             "The rules file is not completelly parsed, can't edit");
     // copy old rules,except listed in rule_indexes
-    std::set<uint> unique_indexes(rules_to_delete_.cbegin(),
-                                  rules_to_delete_.cend());
+    const std::set<uint> unique_indexes(rules_to_delete_.cbegin(),
+                                        rules_to_delete_.cend());
     for (const auto &rule : parsed_rules.first) {
         if (unique_indexes.count(rule.number()) == 0) {
             // skip rules with conflicting policy,place rest to new_rules
